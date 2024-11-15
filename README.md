@@ -1,4 +1,4 @@
-<h1 align="center"> F1nalLap 🏎️ </h1>
+<h1 align="center"> 🏁 F1nalLap 🏎️ </h1>
 
 ## Descripción
 ¡Bienvenidos a F1nalLap, una app web dedicada a Fórmula 1!
