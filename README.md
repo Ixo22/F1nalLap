@@ -9,4 +9,4 @@ En esta página entcontrarás una amplia gama de información sobre este mundo, 
 
 
 ## Contacto
-> Puede ponerse en contacto conmigo para cualquier consulta sobre la aplicación F1nalLap por correo electrónico: aga1036@alu.ubu.es
+Puede ponerse en contacto conmigo para cualquier consulta sobre la aplicación F1nalLap por correo electrónico: ```aga1036@alu.ubu.es```
