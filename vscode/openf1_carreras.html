@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1nal Lap</title>
+    <link rel="shortcut icon" href="https://www.formula1.com/etc/designs/fom-website/images/f1_logo.svg">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Audiowide" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div class="content">
+
+            <header>
+                <h1>F1nal Lap</h1>
+                <img src="https://www.formula1.com/etc/designs/fom-website/images/f1_logo.svg" alt="Fórmula 1 Logo">
+            </header>
+
+
+            <div id="progress-container">
+                <nav>
+                    <a href="index.html">Inicio</a>
+                    <a href="temp_act.html">Temporada Actual</a>
+                    <a href="ult_temp.html">Últimas Temporadas</a>
+                    <a href="temp_mem.html">Temporadas Memorables</a>
+                    <a href="prueba.html">Prueba</a>
+                    <a href="openf1_carreras.html">Carreras</a>
+                    <a href="openf1_drivers.html">Pilotos</a>
+                    <a href="API-sports.html">Api Sport</a>
+                </nav>
+                <div id="progress-bar"></div>
+            </div>
+
+            <div class="contenedor-section">
+                <section id="api">
+                    <h2>Datos de la Sesión de F1</h2>
+
+                    <div class="form-group">
+                        <label for="yearSelector">
+                            <p style="font-size: 18px;">Selecciona la Temporada:‎ ‎ ‎ </p>
+                        </label>
+                        <select id="yearSelector">
+                            <option value="">-- Temporada --</option>
+                            <!-- Generar opciones de 2023 a 2024 -->
+                            <script>
+                                for (let year = 2023; year <= 2024; year++) {
+                                    document.write(`<option value="${year}">${year}</option>`);
+                                }
+                            </script>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionSelector">
+                            <p style="font-size: 18px;">Selecciona la Sesion:‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ </p>
+                        </label>
+                        <select id="sessionSelector">
+                            <option value="">-- Sesión --</option>
+                            <option value="Practice 1">Practice 1</option>
+                            <option value="Practice 2">Practice 2</option>
+                            <option value="Practice 3">Practice 3</option>
+                            <option value="Sprint Qualifying">Sprint Qualifying</option>
+                            <option value="Sprint">Sprint</option>
+                            <option value="Qualifying">Qualifying</option>
+                            <option value="Race">Race</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="countrySelector">
+                            <p style="font-size: 18px;">Escribe el País:‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎
+                                ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎</p>
+                        </label>
+                        <input type="text" id="countrySelector" placeholder="Spain..." />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="circuitSelector">
+                            <p style="font-size: 18px;">Escribe el Circuito: ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎
+                                ‎ ‎ ‎ ‎ ‎ </p>
+                        </label>
+                        <input type="text" id="circuitSelector" placeholder="Monza..." />
+                    </div>
+
+                    <div class="form-btn">
+                        <button id="mostrarBtn">Mostrar</button>
+                        <button id="reestablecerBtn">Reestablecer</button>
+                    </div>
+                    <div id="contenedor"></div>
+
+
+                </section>
+            </div>
+        </div>
+
+        <footer>
+            <a href="https://www.linkedin.com/in/aalbeerto/" target="_blank">© AGA. Todos los derechos
+                reservados.</a>
+        </footer>
+
+    </div>
+    
+    <script src="openf1.js"></script> <!-- Vincula el archivo JavaScript -->
+    <script src="barra_deslizante.js"></script>
+</body>
+
+</html>

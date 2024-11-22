@@ -1,0 +1,971 @@
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: black;
+  /*background-color: #f4f4f4; /* Fondo claro para contraste */
+  /* cursor: url('RUTA DEL ARCHIVO.extension'), auto; */
+  position: relative;
+}
+
+body::before {
+  content: "";
+  /* Necesario para crear un pseudo-elemento */
+  position: absolute;
+  /* Posiciona el pseudo-elemento en relación al body */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("https://static4.depositphotos.com/1008458/383/i/450/depositphotos_3838148-stock-photo-chequered-flag.jpg");
+  background-repeat: repeat;
+  background-size: auto;
+  background-position: top left;
+  opacity: 0.25;
+  /* 60% de transparencia (40% opaco) */
+  z-index: -1;
+  /* Asegura que el pseudo-elemento esté detrás del contenido */
+}
+
+p {
+  line-height: 1.25;
+}
+
+/* Sirve para tener el contenido de la página ajustado*/
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Sirve para tener el footer en este caso siempre pegado al borde inferior de la página*/
+.content {
+  flex: 1;
+}
+
+header {
+  background-color: #da0000;
+  /* Rojo Fórmula 1 */
+  color: white;
+  padding: 1rem 0;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Sombra para el encabezado */
+  flex-wrap: wrap;
+}
+
+header h1 {
+  font-family: "Audiowide", sans-serif;
+  font-size: 45px;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+header img {
+  position: absolute;
+  right: 8em;
+  height: 38%; /* Ajusta el tamaño del logo */
+  box-shadow: none;
+}
+
+nav {
+  position: sticky; /* Cambia a sticky */
+  top: 0; /* Alinea la barra en la parte superior cuando se hace scroll */
+  left: 0; /* Alinea la barra a la izquierda */
+  right: 0; /* Alinea la barra a la derecha */
+  padding-left: 1rem;
+  background-color: rgba(0, 0, 0, 1); /* Negro con un poco de transparencia */
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para el nav */
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  z-index: 1000; /* Asegura que la barra esté por encima de otros elementos */
+}
+
+nav a {
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 10px 25px;
+  font-size: 16px;
+  text-decoration: none;
+  transition: background-color 0.6s ease; /* Transición suave */
+}
+
+nav a:hover {
+  background-color: #ff0000;
+  color: white;
+  text-decoration: underline;
+}
+
+section {
+  flex-grow: 1;
+  /* Permite que la sección principal ocupe el espacio disponible */
+  padding: 10px 30px 50px 40px;
+  /* padding: top, right, bottom, left */
+  margin: 15px 0;
+  /* Espacio entre secciones */
+  background-color: white;
+  /* Fondo blanco para secciones */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Sombra para secciones */
+  border: 3px solid #000000;
+  /* Borde negro */
+  border-radius: 8px;
+  /* Bordes redondeados */
+}
+
+section h2 {
+  font-size: 30px;
+  color: #da0000;
+  /* Rojo Fórmula 1 */
+  border-bottom: 2px solid #da0000;
+  /* Línea inferior */
+  padding-bottom: 5px;
+}
+
+section h3 {
+  color: #000000;
+  /* Rojo Fórmula 1 */
+  border-bottom: 2px solid #000000;
+  /* Línea inferior */
+  padding-bottom: 5px;
+}
+
+section p,
+section ul,
+section table {
+  margin: 10px 0;
+}
+
+#que-encontraras a {
+  text-decoration: none;
+  color: black;
+}
+
+#que-encontraras a:hover {
+  text-decoration: underline;
+  color: #da0000;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+table th,
+table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+table th {
+  background-color: #da0000;
+  /* Rojo Fórmula 1 */
+  color: white;
+}
+
+table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+footer {
+  background-color: #000000;
+  /* Negro */
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  margin-top: auto;
+  /* Empuja el footer al final del contenedor */
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Checkered_Flag.svg/1200px-Checkered_Flag.svg.png");
+  /* Bandera a cuadros */
+  background-repeat: repeat;
+  background-size: 50px 50px;
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+  /* Sombra para el footer */
+}
+
+footer a {
+  padding: 0;
+  font-size: 14px;
+  color: white;
+  text-decoration: none;
+  /* Sin subrayado */
+}
+
+footer a:hover {
+  color: #ddd;
+  /* Gris blanquecino */
+  text-decoration: underline;
+  /* Subrayado */
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  /* Bordes redondeados para imágenes */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Sombra para imágenes */
+}
+
+video {
+  width: 100%;
+  border-radius: 8px;
+  /* Bordes redondeados para videos */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Sombra para videos */
+  margin: 20px 0;
+}
+
+.championships {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.championship {
+  width: 48%;
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+th,
+td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #da0000;
+  color: white;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: row;
+  /* Alinea los elementos en columna */
+  justify-content: center;
+  align-items: center;
+  /* Centra los elementos horizontalmente */
+  margin: 10px 0;
+  /* Espaciado entre grupos */
+}
+
+.form-btn {
+  display: flex;
+  flex-direction: row;
+  /* Alinea los elementos en columna */
+  justify-content: center;
+  align-items: center;
+  /* Centra los elementos horizontalmente */
+  margin: 10px 10px;
+  /* Espaciado entre grupos */
+}
+
+select {
+  padding: 10px 20px;
+  /* padding: top, right, bottom, left */
+  width: 10%;
+  /* Ancho del selector */
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+button {
+  padding: 10px;
+  /* padding: top, right, bottom, left */
+  margin: 10px 10px;
+  width: 10rem;
+  /* Ancho del botón */
+  border-radius: 5px;
+  border: 2px solid #a5a5a5;
+  background-color: #e2e2e2;
+  cursor: pointer;
+  transition: background-color 0.6s ease, border 1s ease;
+}
+
+button:hover {
+  
+  /* Transición suave */
+  color: white;
+  background-color: #da0000;
+  border: 2px solid black;
+}
+
+.result {
+  /*margin: 10px auto;*/
+  margin: 10px auto;
+  background-color: #f9f9f9;
+  /* Color de fondo */
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  width: 28%;
+  padding: 10px 50px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+}
+
+.result h2 {
+  padding-left: 15px;
+}
+
+.result p {
+  padding-left: 4rem;
+}
+
+.result-table {
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+}
+
+#api {
+  text-align: center;
+}
+
+#temporada,
+#ronda {
+  text-align: center;
+  font-size: 14px;
+}
+
+#contenedor h3 {
+  text-align: center;
+  color: #000000;
+  /* Color del texto */
+  border-bottom: 2px solid #000000;
+  /* Línea inferior */
+  padding: 5px 30px;
+  /* Agrega padding a la izquierda y derecha */
+  display: inline-block;
+  /* Hace que la línea ocupe solo el ancho del texto */
+}
+
+.openf1-tabla {
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+}
+
+select {
+  text-align: center;
+  width: 11rem;
+}
+
+input {
+  width: 10rem;
+  height: 2rem;
+  padding-left: 12px;
+}
+
+.contenedor {
+  display: flex;
+  /* Usar flexbox para centrar contenido */
+  flex-direction: column;
+  /* Alinear elementos en columna */
+  justify-content: center;
+  /* Centrar verticalmente */
+  align-items: center;
+  /* Centrar horizontalmente */
+  max-width: 1000px;
+  /* Ancho máximo */
+  margin: 10px auto;
+  /* Centrar el contenedor en la página */
+  background: white;
+  /* Fondo blanco */
+  padding: 20px 40px;
+  /* Espaciado interno */
+  border-radius: 8px;
+  /* Bordes redondeados */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  /* Sombra */
+  border: 3px solid #000000;
+  /* Borde negro */
+}
+
+.rankings {
+  display: flex;
+  /* Usar flexbox para crear columnas */
+  flex-wrap: wrap;
+  /* Permitir que los elementos se envuelvan */
+  justify-content: space-between;
+  /* Espacio entre columnas */
+  margin-top: 20px;
+}
+
+.driver,
+.team,
+.race {
+  width: 40%;
+  /* Cada elemento ocupa el 48% del contenedor */
+  margin-bottom: 20px;
+  /* Espacio entre filas */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Sombra para cada elemento */
+  padding: 15px 25px;
+  /* Espaciado interno */
+  border-radius: 15px;
+  /* Bordes redondeados */
+  background-color: white;
+  /* Fondo blanco para cada elemento */
+}
+
+.race {
+  width: 44%;
+  border: 2px solid #cacaca;
+}
+
+.race img {
+  text-align: center;
+}
+
+.driver {
+  display: flex; /* Usar flexbox para alinear imagen y texto */
+  align-items: center; /* Centrar verticalmente */
+  width: 48%; /* Cada elemento ocupa el 40% del contenedor */
+  margin-bottom: 20px; /* Espacio entre filas */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para cada elemento */
+  padding: 15px 0; /* Espaciado interno */
+  border-radius: 5px; /* Bordes redondeados */
+  background-color: white; /* Fondo blanco para cada elemento */
+  border: 2px solid #ccc;
+}
+
+.driver img {
+  width: auto; /* Mantener proporciones */
+  height: 100px; /* Ocupa toda la altura del contenedor */
+  margin-right: 10px; /* Espacio entre la imagen y el texto */
+  box-shadow: none;
+  border-radius: 50px; /* Bordes redondeados */
+}
+
+.driver img:hover {
+  border-radius: 25px;
+  scale: 150%;
+  transition: scale 0.6s ease, border-radius 1s ease; /* Transición suave */
+}
+
+.driver img:not(:hover) {
+  transition: scale 0.6s ease, border-radius 0.5s ease; /* Transición suave */
+}
+
+.driver-info {
+  flex-grow: 1; /* Permite que el texto ocupe el espacio restante */
+  text-align: left; /* Alinea el texto a la izquierda */
+}
+
+
+.team {
+  align-items: center; /* Centrar verticalmente */
+  padding: 12px 30px; /* Espaciado interno */
+  border-radius: 5px; /* Bordes redondeados */
+  border: 2px solid #ccc; /* Borde gris */
+  margin: 6px auto; /* Centrar el contenedor en la página */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para imágenes */
+}
+
+.team-info {
+  display: flex; /* Usar flexbox para alinear la imagen y el texto */
+  align-items: left;
+}
+
+.team-info img {
+  width: 106px !important; /* Mantener proporciones */
+  height: 60px !important; /* Ocupa toda la altura del contenedor */
+  margin-right: 30px !important; /* Espacio entre imagen y texto */
+  border-radius: 10px;
+  border: 1px solid black;
+}
+
+.team-info img:hover {
+  scale:140%;
+  transition: scale 0.6s ease; /* Transición suave */
+}
+
+.team-info img:not(:hover) {
+  transition: scale 0.6s ease; /* Transición suave */
+}
+
+.position {
+  font-weight: bold; /* Negrita para la posición */
+  color: #007bff; /* Color para la posición */
+}
+
+.tyres {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.tyres img {
+    box-shadow: none;
+}
+
+#tyres {
+  align-items: center;
+  height: 250px;
+  width: auto;
+}
+
+.contenedor-section {
+  display: flex;
+  /* Usar flexbox para centrar contenido */
+  flex-direction: column;
+  /* Alinear elementos en columna */
+  justify-content: center;
+  /* Centrar verticalmente */
+  max-width: 1500px;
+  /* Ancho máximo */
+  margin: 10px auto;
+  /* Centrar el contenedor en la página */
+}
+
+#progress-container {
+  position: sticky; /* Mantiene la barra en una posición fija */
+  top: 0; /* Ajusta esto según la altura de tu barra de navegación */
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background-color: transparent;
+  z-index: 9999; /* Asegura que esté por encima de otros elementos */
+  /*border-top: 2px solid white;*/
+  margin-bottom: 55px;
+}
+
+#progress-bar {
+  height: 100%;
+  width: 0;
+  background-color: #da0000; /* Color de la barra de progreso */
+}
+
+@media (max-width: 1020px) {
+  nav {
+    padding-left: 1rem;
+    background-color: #000000;
+    /* Negro */
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Sombra para el nav */
+    border-top: 1px solid white;
+  }
+
+  nav a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 10px 18px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.5s ease;
+    /* Transición suave */
+  }
+
+  nav a:hover {
+    background-color: #ff0000;
+    color: white;
+    text-decoration: underline;
+  }
+}
+
+/* Pantalla Mediana */
+@media (max-width: 870px) {
+  header {
+    background-color: #da0000;
+    /* Rojo Fórmula 1 */
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Sombra para el encabezado */
+    flex-wrap: wrap;
+  }
+
+  header h1 {
+    font-family: "Audiowide", sans-serif;
+    font-size: 35px;
+    margin: 0;
+    flex: 1;
+    text-align: center;
+  }
+
+  header img {
+    position: absolute;
+    right: 2em;
+    height: 35%;
+    /* Ajusta el tamaño del logo */
+  }
+
+  nav {
+    background-color: #000000;
+    /* Negro */
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Sombra para el nav */
+  }
+
+  nav a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 8px 8px;
+    font-size: 12px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    /* Transición suave */
+  }
+
+  nav a:hover {
+    background-color: #ff0000;
+    /* Rojo Fórmula 1 */
+    color: white;
+    text-decoration: underline;
+  }
+
+  section {
+    flex-grow: 1;
+    /* Permite que la sección principal ocupe el espacio disponible */
+    padding: 5px 20px;
+    /* Aumenta el padding lateral */
+    margin: 10px 10px;
+    /* Espacio entre secciones */
+    background-color: white;
+    /* Fondo blanco para secciones */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Sombra para secciones */
+    border-radius: 8px;
+    /* Bordes redondeados */
+  }
+
+  body h2 {
+    font-size: 18px;
+  }
+
+  body p {
+    font-size: 14px;
+  }
+
+  body ul {
+    font-size: 14px;
+  }
+
+  footer {
+    background-color: #000000;
+    /* Negro */
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: auto;
+    /* Empuja el footer al final del contenedor */
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Checkered_Flag.svg/1200px-Checkered_Flag.svg.png");
+    /* Bandera a cuadros */
+    background-repeat: repeat;
+    background-size: 50px 50px;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+    /* Sombra para el footer */
+  }
+
+  footer a {
+    padding: 0;
+    font-size: 12px;
+    color: white;
+    text-decoration: none;
+    /* Sin subrayado */
+  }
+
+  footer a:hover {
+    color: #ddd;
+    /* Gris blanquecino */
+    text-decoration: underline;
+    /* Subrayado */
+  }
+}
+
+@media (max-width: 620px) {
+  nav {
+    background-color: #000000;
+    /* Negro */
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Sombra para el nav */
+  }
+
+  nav a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 8px 8px;
+    font-size: 10px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    /* Transición suave */
+  }
+
+  nav a:hover {
+    background-color: #ff0000;
+    /* Rojo Fórmula 1 */
+    color: white;
+    text-decoration: underline;
+  }
+}
+
+/* Pantalla Pequeña */
+@media (max-width: 500px) {
+  header {
+    background-color: #da0000;
+    /* Rojo Fórmula 1 */
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Sombra para el encabezado */
+    flex-wrap: wrap;
+  }
+
+  header h1 {
+    font-family: "Audiowide", sans-serif;
+    font-size: 28px;
+    margin: 0;
+    flex: 1;
+    text-align: center;
+  }
+
+  header img {
+    position: absolute;
+    right: 2em;
+    height: 25%;
+    /* Ajusta el tamaño del logo */
+  }
+
+  nav {
+    background-color: #000000;
+    /* Negro */
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Sombra para el nav */
+  }
+
+  nav a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 8px 8px;
+    font-size: 10px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    /* Transición suave */
+  }
+
+  nav a:hover {
+    background-color: #ff0000;
+    /* Rojo Fórmula 1 */
+    color: white;
+    text-decoration: underline;
+  }
+
+  section {
+    flex-grow: 1;
+    /* Permite que la sección principal ocupe el espacio disponible */
+    padding: 5px 20px;
+    /* Aumenta el padding lateral */
+    margin: 10px 10px;
+    /* Espacio entre secciones */
+    background-color: white;
+    /* Fondo blanco para secciones */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Sombra para secciones */
+    border-radius: 8px;
+    /* Bordes redondeados */
+  }
+
+  body h2 {
+    font-size: 17px;
+  }
+
+  body p {
+    font-size: 12px;
+  }
+
+  body ul {
+    font-size: 12px;
+  }
+
+  footer {
+    background-color: #000000;
+    /* Negro */
+    color: white;
+    text-align: center;
+    padding: 6px 0;
+    margin-top: auto;
+    /* Empuja el footer al final del contenedor */
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Checkered_Flag.svg/1200px-Checkered_Flag.svg.png");
+    /* Bandera a cuadros */
+    background-repeat: repeat;
+    background-size: 50px 50px;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+    /* Sombra para el footer */
+  }
+
+  footer a {
+    padding: 0;
+    font-size: 10px;
+    color: white;
+    text-decoration: none;
+    /* Sin subrayado */
+  }
+
+  footer a:hover {
+    color: #ddd;
+    /* Gris blanquecino */
+    text-decoration: underline;
+    /* Subrayado */
+  }
+}
+
+/* Pantalla MUY Pequeña */
+@media (max-width: 380px) {
+  header {
+    background-color: #da0000;
+    /* Rojo Fórmula 1 */
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Sombra para el encabezado */
+    flex-wrap: wrap;
+  }
+
+  header h1 {
+    font-family: "Audiowide", sans-serif;
+    font-size: 28px;
+    margin: 0;
+    flex: 1;
+    text-align: center;
+  }
+
+  header img {
+    position: absolute;
+    right: 1em;
+    height: 22%;
+    /* Ajusta el tamaño del logo */
+  }
+
+  nav {
+    background-color: #000000;
+    /* Negro */
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Sombra para el nav */
+  }
+
+  nav a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 8px 8px;
+    font-size: 9px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    /* Transición suave */
+  }
+
+  nav a:hover {
+    background-color: #ff0000;
+    /* Rojo Fórmula 1 */
+    color: white;
+    text-decoration: underline;
+  }
+
+  section {
+    flex-grow: 1;
+    /* Permite que la sección principal ocupe el espacio disponible */
+    padding: 5px 20px;
+    /* Aumenta el padding lateral */
+    margin: 10px 10px;
+    /* Espacio entre secciones */
+    background-color: white;
+    /* Fondo blanco para secciones */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Sombra para secciones */
+    border-radius: 8px;
+    /* Bordes redondeados */
+  }
+
+  body h2 {
+    font-size: 16px;
+  }
+
+  body p {
+    font-size: 11px;
+  }
+
+  body ul {
+    font-size: 11px;
+  }
+
+  footer {
+    background-color: #000000;
+    /* Negro */
+    color: white;
+    text-align: center;
+    padding: 4px 0;
+    margin-top: auto;
+    /* Empuja el footer al final del contenedor */
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Checkered_Flag.svg/1200px-Checkered_Flag.svg.png");
+    /* Bandera a cuadros */
+    background-repeat: repeat;
+    background-size: 50px 50px;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+    /* Sombra para el footer */
+  }
+
+  footer a {
+    padding: 0;
+    font-size: 9px;
+    color: white;
+    text-decoration: none;
+    /* Sin subrayado */
+  }
+
+  footer a:hover {
+    color: #ddd;
+    /* Gris blanquecino */
+    text-decoration: underline;
+    /* Subrayado */
+  }
+}

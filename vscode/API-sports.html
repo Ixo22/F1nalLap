@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1nal Lap</title>
+    <link rel="shortcut icon" href="https://www.formula1.com/etc/designs/fom-website/images/f1_logo.svg">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Audiowide" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="content">
+            <header>
+
+                <h1>F1nal Lap</h1>
+                <img src="https://www.formula1.com/etc/designs/fom-website/images/f1_logo.svg" alt="Fórmula 1 Logo">
+
+            </header>
+
+
+            <div id="progress-container">
+                <nav>
+    
+                    <a href="index.html">Inicio</a>
+                    <a href="temp_act.html">Temporada Actual</a>
+                    <a href="ult_temp.html">Últimas Temporadas</a>
+                    <a href="temp_mem.html">Temporadas Memorables</a>
+                    <a href="prueba.html">Prueba</a>
+                    <a href="openf1_carreras.html">Carreras</a>
+                    <a href="openf1_drivers.html">Pilotos</a>
+                    <a href="API-sports.html">Api Sport</a>
+    
+                </nav>
+                <div id="progress-bar"></div>
+            </div>
+
+            <div class="contenedor">
+                <h1>Ranking de F1 - Temporada 2024</h1>
+                <div class="buttons">
+                    <button id="showDrivers">Ranking de Pilotos</button>
+                    <button id="showTeams">Ranking de Equipos</button>
+                    <button id="showCircuits">Circuitos</button>
+                    <button id="clearData">Borrar Contenido</button>
+                    <button id="clearCache">Borrar Caché</button>
+                </div>
+                <div id="rankings" class="rankings"></div>
+            </div>
+
+        </div>
+
+        <footer>
+            <a href="https://www.linkedin.com/in/aalbeerto/" target="_blank">© AGA. Todos los derechos reservados.</a>
+        </footer>
+
+    </div>
+
+    <script src="cache-api-sports.js"></script>
+    <script src="barra_deslizante.js"></script>
+</body>
+
+</html>
