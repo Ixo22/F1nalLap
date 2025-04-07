@@ -110,7 +110,7 @@ body {
     /* Permite que la sección principal ocupe el espacio disponible */
     padding: 10px 30px 50px 40px;
     /* padding: top, right, bottom, left */
-    margin: 15px 0;
+    margin: 15px 25px;
     /* Espacio entre secciones */
     background-color: white;
     /* Fondo blanco para secciones */
@@ -559,7 +559,7 @@ body {
   
   /* Ocultar flechas en input de tipo number */
   input[type="number"] {
-    -moz-appearance: textfield; /* Firefox */
+    //moz-appearance: textfield; /* Firefox */
     border-radius: 5px;
     border: 1px solid gray;
   }
