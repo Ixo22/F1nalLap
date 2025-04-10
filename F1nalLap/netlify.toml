@@ -1,9 +1,8 @@
 [build]
-  publish = "dist/f1nal-lap"  # Asegúrate de que esta es la ruta correcta a tu carpeta de salida
   command = "ng build --configuration production"
+  publish = "dist/f1nal-lap/browser"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  force = true
