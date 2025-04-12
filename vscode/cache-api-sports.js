@@ -20,7 +20,7 @@ async function fetchDriverRankings() {
     }
 
     const anyoActual = new Date().getFullYear();
-    const response = await fetch(`https://v1.formula-1.api-sports.io/rankings/drivers?season=${anyoActual}`, {
+    const response = await fetch(`https://v1.formula-1.api-sports.io/rankings/drivers?season=2023`, {
         method: "GET",
         headers: {
             "x-rapidapi-key": apiKey,
@@ -46,7 +46,7 @@ async function fetchTeamRankings() {
     }
 
     const anyoActual = new Date().getFullYear();
-    const response = await fetch(`https://v1.formula-1.api-sports.io/rankings/teams?season=${anyoActual}`, {
+    const response = await fetch(`https://v1.formula-1.api-sports.io/rankings/teams?season=2023`, {
         method: "GET",
         headers: {
             "x-rapidapi-host": "v1.formula-1.api-sports.io",
@@ -72,7 +72,7 @@ async function fetchCircuits() {
     }
 
     const anyoActual = new Date().getFullYear();
-    const response = await fetch(`https://v1.formula-1.api-sports.io/races?type=Race&season=${anyoActual}`, {
+    const response = await fetch(`https://v1.formula-1.api-sports.io/races?type=Race&season=2023`, {
         method: "GET",
         headers: {
             "x-rapidapi-key": apiKey,

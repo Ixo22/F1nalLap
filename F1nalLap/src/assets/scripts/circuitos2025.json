@@ -1,0 +1,232 @@
+[
+  {
+    "id": 1,
+    "name": "Albert Park Circuit",
+    "image": "https://media.api-sports.io/formula-1/circuits/1.png",
+    "name_GP": "Australia Grand Prix",
+    "country": "Australia",
+    "laps": 58,
+    "length": "5.278 km",
+    "lap_record": "1:19.813"
+  },
+  {
+    "id": 1,
+    "name": "Shanghai International Circuit",
+    "image": "https://media.api-sports.io/formula-1/circuits/4.png",
+    "name_GP": "China Grand Prix",
+    "country": "China",
+    "laps": 56,
+    "length": "5.451 Kms",
+    "lap_record": "1:32.238"
+  },
+  {
+    "id": 2,
+    "name": "Suzuka International Racing Course",
+    "image": "https://media.api-sports.io/formula-1/circuits/19.png",
+    "name_GP": "Japan Grand Prix",
+    "country": "Japan",
+    "laps": 53,
+    "length": "5.807 Kms",
+    "lap_record": "1:30.983"
+  },
+  {
+    "id": 3,
+    "name": "Bahrain International Circuit",
+    "image": "https://media.api-sports.io/formula-1/circuits/2.png",
+    "name_GP": "Bahrain Grand Prix",
+    "country": "Bahrain",
+    "laps": 57,
+    "length": "5.412 Kms",
+    "lap_record": "1:31.447"
+  },
+  {
+    "id": 4,
+    "name": "Jeddah Corniche Circuit",
+    "image": "https://media.api-sports.io/formula-1/circuits/29.png",
+    "name_GP": "Saudi Arabia Grand Prix",
+    "country": "Saudi Arabia",
+    "laps": 50,
+    "length": "6.174 Kms",
+    "lap_record": "1:30.734"
+  },
+  {
+    "id": 5,
+    "name": "Miami International Autodrome",
+    "image": "https://media.api-sports.io/formula-1/circuits/31.png",
+    "name_GP": "Miami Grand Prix",
+    "country": "USA",
+    "laps": 57,
+    "length": "5.412 km",
+    "lap_record": "1:29.708"
+  },
+  {
+    "id": 6,
+    "name": "Autodromo Enzo e Dino Ferrari",
+    "image": "https://media.api-sports.io/formula-1/circuits/27.png",
+    "name_GP": "Emilia Romagna Grand Prix",
+    "country": "Italy",
+    "laps": 63,
+    "length": "4.909 km",
+    "lap_record": "1:15.484"
+  },
+  {
+    "id": 7,
+    "name": "Circuit de Monaco",
+    "image": "https://media.api-sports.io/formula-1/circuits/7.png",
+    "name_GP": "Monaco Grand Prix",
+    "country": "Monaco",
+    "laps": 78,
+    "length": "3.337 Kms",
+    "lap_record": "1:12.909"
+  },
+  {
+    "id": 8,
+    "name": "Circuit de Barcelona-Catalunya",
+    "image": "https://media.api-sports.io/formula-1/circuits/6.png",
+    "name_GP": "Spain Grand Prix",
+    "country": "Spain",
+    "laps": 66,
+    "length": "4.657 km",
+    "lap_record": "1:16.330"
+  },
+  {
+    "id": 9,
+    "name": "Circuit Gilles-Villeneuve",
+    "image": "https://media.api-sports.io/formula-1/circuits/9.png",
+    "name_GP": "Canada Grand Prix",
+    "country": "Canada",
+    "laps": 70,
+    "length": "4.361 Kms",
+    "lap_record": "1:13.078"
+  },
+  {
+    "id": 10,
+    "name": "Red Bull Ring",
+    "image": "https://media.api-sports.io/formula-1/circuits/11.png",
+    "name_GP": "Austria Grand Prix",
+    "country": "Austria",
+    "laps": 71,
+    "length": "4.318 km",
+    "lap_record": "1:05.619"
+  },
+  {
+    "id": 11,
+    "name": "Silverstone Circuit",
+    "image": "https://media.api-sports.io/formula-1/circuits/12.png",
+    "name_GP": "Great Britain Grand Prix",
+    "country": "United Kingdom",
+    "laps": 52,
+    "length": "5.891 Kms",
+    "lap_record": "1:27.097"
+  },
+  {
+    "id": 12,
+    "name": "Hungaroring",
+    "image": "https://media.api-sports.io/formula-1/circuits/14.png",
+    "name_GP": "Hungary Grand Prix",
+    "country": "Hungary",
+    "laps": 70,
+    "length": "4.381 Kms",
+    "lap_record": "1:16.627"
+  },
+  {
+    "id": 13,
+    "name": "Circuit Zandvoort",
+    "image": "https://media.api-sports.io/formula-1/circuits/5.png",
+    "name_GP": "Netherlands Grand Prix",
+    "country": "Netherlands",
+    "laps": 72,
+    "length": "4.259 kms",
+    "lap_record": "1:11.097"
+  },
+  {
+    "id": 14,
+    "name": "Autodromo Nazionale Monza",
+    "image": "https://media.api-sports.io/formula-1/circuits/16.png",
+    "name_GP": "Italy Grand Prix",
+    "country": "Italy",
+    "laps": 53,
+    "length": "5.793 Kms",
+    "lap_record": "1:21.046"
+  },
+  {
+    "id": 15,
+    "name": "Baku City Circuit",
+    "image": "https://media.api-sports.io/formula-1/circuits/8.png",
+    "name_GP": "Azerbaijan Grand Prix",
+    "country": "Azerbaijan",
+    "laps": 51,
+    "length": "6.003 Kms",
+    "lap_record": "1:43.009"
+  },
+  {
+    "id": 16,
+    "name": "Marina Bay Street Circuit",
+    "image": "https://media.api-sports.io/formula-1/circuits/17.png",
+    "name_GP": "Singapore Grand Prix",
+    "country": "Singapore",
+    "laps": 62,
+    "length": "4.940 km",
+    "lap_record": "1:34.486"
+  },
+  {
+    "id": 17,
+    "name": "Circuit of The Americas",
+    "image": "https://media.api-sports.io/formula-1/circuits/20.png",
+    "name_GP": "USA Grand Prix",
+    "country": "USA",
+    "laps": 56,
+    "length": "5.513 km",
+    "lap_record": "1:36.169"
+  },
+  {
+    "id": 18,
+    "name": "Autódromo Hermanos Rodríguez",
+    "image": "https://media.api-sports.io/formula-1/circuits/21.png",
+    "name_GP": "Mexico Grand Prix",
+    "country": "Mexico",
+    "laps": 71,
+    "length": "4.304 Kms",
+    "lap_record": "1:17.774"
+  },
+  {
+    "id": 19,
+    "name": "Autódromo José Carlos Pace",
+    "image": "https://media.api-sports.io/formula-1/circuits/22.png",
+    "name_GP": "Brazil Grand Prix",
+    "country": "Brazil",
+    "laps": 71,
+    "length": "4.309 Kms",
+    "lap_record": "1:10.540"
+  },
+  {
+    "id": 20,
+    "name": "Las Vegas Strip Circuit",
+    "image": "https://media.api-sports.io/formula-1/circuits/32.png",
+    "name_GP": "Las Vegas Grand Prix",
+    "country": "USA",
+    "laps": 50,
+    "length": "6.201 kms",
+    "lap_record": "1:34.876"
+  },
+  {
+    "id": 21,
+    "name": "Losail International Circuit",
+    "image": "https://media.api-sports.io/formula-1/circuits/30.png",
+    "name_GP": "Qatar Grand Prix",
+    "country": "Qatar",
+    "laps": 57,
+    "length": "5.419 km",
+    "lap_record": "1:22.384"
+  },
+  {
+    "id": 22,
+    "name": "Yas Marina Circuit",
+    "image": "https://media.api-sports.io/formula-1/circuits/23.png",
+    "name_GP": "Abu Dhabi Grand Prix",
+    "country": "United Arab Emirates",
+    "laps": 58,
+    "length": "5.281 km",
+    "lap_record": "1:25.637"
+  }
+]
