@@ -10,7 +10,7 @@
     "lap_record": "1:19.813"
   },
   {
-    "id": 1,
+    "id": 2,
     "name": "Shanghai International Circuit",
     "image": "https://media.api-sports.io/formula-1/circuits/4.png",
     "name_GP": "China Grand Prix",
@@ -20,7 +20,7 @@
     "lap_record": "1:32.238"
   },
   {
-    "id": 2,
+    "id": 3,
     "name": "Suzuka International Racing Course",
     "image": "https://media.api-sports.io/formula-1/circuits/19.png",
     "name_GP": "Japan Grand Prix",
@@ -30,7 +30,7 @@
     "lap_record": "1:30.983"
   },
   {
-    "id": 3,
+    "id": 4,
     "name": "Bahrain International Circuit",
     "image": "https://media.api-sports.io/formula-1/circuits/2.png",
     "name_GP": "Bahrain Grand Prix",
@@ -40,7 +40,7 @@
     "lap_record": "1:31.447"
   },
   {
-    "id": 4,
+    "id": 5,
     "name": "Jeddah Corniche Circuit",
     "image": "https://media.api-sports.io/formula-1/circuits/29.png",
     "name_GP": "Saudi Arabia Grand Prix",
@@ -50,7 +50,7 @@
     "lap_record": "1:30.734"
   },
   {
-    "id": 5,
+    "id": 6,
     "name": "Miami International Autodrome",
     "image": "https://media.api-sports.io/formula-1/circuits/31.png",
     "name_GP": "Miami Grand Prix",
@@ -60,7 +60,7 @@
     "lap_record": "1:29.708"
   },
   {
-    "id": 6,
+    "id": 7,
     "name": "Autodromo Enzo e Dino Ferrari",
     "image": "https://media.api-sports.io/formula-1/circuits/27.png",
     "name_GP": "Emilia Romagna Grand Prix",
@@ -70,7 +70,7 @@
     "lap_record": "1:15.484"
   },
   {
-    "id": 7,
+    "id": 8,
     "name": "Circuit de Monaco",
     "image": "https://media.api-sports.io/formula-1/circuits/7.png",
     "name_GP": "Monaco Grand Prix",
@@ -80,7 +80,7 @@
     "lap_record": "1:12.909"
   },
   {
-    "id": 8,
+    "id": 9,
     "name": "Circuit de Barcelona-Catalunya",
     "image": "https://media.api-sports.io/formula-1/circuits/6.png",
     "name_GP": "Spain Grand Prix",
@@ -90,7 +90,7 @@
     "lap_record": "1:16.330"
   },
   {
-    "id": 9,
+    "id": 10,
     "name": "Circuit Gilles-Villeneuve",
     "image": "https://media.api-sports.io/formula-1/circuits/9.png",
     "name_GP": "Canada Grand Prix",
@@ -100,7 +100,7 @@
     "lap_record": "1:13.078"
   },
   {
-    "id": 10,
+    "id": 11,
     "name": "Red Bull Ring",
     "image": "https://media.api-sports.io/formula-1/circuits/11.png",
     "name_GP": "Austria Grand Prix",
@@ -110,7 +110,7 @@
     "lap_record": "1:05.619"
   },
   {
-    "id": 11,
+    "id": 12,
     "name": "Silverstone Circuit",
     "image": "https://media.api-sports.io/formula-1/circuits/12.png",
     "name_GP": "Great Britain Grand Prix",
@@ -120,7 +120,17 @@
     "lap_record": "1:27.097"
   },
   {
-    "id": 12,
+    "id": 13,
+    "name": "Circuit de Spa-Francorchamps",
+    "image": "https://media.api-sports.io/formula-1/circuits/15.png",
+    "name_GP": "Belgium Grand Prix",
+    "country": "Belgium",
+    "laps": 44,
+    "length": "7.004 Kms",
+    "lap_record": "1:44.701"
+  },
+  {
+    "id": 14,
     "name": "Hungaroring",
     "image": "https://media.api-sports.io/formula-1/circuits/14.png",
     "name_GP": "Hungary Grand Prix",
@@ -130,7 +140,7 @@
     "lap_record": "1:16.627"
   },
   {
-    "id": 13,
+    "id": 15,
     "name": "Circuit Zandvoort",
     "image": "https://media.api-sports.io/formula-1/circuits/5.png",
     "name_GP": "Netherlands Grand Prix",
@@ -140,7 +150,7 @@
     "lap_record": "1:11.097"
   },
   {
-    "id": 14,
+    "id": 16,
     "name": "Autodromo Nazionale Monza",
     "image": "https://media.api-sports.io/formula-1/circuits/16.png",
     "name_GP": "Italy Grand Prix",
@@ -150,7 +160,7 @@
     "lap_record": "1:21.046"
   },
   {
-    "id": 15,
+    "id": 17,
     "name": "Baku City Circuit",
     "image": "https://media.api-sports.io/formula-1/circuits/8.png",
     "name_GP": "Azerbaijan Grand Prix",
@@ -160,7 +170,7 @@
     "lap_record": "1:43.009"
   },
   {
-    "id": 16,
+    "id": 18,
     "name": "Marina Bay Street Circuit",
     "image": "https://media.api-sports.io/formula-1/circuits/17.png",
     "name_GP": "Singapore Grand Prix",
@@ -170,7 +180,7 @@
     "lap_record": "1:34.486"
   },
   {
-    "id": 17,
+    "id": 19,
     "name": "Circuit of The Americas",
     "image": "https://media.api-sports.io/formula-1/circuits/20.png",
     "name_GP": "USA Grand Prix",
@@ -180,7 +190,7 @@
     "lap_record": "1:36.169"
   },
   {
-    "id": 18,
+    "id": 20,
     "name": "Autódromo Hermanos Rodríguez",
     "image": "https://media.api-sports.io/formula-1/circuits/21.png",
     "name_GP": "Mexico Grand Prix",
@@ -190,7 +200,7 @@
     "lap_record": "1:17.774"
   },
   {
-    "id": 19,
+    "id": 21,
     "name": "Autódromo José Carlos Pace",
     "image": "https://media.api-sports.io/formula-1/circuits/22.png",
     "name_GP": "Brazil Grand Prix",
@@ -200,7 +210,7 @@
     "lap_record": "1:10.540"
   },
   {
-    "id": 20,
+    "id": 22,
     "name": "Las Vegas Strip Circuit",
     "image": "https://media.api-sports.io/formula-1/circuits/32.png",
     "name_GP": "Las Vegas Grand Prix",
@@ -210,7 +220,7 @@
     "lap_record": "1:34.876"
   },
   {
-    "id": 21,
+    "id": 23,
     "name": "Losail International Circuit",
     "image": "https://media.api-sports.io/formula-1/circuits/30.png",
     "name_GP": "Qatar Grand Prix",
@@ -220,7 +230,7 @@
     "lap_record": "1:22.384"
   },
   {
-    "id": 22,
+    "id": 24,
     "name": "Yas Marina Circuit",
     "image": "https://media.api-sports.io/formula-1/circuits/23.png",
     "name_GP": "Abu Dhabi Grand Prix",

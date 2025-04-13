@@ -27,6 +27,8 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
+              "src/assets",
+              "src/favicon.ico",
               {
                 "glob": "**/*",
                 "input": "public"
@@ -36,7 +38,8 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "src/assets/scripts/barra_deslizante.js"
+              "src/assets/js/barra_deslizante.js",
+              "src/assets/js/tarjetas.js"
             ]
           },
           "configurations": {
@@ -96,7 +99,9 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/js/barra_deslizante.js"
+            ]
           }
         }
       }

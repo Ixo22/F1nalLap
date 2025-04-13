@@ -1,104 +1,64 @@
-// Variables
-$color-primario: #3498db;
-$color-secundario: #2980b9;
-$color-fondo: #f9f9f9;
-$color-texto: #333;
-$sombra: 0 4px 8px rgba(0, 0, 0, 0.1);
-$radio-borde: 8px;
-$transicion: all 0.3s ease;
+// tarjetas.scss
 
-// Mixin para flexbox
-@mixin flex-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-// Estilos base
-body {
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
-    color: $color-texto;
-    background-color: $color-fondo;
-    padding: 20px;
-}
-
-// Contenedor de tarjetas
 .tarjetas-contenedor {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); // 3 columnas
+  gap: 2rem;
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 1100px;
+  margin: 2rem auto;
 }
 
-// Estilos de tarjeta individual
-.tarjeta {
-    background: white;
-    border-radius: $radio-borde;
-    overflow: hidden;
-    box-shadow: $sombra;
-    transition: $transicion;
-    
-    &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    }
-}
+::ng-deep .tarjeta {
+  border: 2px solid black;
+  border-radius: 1rem;
+  padding: 1rem;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  cursor: pointer;
 
-.tarjeta-imagen {
-    height: 200px;
-    overflow: hidden;
-    
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: $transicion;
-        
-        .tarjeta:hover & {
-            transform: scale(1.05);
-        }
-    }
-}
+  &:hover {
+    transform: scale(1.02);
+  }
 
-.tarjeta-contenido {
-    padding: 20px;
-    
+  .tarjeta-imagen img {
+    width: 100%;
+    box-shadow: none;
+    border-radius: 0.5rem;
+    object-fit: cover;
+  }
+
+  .tarjeta-contenido {
+    border-top: 1px solid black;
+    margin-top: 1rem;
+    text-align: center;
+
     h3 {
-        margin-top: 0;
-        color: $color-primario;
+      margin: 0.5rem 0;
     }
-    
-    p {
-        margin-bottom: 20px;
+
+    .boton {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.5rem 1rem;
+      background-color: black;
+      color: white;
+      border-radius: 0.5rem;
+      text-decoration: none;
+
+      &:hover {
+        background-color: #333;
+      }
     }
+  }
 }
 
-.boton {
-    display: inline-block;
-    background: $color-primario;
-    color: white;
-    padding: 10px 20px;
-    border-radius: $radio-borde;
-    text-decoration: none;
-    transition: $transicion;
-    
-    &:hover {
-        background: $color-secundario;
-    }
-}
 
-// Responsive
 @media (max-width: 768px) {
-    .tarjetas-contenedor {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    }
-}
-
-@media (max-width: 480px) {
-    .tarjetas-contenedor {
-        grid-template-columns: 1fr;
-    }
+    
+  .tarjetas-contenedor {
+    grid-template-columns: repeat(2, 1fr); // 2 columnas en pantallas pequeñas
+  }
 }
