@@ -59,6 +59,13 @@
 @media (max-width: 768px) {
     
   .tarjetas-contenedor {
-    grid-template-columns: repeat(2, 1fr); // 2 columnas en pantallas pequeñas
+    grid-template-columns: repeat(1, 1fr); // 2 columnas en pantallas pequeñas
   }
 }
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    
+    .tarjetas-contenedor {
+      grid-template-columns: repeat(2, 1fr); // 2 columnas en pantallas pequeñas
+    }
+  }

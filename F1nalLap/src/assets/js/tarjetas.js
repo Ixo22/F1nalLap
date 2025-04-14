@@ -24,7 +24,7 @@ function initTarjetas() {
             <p>Circuito: ${circuito.name}</p>
             <p>Vueltas: ${circuito.laps} | Longitud: ${circuito.length}</p>
             <p>Récord: ${circuito.lap_record}</p>
-            <a href="#" class="boton">Ver más</a>
+            <a href="#" class="boton">Proximamente...</a>
           </div>
         `;
         contenedor.appendChild(tarjeta);
