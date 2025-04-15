@@ -6,7 +6,6 @@ export const routes: Routes = [
   { path: 'temp-actual', loadComponent: () => import('./pages/temp-actual/temp-actual.component').then(m => m.TempActualComponent) },
   { path: 'last-temps', loadComponent: () => import('./pages/last-temps/last-temps.component').then(m => m.LastTempsComponent) },
   { path: 'memorable-temps', loadComponent: () => import('./pages/memorable-temps/memorable-temps.component').then(m => m.MemorableTempsComponent) },
-  { path: 'sim', loadComponent: () => import('./pages/sim/sim.component').then(m => m.SimComponent) }
+  { path: 'circuits', loadComponent: () => import('./pages/circuits/circuits.component').then(m => m.CircuitsComponent) }
 ];
  
-
