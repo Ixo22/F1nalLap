@@ -38,8 +38,7 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "src/assets/js/barra_deslizante.js",
-              "src/assets/js/tarjetas.js"
+              "src/assets/js/barra_deslizante.js"
             ]
           },
           "configurations": {

@@ -24,7 +24,7 @@ function initTarjetas() {
             <p>Circuito: ${circuito.name}</p>
             <p>Vueltas: ${circuito.laps} | Longitud: ${circuito.length}</p>
             <p>Récord: ${circuito.lap_record}</p>
-            <a href="#" class="boton">Proximamente...</a>
+            <a href="simulador" class="boton">Simular</a>
           </div>
         `;
         contenedor.appendChild(tarjeta);
@@ -38,3 +38,15 @@ function initTarjetas() {
 document.addEventListener("DOMContentLoaded", () => {
   initTarjetas(); // Lanza el intento
 });
+
+
+
+// antiguo boton:
+// <a href="#" class="boton">Proximamente...</a>
+
+//boton que dirige a simulador:
+//<a href="simulador" class="boton">Simular</a>
+
+
+//boton que funciona con # en la ruta ("localhost:4200/#/simulador")
+//<a href="/simulador/${circuito.id}" class="boton">Simular</a>

@@ -1,3 +1,4 @@
+<!-- simulador.component.html -->
 <div class="container">
   <div class="content">
     <header>
@@ -21,23 +22,10 @@
     </div>
 
     <div class="contenedor-section">
-      <div class="tarjetas-contenedor">
-        <div *ngFor="let circuito of circuits" class="tarjeta">
-          <div class="tarjeta-imagen">
-            <img [src]="circuito.image" [alt]="circuito.name" />
-          </div>
-          <div class="tarjeta-contenido">
-            <h3>{{ circuito.name_GP }}</h3>
-            <p>Circuito: {{ circuito.name }}</p>
-            <p>
-              Vueltas: {{ circuito.laps }} | Longitud: {{ circuito.length }}
-            </p>
-            <p>Récord: {{ circuito.lap_record }}</p>
-            <a href="Proximamente..." class="boton">Simular</a>
-          </div>
-        </div>
-      </div>
+      <h1 style="color:white; text-align: center;">Simulador de Carreras</h1>
     </div>
+
+      
   </div>
 
   <footer>
@@ -46,5 +34,3 @@
     >
   </footer>
 </div>
-
-
