@@ -45,7 +45,8 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'simulador/:id',
+    //path: 'simulador/:id', // Mostramos el id en la ruta "simulador/3"
+    path: 'simulador/:name_GP', // Mostramos el nombre del GP en la ruta "simulador/Japan%20Grand%20Prix"
     loadComponent: () =>
       import('./pages/simulador/simulador.component').then(
         (m) => m.SimuladorComponent

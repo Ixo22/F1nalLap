@@ -33,7 +33,7 @@
               Vueltas: {{ circuito.laps }} | Longitud: {{ circuito.length }}
             </p>
             <p>Récord: {{ circuito.lap_record }}</p>
-            <a [routerLink]="['/simulador', circuito.id]" class="boton">Simular</a>
+            <a [routerLink]="['/simulador', circuito.name_GP]" class="boton">Simular</a>
 
           </div>
         </div>

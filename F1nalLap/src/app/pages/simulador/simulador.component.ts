@@ -13,29 +13,23 @@ import { RouterModule } from '@angular/router'; // 👈 ¡esto es lo que faltaba
 export class SimuladorComponent implements OnInit {
   circuito: any;
   private activatedRoute = inject(ActivatedRoute);
-  //public num: string = '1';
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-
-    /*this.activatedRoute.params.subscribe((params) => {
-      if (params['id']) {
-        this.num = params['id'];
-      }
-      console.log('Id del circuit:', this.num); // Aquí puedes ver que el array tiene los datos correctos
-    });*/
-
-
-    const idcircuito = this.route.snapshot.paramMap.get('id');
-    console.log('Id del GPpppppp:', idcircuito); // Verifica el parámetro
+    //const idcircuito = this.route.snapshot.paramMap.get('id'); // Para mostrar el id en la ruta "simulador/3"
+    const idcircuito = this.route.snapshot.paramMap.get('name_GP'); // Para mostrar el nombre del GP en la ruta "simulador/Japan%20Grand%20Prix"
+    console.log('Id del GP:', idcircuito); // Verifica el parámetro
 
     fetch('./../../../assets/json/circuitos2025.json')
       .then((response) => response.json())
       .then((data) => {
-        //console.log('Datos del JSON:', data); // Verifica los datos cargados
-        this.circuito = data.find((circuito: any) => circuito.id == idcircuito);
-        console.log('Circuito encontrado:', this.circuito);
-        console.log('Id del circuitoooooo: ', this.circuito.id) // Verifica el circuito encontrado
+        //console.log('Datos del JSON:', data); // Verifica los datos cargados del JSON
+        //this.circuito = data.find((circuito: any) => circuito.id == idcircuito); // Para mostrar el id en la ruta "simulador/3"
+        this.circuito = data.find((circuito: any) => circuito.name_GP == idcircuito); // Para mostrar el nombre del GP en la ruta "simulador/Japan%20Grand%20Prix"
+        console.log('Circuito encontrado:', this.circuito); // Verifica el circuito encontrado
+        console.log('Id del circuito: ', this.circuito.id); // Verifica el id del circuito
+        console.log('Nombre del circuito: ', this.circuito.name); // Verifica el nombre del circuito
+        console.log('Nombre del GP: ', this.circuito.name_GP); // Verifica el nombre del GP
       })
       .catch((error) => {
         console.error('Error cargando el JSON:', error);

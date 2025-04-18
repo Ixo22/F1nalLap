@@ -38,7 +38,7 @@
           <p>Vueltas: {{ circuito.laps }}</p>
           <p>Longitud: {{ circuito.length }}</p>
           <p>Récord: {{ circuito.lap_record }}</p>
-          <a href="" class="boton">Simulacion</a>
+          <a [routerLink]="['/simulador', circuito.name_GP]" class="boton">En mantenimiento...</a>
         </div>
         <ng-template #loading>
           <p>Cargando circuito...</p>

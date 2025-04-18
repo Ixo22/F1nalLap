@@ -19,7 +19,7 @@ export class CircuitsComponent implements OnInit {
   this.http.get<any[]>('./../../../assets/json/circuitos2025.json')
     .subscribe(data => {
       this.circuits = data;
-      console.log('Circuitos:', this.circuits);  // Aquí puedes ver que el array tiene los datos correctos
+      //console.log('Circuitos:', this.circuits);  // Aquí podemos ver los circuitos cargados del JSON
     });
 }
 
