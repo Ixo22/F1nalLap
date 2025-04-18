@@ -22,10 +22,29 @@
     </div>
 
     <div class="contenedor-section">
-      <h1 style="color:white; text-align: center;">Simulador de Carreras</h1>
+      <h1 style="color: white; text-align: center; margin-bottom: 0">
+        Simulador de Carreras
+      </h1>
+      <h3 style="color: white; text-align: center; margin-top: 0">
+        Próximamente disponible...
+      </h3>
+      <section id="vuelta">
+        <a href="../circuits" class="boton" id="volver">Volver</a>
+      </section>
+      <section>
+        <div *ngIf="circuito; else loading">
+          <h2>{{ circuito.name_GP }}</h2>
+          <img [src]="circuito.image" [alt]="circuito.name" />
+          <p>Vueltas: {{ circuito.laps }}</p>
+          <p>Longitud: {{ circuito.length }}</p>
+          <p>Récord: {{ circuito.lap_record }}</p>
+          <a href="" class="boton">Simulacion</a>
+        </div>
+        <ng-template #loading>
+          <p>Cargando circuito...</p>
+        </ng-template>
+      </section>
     </div>
-
-      
   </div>
 
   <footer>
