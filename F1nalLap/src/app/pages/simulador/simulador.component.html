@@ -15,37 +15,45 @@
         <a href="actual">Temporada Actual</a>
         <a href="last">Últimas Temporadas</a>
         <a href="memorable">Temporadas Memorables</a>
-        <a href="circuits">Circuitos</a>
+        <a href="../circuits">Circuitos</a>
       </nav>
 
       <div id="progress-bar"></div>
     </div>
 
-    <div class="contenedor-section">
+    
       <h1 style="color: white; text-align: center; margin-bottom: 0">
         Simulador de Carreras
       </h1>
       <h3 style="color: white; text-align: center; margin-top: 0">
         Próximamente disponible...
       </h3>
-      <section id="vuelta">
+
         <a href="../circuits" class="boton" id="volver">Volver</a>
-      </section>
-      <section>
-        <div *ngIf="circuito; else loading">
-          <h2>{{ circuito.name_GP }}</h2>
-          <img [src]="circuito.image" [alt]="circuito.name" />
-          <p>Vueltas: {{ circuito.laps }}</p>
-          <p>Longitud: {{ circuito.length }}</p>
-          <p>Récord: {{ circuito.lap_record }}</p>
-          <a [routerLink]="['/simulador', circuito.name_GP]" class="boton">En mantenimiento...</a>
+    
+      <div class="contenedor-section">
+        <div class="tarjetas-contenedor">
+            <div class="tarjeta-imagen">
+              <img [src]="circuito.image" [alt]="circuito.name" />
+            </div>
+            <div class="tarjeta-contenido">
+              <div *ngIf="circuito; else loading">
+                <h2>{{ circuito.name_GP }}</h2>
+                <p>Vueltas: {{ circuito.laps }}</p>
+                <p>Longitud: {{ circuito.length }}</p>
+                <p>Récord: {{ circuito.lap_record }}</p>
+                <a [routerLink]="['/simulador', circuito.name_GP]" class="boton">En mantenimiento...</a>
+              </div>
+              <ng-template #loading>
+                <p>Cargando circuito...</p>
+              </ng-template>
+  
+            </div>
+          </div>
         </div>
-        <ng-template #loading>
-          <p>Cargando circuito...</p>
-        </ng-template>
-      </section>
-    </div>
-  </div>
+      </div>
+
+
 
   <footer>
     <a href="https://www.linkedin.com/in/aalbeerto/" target="_blank"
