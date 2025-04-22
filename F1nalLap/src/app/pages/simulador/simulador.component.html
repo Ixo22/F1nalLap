@@ -42,7 +42,14 @@
                 <p>Vueltas: {{ circuito.laps }}</p>
                 <p>Longitud: {{ circuito.length }}</p>
                 <p>Récord: {{ circuito.lap_record }}</p>
-                <a [routerLink]="['/simulador', circuito.name_GP]" class="boton">En mantenimiento...</a>
+                
+                <button class="boton" (click)="calcularEstrategias()">Calcular estrategias</button>
+                <section *ngIf="estrategias.length > 0" class="estrategias-resultados">
+                  <h3>Mejores estrategias:</h3>
+                  <ul>
+                    <li *ngFor="let est of estrategias">{{ est }}</li>
+                  </ul>
+                </section>
               </div>
               <ng-template #loading>
                 <p>Cargando circuito...</p>
@@ -51,6 +58,8 @@
             </div>
           </div>
         </div>
+
+        
       </div>
 
 

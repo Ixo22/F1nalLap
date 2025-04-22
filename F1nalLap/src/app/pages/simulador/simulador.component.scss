@@ -74,6 +74,43 @@
   }
 }
 
+
+
+.estrategias-resultados{
+  margin-top: 5ch;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+
+  h3{
+    color:rgb(0, 0, 0);
+  }
+
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  li {
+    margin: 0.5rem 0;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 /* 🎯 Responsive */
 @media (min-width: 769px) and (max-width: 1024px) {
   .tarjetas-contenedor {
