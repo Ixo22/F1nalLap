@@ -21,48 +21,44 @@
       <div id="progress-bar"></div>
     </div>
 
-    
-      <h1 style="color: white; text-align: center; margin-bottom: 0">
-        Simulador de Carreras
-      </h1>
-      <h3 style="color: white; text-align: center; margin-top: 0">
-        Próximamente disponible...
-      </h3>
-
-        <a href="../circuits" class="boton" id="volver">Volver</a>
-    
-      <div class="contenedor-section">
-        <div class="tarjetas-contenedor">
-            <div class="tarjeta-imagen">
-              <img [src]="circuito.image" [alt]="circuito.name" />
-            </div>
-            <div class="tarjeta-contenido">
-              <div *ngIf="circuito; else loading">
-                <h2>{{ circuito.name_GP }}</h2>
-                <p>Vueltas: {{ circuito.laps }}</p>
-                <p>Longitud: {{ circuito.length }}</p>
-                <p>Récord: {{ circuito.lap_record }}</p>
-                
-                <button class="boton" (click)="calcularEstrategias()">Calcular estrategias</button>
-                <section *ngIf="estrategias.length > 0" class="estrategias-resultados">
-                  <h3>Mejores estrategias:</h3>
-                  <ul>
-                    <li *ngFor="let est of estrategias">{{ est }}</li>
-                  </ul>
-                </section>
-              </div>
-              <ng-template #loading>
-                <p>Cargando circuito...</p>
-              </ng-template>
-  
-            </div>
-          </div>
+    <div class="contenedor-section">
+      <div class="tarjetas-contenedor">
+        <a href="../circuits" class="boton" id="volver">
+          🡰
+        </a>
+        <div class="tarjeta-imagen">
+          <img [src]="circuito.image" [alt]="circuito.name" />
         </div>
+        <div class="tarjeta-contenido">
+          <div *ngIf="circuito; else loading">
+            <h2>{{ circuito.name_GP }}</h2>
+            <p>
+              Circuito: {{ circuito.name }}
+            </p>
+            <p>
+              Vueltas: {{ circuito.laps }} | Longitud: {{ circuito.length }}
+            </p>
+            <p>
+              Vuelta rápida: {{ circuito.lap_record }}
+            </p>
 
-        
+            <button class="boton" (click)="calcularEstrategias()">
+              Calcular estrategias
+            </button>
+            <section *ngIf="estrategias.length > 0" class="estrategias-resultados">
+              <h3>Mejores estrategias:</h3>
+              <ul>
+                <li *ngFor="let est of estrategias">{{ est }}</li>
+              </ul>
+            </section>
+          </div>
+          <ng-template #loading>
+            <p>Cargando circuito...</p>
+          </ng-template>
+        </div>
       </div>
-
-
+    </div>
+  </div>
 
   <footer>
     <a href="https://www.linkedin.com/in/aalbeerto/" target="_blank"

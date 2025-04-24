@@ -1,0 +1,124 @@
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.flex-texto {
+  flex: 2;
+  text-align: left;
+  margin-right: 30px;
+}
+
+.flex-imagen {
+  margin-left: 40px;
+  flex: 1;
+}
+
+.imagen {
+  width: auto;
+  max-width: 450px;
+  border-radius: 20px;
+  //border: 2px solid rgb(197, 197, 197);
+  box-shadow: none;
+}
+
+h2 {
+  margin-bottom: 0;
+}
+
+
+section {
+    padding: 10px 30px 10px 40px;
+  }
+
+
+
+
+
+
+/* Tablets y pantallas medianas */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .flex {
+    gap: 16px;
+    padding: 16px;
+    align-items: center;
+  }
+
+  .flex-imagen {
+    margin-left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+  }
+
+  .imagen {
+    width: auto;
+    max-width: 300px;
+    border-radius: 16px;
+  }
+}
+
+
+/* Móviles grandes y tablets pequeñas */
+@media (min-width: 481px) and (max-width: 768px) {
+  .flex {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 16px;
+  }
+
+  .flex-texto {
+    width: 100%;
+    margin-left: 20px;
+  }
+
+  .flex-imagen {
+    width: auto;
+    margin-left: 0;
+  }
+
+  .imagen {
+    max-width: 450px;
+    border-radius: 16px;
+  }
+}
+
+
+
+/* Móviles pequeños */
+@media (max-width: 480px) {
+  .flex {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 12px;
+  }
+
+  .flex-texto {
+    width: 100%;
+    margin-left: 15px;
+  }
+
+  .flex-imagen {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .imagen {
+    max-width: 100%;
+    border-radius: 12px;
+  }
+
+  .flex-texto p {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+}
