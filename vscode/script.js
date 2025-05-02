@@ -16,7 +16,8 @@ mostrarBtn.addEventListener('click', async () => {
         return;
     }
 
-    const apiUrl = `https://ergast.com/api/f1/${temporada}/${ronda}/results.json`;
+    //const apiUrl = `https://ergast.com/api/f1/${temporada}/${ronda}/results.json`;
+    const apiUrl = `https://api.jolpi.ca/ergast/f1/${temporada}/${ronda}/results.json`;
 
     try {
         const respuesta = await fetch(apiUrl);
@@ -36,7 +37,7 @@ function mostrarDatos(datos) {
 
     // Verificar si hay datos
     if (datos.MRData.RaceTable.Races.length === 0) {
-        contenedor.innerHTML = '<p>No se encontraron resultados.</p>';
+        contenedor.innerHTML = '<p>No se encontraron resultados.</p><p>O aún no hay datos</p>';
         return;
     }
 

@@ -76,6 +76,12 @@
   }
 }
 
+.flecha-volver {
+  max-width: 25px;
+  margin: 0;
+  padding: 0;
+}
+
 
 
 .estrategias-resultados{
@@ -137,6 +143,8 @@
     font-size: 1rem;
   }
 
+  
+
 
 
 }
@@ -157,5 +165,10 @@
 
   .estrategias-resultados{
     margin: 2rem auto;
+  }
+
+  #volver {
+    margin-left: 15px;
+    margin-top: 15px;
   }
 }
