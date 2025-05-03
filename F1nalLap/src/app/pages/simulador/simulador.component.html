@@ -11,11 +11,26 @@
 
     <div id="progress-container">
       <nav>
-        <a href="../home">Inicio</a>
-        <a href="../actual">Temporada Actual</a>
-        <a href="../last">Últimas Temporadas</a>
-        <a href="../memorable">Temporadas Memorables</a>
-        <a href="../circuits">Circuitos</a>
+        <a mat-button href="../home">Inicio</a>
+        
+        <button mat-button [matMenuTriggerFor]="Informacion" #triggerTemp="matMenuTrigger">
+          Formula 1
+        </button>
+        <mat-menu #Informacion="matMenu">
+          <a mat-menu-item href="../actual">Temporada Actual</a>
+          <a mat-menu-item href="../last">Últimas Temporadas</a>
+          <a mat-menu-item href="../memorable">Temporadas Memorables</a>
+        </mat-menu>
+
+        <button mat-button [matMenuTriggerFor]="Clasificacion" #triggerClas="matMenuTrigger">
+          Clasificación
+        </button>
+        <mat-menu #Clasificacion="matMenu">
+          <a mat-menu-item href="pilotos">Pilotos</a>
+          <a mat-menu-item href="equipos">Equipos</a>
+        </mat-menu>
+
+        <a mat-button href="../circuits">Simulador</a>
       </nav>
 
       <div id="progress-bar"></div>

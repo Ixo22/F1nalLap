@@ -13,14 +13,25 @@ import {
 } from '../../utils/estrategia';
 
 
+import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { CloseOtherMenusDirective } from '../../Cerrado/cerrado.component';
+
 
 @Component({
   selector: 'app-simulador',
-  imports: [CommonModule, HttpClientModule, RouterModule],
+  imports: [
+    CommonModule, 
+    HttpClientModule, 
+    RouterModule,
+    MatMenuModule,
+    MatMenuTrigger,
+    MatButtonModule,
+  ],
   templateUrl: './simulador.component.html',
   styleUrls: ['./simulador.component.scss'],
 })
-export class SimuladorComponent implements OnInit {
+export class SimuladorComponent extends CloseOtherMenusDirective implements OnInit {
   circuito: any;
 
 
@@ -73,7 +84,9 @@ export class SimuladorComponent implements OnInit {
 
 
   private activatedRoute = inject(ActivatedRoute);
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute) {
+    super();
+  }
 
   ngOnInit(): void {
     //const idcircuito = this.route.snapshot.paramMap.get('id'); // Para mostrar el id en la ruta "simulador/3"

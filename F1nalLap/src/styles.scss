@@ -34,6 +34,7 @@ body::before {
 }
 
 p {
+  color: #000000;
   line-height: 1.25;
 }
 
@@ -51,7 +52,7 @@ p {
 
 header {
   background-color: #da0000;
-  color: white;
+  color: #ffffff;
   padding: 1rem 0;
   text-align: center;
   display: flex;
@@ -220,6 +221,42 @@ button:hover {
   height: 100%;
   width: 0;
   background-color: #da0000; /* Color de la barra de progreso */
+}
+
+
+.mat-mdc-button:not(:disabled) { // Boton principal
+  background-color: black !important;
+  color: white !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  width: 125px !important;
+  padding: 0 !important;
+  font-size: 15px !important;
+}
+
+.mat-mdc-button:not(:disabled):hover {
+  background-color: #da0000 !important;
+  border-radius: 0 !important;
+  border: 0 !important;
+}
+
+.mat-mdc-menu-content {
+  background-color: rgb(24, 24, 24) !important;
+  padding: 10px 0!important;
+  border: 1px solid #ffffff !important;
+}
+
+.mat-mdc-menu-item.mat-focus-indicator { // Subitem
+  z-index: 100000 !important;
+  color: white !important;
+  background-color: rgb(24, 24, 24) !important;
+}
+
+.mat-mdc-menu-item.mat-focus-indicator:hover {
+  background-color: #da0000 !important;
+  transition: 0.8s !important;
+  color: white !important;
+  border: 1px solid #ffffff !important;
 }
 
 
