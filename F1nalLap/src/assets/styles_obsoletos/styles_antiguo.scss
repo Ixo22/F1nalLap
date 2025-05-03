@@ -1,0 +1,235 @@
+// COSAS QUE SOBRAN EN ESTE CSS PORQUE VENÍAN DE ANTES Y NO SE USAN EN EL PROYECTO
+.form-group {
+  display: flex;
+  flex-direction: row;
+  /* Alinea los elementos en columna */
+  justify-content: center;
+  align-items: center;
+  /* Centra los elementos horizontalmente */
+  margin: 10px 0;
+  /* Espaciado entre grupos */
+}
+
+.form-btn {
+  display: flex;
+  flex-direction: row;
+  /* Alinea los elementos en columna */
+  justify-content: center;
+  align-items: center;
+  /* Centra los elementos horizontalmente */
+  margin: 10px 10px;
+  /* Espaciado entre grupos */
+}
+
+.result {
+  /*margin: 10px auto;*/
+  margin: 10px auto;
+  background-color: #f9f9f9;
+  /* Color de fondo */
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  width: 28%;
+  padding: 10px 50px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+}
+
+.result h2 {
+  padding-left: 15px;
+}
+
+.result p {
+  padding-left: 4rem;
+}
+
+.result-table {
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+}
+
+select {
+  padding: 10px 20px;
+  /* padding: top, right, bottom, left */
+  width: 10%;
+  /* Ancho del selector */
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+#api {
+  text-align: center;
+}
+
+#temporada,
+#ronda {
+  text-align: center;
+  font-size: 14px;
+}
+
+#contenedor h3 {
+  text-align: center;
+  color: #000000;
+  /* Color del texto */
+  border-bottom: 2px solid #000000;
+  /* Línea inferior */
+  padding: 5px 30px;
+  /* Agrega padding a la izquierda y derecha */
+  display: inline-block;
+  /* Hace que la línea ocupe solo el ancho del texto */
+}
+
+.openf1-tabla {
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+}
+
+select {
+  text-align: center;
+  width: 11rem;
+}
+
+input {
+  width: 10rem;
+  height: 2rem;
+  padding-left: 12px;
+}
+
+.contenedor {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 1000px;
+  margin: 10px auto;
+  background: white;
+  padding: 20px 40px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 3px solid #000000;
+}
+
+.rankings {
+  display: flex;
+  /* Usar flexbox para crear columnas */
+  flex-wrap: wrap;
+  /* Permitir que los elementos se envuelvan */
+  justify-content: space-between;
+  /* Espacio entre columnas */
+  margin-top: 20px;
+}
+
+.driver,
+.team,
+.race {
+  width: 40%;
+  /* Cada elemento ocupa el 48% del contenedor */
+  margin-bottom: 20px;
+  /* Espacio entre filas */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Sombra para cada elemento */
+  padding: 15px 25px;
+  /* Espaciado interno */
+  border-radius: 15px;
+  /* Bordes redondeados */
+  background-color: white;
+  /* Fondo blanco para cada elemento */
+}
+
+.race {
+  width: 44%;
+  border: 2px solid #cacaca;
+}
+
+.race img {
+  text-align: center;
+}
+
+.driver {
+  display: flex; /* Usar flexbox para alinear imagen y texto */
+  align-items: center; /* Centrar verticalmente */
+  width: 48%; /* Cada elemento ocupa el 40% del contenedor */
+  margin-bottom: 20px; /* Espacio entre filas */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para cada elemento */
+  padding: 15px 0; /* Espaciado interno */
+  border-radius: 5px; /* Bordes redondeados */
+  background-color: white; /* Fondo blanco para cada elemento */
+  border: 2px solid #ccc;
+}
+
+.driver img {
+  width: auto; /* Mantener proporciones */
+  height: 100px; /* Ocupa toda la altura del contenedor */
+  margin-right: 10px; /* Espacio entre la imagen y el texto */
+  box-shadow: none;
+  border-radius: 50px; /* Bordes redondeados */
+}
+
+.driver img:hover {
+  border-radius: 25px;
+  scale: 150%;
+  transition: scale 0.6s ease, border-radius 1s ease; /* Transición suave */
+}
+
+.driver img:not(:hover) {
+  transition: scale 0.6s ease, border-radius 0.5s ease; /* Transición suave */
+}
+
+.driver-info {
+  flex-grow: 1; /* Permite que el texto ocupe el espacio restante */
+  text-align: left; /* Alinea el texto a la izquierda */
+}
+
+.team {
+  align-items: center; /* Centrar verticalmente */
+  padding: 12px 30px; /* Espaciado interno */
+  border-radius: 5px; /* Bordes redondeados */
+  border: 2px solid #ccc; /* Borde gris */
+  margin: 6px auto; /* Centrar el contenedor en la página */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para imágenes */
+}
+
+.team-info {
+  display: flex; /* Usar flexbox para alinear la imagen y el texto */
+  align-items: left;
+}
+
+.team-info img {
+  width: 106px !important; /* Mantener proporciones */
+  height: 60px !important; /* Ocupa toda la altura del contenedor */
+  margin-right: 30px !important; /* Espacio entre imagen y texto */
+  border-radius: 10px;
+  border: 1px solid black;
+}
+
+.team-info img:hover {
+  scale: 140%;
+  transition: scale 0.6s ease; /* Transición suave */
+}
+
+.team-info img:not(:hover) {
+  transition: scale 0.6s ease; /* Transición suave */
+}
+
+.position {
+  font-weight: bold; /* Negrita para la posición */
+  color: #007bff; /* Color para la posición */
+}
+
+/* Ocultar flechas en input de tipo number */
+input[type="number"] {
+  //moz-appearance: textfield; /* Firefox */
+  border-radius: 5px;
+  border: 1px solid gray;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none; /* Chrome, Safari, Edge */
+  margin: 0; /* Asegura que no haya margen */
+}
