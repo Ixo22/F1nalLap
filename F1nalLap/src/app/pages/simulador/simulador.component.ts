@@ -27,11 +27,12 @@ import { CloseOtherMenusDirective } from '../../Cerrado/cerrado.component';
     MatMenuModule,
     MatMenuTrigger,
     MatButtonModule,
+    CloseOtherMenusDirective
   ],
   templateUrl: './simulador.component.html',
   styleUrls: ['./simulador.component.scss'],
 })
-export class SimuladorComponent extends CloseOtherMenusDirective implements OnInit {
+export class SimuladorComponent implements OnInit {
   circuito: any;
 
 
@@ -85,7 +86,6 @@ export class SimuladorComponent extends CloseOtherMenusDirective implements OnIn
 
   private activatedRoute = inject(ActivatedRoute);
   constructor(private route: ActivatedRoute) {
-    super();
   }
 
   ngOnInit(): void {

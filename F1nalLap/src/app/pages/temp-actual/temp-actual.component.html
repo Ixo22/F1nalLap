@@ -7,7 +7,7 @@
 
 
       <div id="progress-container">
-        <nav>
+        <nav appCloseOtherMenus>
           <a mat-button href="home">Inicio</a>
         
         <button mat-button [matMenuTriggerFor]="Informacion" #triggerTemp="matMenuTrigger">
@@ -15,7 +15,7 @@
         </button>
         <mat-menu #Informacion="matMenu">
           <a mat-menu-item href="actual">Temporada Actual</a>
-          <a mat-menu-item href="last">Últimas Temporadas</a>
+          <a mat-menu-item href="last">Temporadas Anteriores</a>
           <a mat-menu-item href="memorable">Temporadas Memorables</a>
         </mat-menu>
 
@@ -64,28 +64,6 @@
             <li><strong>Telemetría:</strong> Sistemas avanzados de telemetría para un análisis más preciso del
               rendimiento
               del coche y la estrategia de carrera.</li>
-          </ul>
-
-          <br><br>
-
-          <h3>Cobertura y Análisis</h3>
-          <p>Además de la información básica, esta sección también ofrecerá análisis detallados de cada carrera,
-            incluyendo
-            resúmenes, estadísticas y comentarios de expertos. Mantente al día con las últimas noticias y desarrollos a
-            medida que la temporada avanza. Aquí tienes algunos recursos útiles:</p>
-          <ul>
-            <li><strong>Resúmenes de Carreras:</strong> Análisis detallados de cada Gran Premio, incluyendo los momentos
-              más
-              destacados y las estrategias de los equipos.</li>
-            <li><strong>Estadísticas:</strong> Datos y estadísticas actualizadas sobre el rendimiento de los pilotos y
-              equipos.</li>
-            <li><strong>Comentarios de Expertos:</strong> Opiniones y análisis de expertos en Fórmula 1 sobre las
-              carreras
-              y
-              el desarrollo de la temporada.</li>
-            <li><strong>Entrevistas:</strong> Entrevistas exclusivas con pilotos, ingenieros y otros miembros clave de
-              los
-              equipos.</li>
           </ul>
 
           <br><br>

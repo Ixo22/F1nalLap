@@ -1,19 +1,22 @@
 import { Component } from '@angular/core';
+import { RouterModule }     from '@angular/router';
+import { MatMenuModule }    from '@angular/material/menu';
+import { MatButtonModule }  from '@angular/material/button';
 
-import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
-import { CloseOtherMenusDirective } from '../../Cerrado/cerrado.component';
+import { CloseOtherMenusDirective } from '../../Cerrado/cerrado.component'
 
 @Component({
   selector: 'app-temp-actual',
+  standalone: true,
   imports: [
+    RouterModule,
     MatMenuModule,
-    MatMenuTrigger,
     MatButtonModule,
+    CloseOtherMenusDirective  
   ],
   templateUrl: './temp-actual.component.html',
-  styleUrl: './temp-actual.component.scss'
+  styleUrls: ['./temp-actual.component.scss']
 })
-export class TempActualComponent extends CloseOtherMenusDirective{
+export class TempActualComponent {
 
 }

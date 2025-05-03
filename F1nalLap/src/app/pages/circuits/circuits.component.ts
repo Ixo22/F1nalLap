@@ -11,23 +11,23 @@ import { CloseOtherMenusDirective } from '../../Cerrado/cerrado.component';
   selector: 'app-circuits',
   standalone: true,
   imports: [
-    CommonModule, 
-    HttpClientModule, 
+    CommonModule,
+    HttpClientModule,
     RouterModule,
     MatMenuModule,
     MatMenuTrigger,
-    MatButtonModule,], 
+    MatButtonModule,
+    CloseOtherMenusDirective
+], 
   templateUrl: './circuits.component.html',
   styleUrl: './circuits.component.scss',
 })
 export class CircuitsComponent
-  extends CloseOtherMenusDirective
   implements OnInit
 {
   circuits: any[] = [];
 
   constructor(private http: HttpClient) {
-    super();
   }
 
   ngOnInit(): void {

@@ -1,19 +1,22 @@
 import { Component } from '@angular/core';
+import { RouterModule }     from '@angular/router';
+import { MatMenuModule }    from '@angular/material/menu';
+import { MatButtonModule }  from '@angular/material/button';
 
-import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
-import { CloseOtherMenusDirective } from '../../Cerrado/cerrado.component';
+import { CloseOtherMenusDirective } from '../../Cerrado/cerrado.component'
 
 @Component({
-  selector: 'app-last-temps',
+  selector: 'app-home',
+  standalone: true,
   imports: [
+    RouterModule,
     MatMenuModule,
-    MatMenuTrigger,
     MatButtonModule,
+    CloseOtherMenusDirective  
   ],
   templateUrl: './last-temps.component.html',
-  styleUrl: './last-temps.component.scss'
+  styleUrls: ['./last-temps.component.scss']
 })
-export class LastTempsComponent extends CloseOtherMenusDirective {
+export class LastTempsComponent {
 
 }

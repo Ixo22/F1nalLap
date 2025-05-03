@@ -3,7 +3,8 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { Subscription } from 'rxjs';
 
 @Directive({
-  selector: '[appCloseOtherMenus]'
+  selector: '[appCloseOtherMenus]',
+  standalone: true
 })
 export class CloseOtherMenusDirective implements AfterContentInit {
   @ContentChildren(MatMenuTrigger, { descendants: true })

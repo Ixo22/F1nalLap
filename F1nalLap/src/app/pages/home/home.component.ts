@@ -1,21 +1,23 @@
 import { Component } from '@angular/core';
-
-import { RouterModule } from '@angular/router';
-import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
+import { RouterModule }     from '@angular/router';
+import { MatMenuModule }    from '@angular/material/menu';
+import { MatButtonModule }  from '@angular/material/button';
 
 import { CloseOtherMenusDirective } from '../../Cerrado/cerrado.component'
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterModule,
+  imports: [
+    RouterModule,
     MatMenuModule,
-    MatMenuTrigger,
-    MatButtonModule],
+    MatButtonModule,
+    CloseOtherMenusDirective  
+  ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  styleUrls:   ['./home.component.scss']  
 })
-export class HomeComponent extends CloseOtherMenusDirective {
+
+export class HomeComponent {
 
 }

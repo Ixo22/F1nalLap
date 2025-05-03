@@ -1,19 +1,22 @@
 import { Component } from '@angular/core';
+import { RouterModule }     from '@angular/router';
+import { MatMenuModule }    from '@angular/material/menu';
+import { MatButtonModule }  from '@angular/material/button';
 
-import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
-import { CloseOtherMenusDirective } from '../../Cerrado/cerrado.component';
+import { CloseOtherMenusDirective } from '../../Cerrado/cerrado.component'
+
 
 @Component({
   selector: 'app-memorable-temps',
   imports: [
+    RouterModule,
     MatMenuModule,
-    MatMenuTrigger,
     MatButtonModule,
+    CloseOtherMenusDirective  
   ],
   templateUrl: './memorable-temps.component.html',
-  styleUrl: './memorable-temps.component.scss'
+  styleUrls: ['./memorable-temps.component.scss']
 })
-export class MemorableTempsComponent extends CloseOtherMenusDirective{
+export class MemorableTempsComponent{
 
 }
