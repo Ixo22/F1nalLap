@@ -25,8 +25,12 @@
           Clasificación
         </button>
         <mat-menu #Clasificacion="matMenu">
-          <a mat-menu-item href="#">Pilotos</a>
-          <a mat-menu-item href="#">Equipos</a>
+          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'drivers' }">
+            Pilotos
+          </button>
+          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'teams' }">
+            Equipos
+          </button>
         </mat-menu>
 
         <a mat-button href="circuits">Simulador</a>

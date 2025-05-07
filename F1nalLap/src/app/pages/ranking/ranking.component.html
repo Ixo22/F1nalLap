@@ -1,0 +1,117 @@
+<div class="container">
+    <div class="content">
+      <header>
+        <h1><a href="home" class="titulo">F1nal Lap</a></h1>
+        <img
+          src="https://www.formula1.com/etc/designs/fom-website/images/f1_logo.svg"
+          alt="Fórmula 1 Logo"
+        />
+      </header>
+  
+      <div id="progress-container">
+        <nav appCloseOtherMenus>
+          <a mat-button href="home">Inicio</a>
+  
+          <button
+            mat-button
+            [matMenuTriggerFor]="Informacion"
+            #triggerTemp="matMenuTrigger"
+          >
+            Formula 1
+          </button>
+          <mat-menu #Informacion="matMenu">
+            <a mat-menu-item href="actual">Temporada Actual</a>
+            <a mat-menu-item href="last">Temporadas Anteriores</a>
+            <a mat-menu-item href="memorable">Temporadas Memorables</a>
+          </mat-menu>
+  
+          <button
+            mat-button
+            [matMenuTriggerFor]="Clasificacion"
+            #triggerClas="matMenuTrigger"
+          >
+            Clasificación
+          </button>
+          <mat-menu #Clasificacion="matMenu">
+            <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'drivers' }">
+              Pilotos
+            </button>
+            <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'teams' }">
+              Equipos
+            </button>
+          </mat-menu>
+  
+          <a mat-button href="circuits">Simulador</a>
+        </nav>
+  
+        <div id="progress-bar"></div>
+      </div>
+  
+      <div class="contenedor-section">
+        <section>
+          <h2 style="text-align: center;">Ranking de F1 – Temporada 2025</h2>
+  
+          <div class="buttons">
+            <button [routerLink]="['/ranking']" [queryParams]="{ view: 'drivers' }" >Ranking de Pilotos</button>
+            <button [routerLink]="['/ranking']" [queryParams]="{ view: 'teams' }">Ranking de Equipos</button>
+          </div>
+  
+          <ng-container *ngIf="items().length > 0; else placeholder">
+            <div class="rankings">
+              <div
+                *ngFor="let it of items()"
+                [ngClass]="isDrivers() ? 'driver' : 'team'"
+              >
+                <!-- Imagen piloto -->
+                <img
+                  *ngIf="isDrivers()"
+                  class="driver-img"
+                  [src]="it.imageUrl"
+                  [alt]="it.driverName"
+                />
+  
+                <!-- Logo equipo -->
+                <img
+                  *ngIf="!isDrivers() && it.logoUrl"
+                  class="team-logo"
+                  [src]="it.logoUrl"
+                  [alt]="it.teamName"
+                />
+  
+                <!-- Contenido para pilotos -->
+                <ng-container *ngIf="isDrivers(); else teamTpl">
+                  <div class="driver-info">
+                    <span class="position">#{{ it.position }}</span>
+                    – <strong>{{ it.driverName }}</strong> ({{ it.teamName }})
+                    <br />
+                    <strong>·</strong> Puntos: {{ it.points }} 
+                    <br>
+                    <strong>·</strong> Victorias: {{ it.wins ?? 0 }}
+                  </div>
+                </ng-container>
+  
+                <!-- Contenido para equipos -->
+                <ng-template #teamTpl>
+                  <div class="team-info">
+                    <span class="position">#{{ it.position }}</span>
+                    – {{ it.teamName }}
+                    <br />
+                    Puntos: {{ it.points }}
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+          </ng-container>
+  
+          <ng-template #placeholder> </ng-template>
+        </section>
+      </div>
+    </div>
+  
+    <footer>
+      <a href="https://www.linkedin.com/in/aalbeerto/" target="_blank"
+        >© AGA. Todos los derechos reservados.</a
+      >
+    </footer>
+  </div>
+  
