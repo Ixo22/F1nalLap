@@ -53,19 +53,13 @@ table tr:nth-child(even) {
 
 @media (max-width: 500px) {
   .rankings {
-    grid-template-columns: repeat(1, 80%);
-  }
-  #tabla-pilotos{
-    margin-left: -20px;
+    grid-template-columns: repeat(1, 100%);
   }
 }
 
 @media (max-width: 400px) {
   .rankings {
-    grid-template-columns: repeat(1, 80%)!important;
-  }
-  #tabla-pilotos{
-    margin-left: -40px;
+    grid-template-columns: repeat(1, 100%)!important;
   }
 }
 

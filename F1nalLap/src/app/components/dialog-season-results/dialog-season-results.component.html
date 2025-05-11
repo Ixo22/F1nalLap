@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>Resultado de la temporada {{ season }} y ronda {{ round }}</h2>
+
+<mat-dialog-content class="mat-typography">
+  <table mat-table [dataSource]="raceData[0].results" class="mat-elevation-z8">
+    <ng-container matColumnDef="position">
+      <th mat-header-cell *matHeaderCellDef>Posición</th>
+      <td mat-cell *matCellDef="let row">{{ row.position }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="driver">
+      <th mat-header-cell *matHeaderCellDef>Conductor</th>
+      <td mat-cell *matCellDef="let row">{{ row.driver }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="constructor">
+      <th mat-header-cell *matHeaderCellDef>Constructor</th>
+      <td mat-cell *matCellDef="let row">{{ row.constructor }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="fastestLapTime">
+      <th mat-header-cell *matHeaderCellDef>Vuelta rápida</th>
+      <td mat-cell *matCellDef="let row">{{ row.fastestLapTime }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="points">
+      <th mat-header-cell *matHeaderCellDef>Puntos</th>
+      <td mat-cell *matCellDef="let row">+{{ row.points }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close id="dialogo">Cerrar</button>
+</mat-dialog-actions>
