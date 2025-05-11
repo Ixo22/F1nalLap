@@ -141,7 +141,7 @@ export class LastTempsComponent {
 
   readonly dialog = inject(MatDialog);
 
-  openDialog(round: string | null) {
+  openDialog(round: string | null, race: string | null) {
     const overlayContainer = document.querySelector(
       '#progress-container'
     ) as HTMLElement;
@@ -177,6 +177,7 @@ export class LastTempsComponent {
           data: {
             season: this.temporadaControl.value,
             round: round,
+            race: race,
             raceData: raceData,
           },
         });

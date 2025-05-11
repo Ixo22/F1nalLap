@@ -13,7 +13,7 @@ import { MatTableModule } from '@angular/material/table';
 })
 export class DialogSeasonResultsComponent {
    season: number;
-   round: number;
+   race: string;
    raceData: any[] = [];
 
    displayedColumns: string[] = ['position', 'driver', 'constructor', 'fastestLapTime', 'points'];
@@ -23,8 +23,8 @@ export class DialogSeasonResultsComponent {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.season = data.season;
-    this.round = data.round;
     this.raceData = data.raceData;
+    this.race = data.race;
     
     console.log('raceData:', this.raceData);
   }

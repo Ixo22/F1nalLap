@@ -52,6 +52,23 @@ export const routes: Routes = [
         (m) => m.SimuladorComponent
       ),
   },
+
+  {
+    path: 'ranking',
+    loadComponent: () =>
+      import('./pages/ranking/ranking.component').then(
+        (m) => m.RankingComponent
+      ),
+  },
+  
+
+  {
+    path: 'prueba',
+    loadComponent: () =>
+      import('./pages/prueba/prueba.component').then(
+        (m) => m.PruebaComponent
+      ),
+  },
 ];
 
 @NgModule({
