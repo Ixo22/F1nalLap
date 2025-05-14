@@ -143,23 +143,28 @@
                   [src]="r.circuitImage"
                   [alt]="r.race + ' circuito'"
                 />
-                <!-- Línea divisoria -->
                 <hr class="divider" />
-                <!-- Información debajo de la línea -->
                 <div class="team-info">
                   <span class="position">#{{ r.round }}</span>
                   – <strong>{{ r.race }}</strong>
                   <br />
                   – Fecha: {{ r.date | date : "dd/MM/yyyy" }}
                   <br />
-                  <div class="podium">
-                    – Podio:
-                    <ul>
-                      <li *ngFor="let p of r.podium">
-                        {{ p.position }}º – {{ p.driver }}
-                      </li>
-                    </ul>
-                  </div>
+                  <ng-container *ngIf="r.podium.length > 0">
+                    <div class="podium">
+                      – Podio:
+                      <ul class="no-bullet-list">
+                        <li *ngFor="let p of r.podium">
+                          {{ p.position }}º – {{ p.driver }}
+                        </li>
+                      </ul>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="r.podium.length == 0">
+                    <div class="podium">
+                      – Sin resultados
+                    </div>
+                  </ng-container>
                 </div>
               </div>
             </div>

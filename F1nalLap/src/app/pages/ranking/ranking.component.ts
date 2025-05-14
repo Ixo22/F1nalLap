@@ -13,11 +13,14 @@ import { CloseOtherMenusDirective } from '../../Cerrado/cerrado.component';
 import teamsJson from '../../../assets/json/teams.json';
 import circuitosJson from '../../../assets/json/circuitos2025.json';
 
-const DRIVER_URL       = 'https://api.jolpi.ca/ergast/f1/2025/driverstandings.json';
-const CONSTRUCTOR_URL  = 'https://api.jolpi.ca/ergast/f1/2025/constructorstandings.json';
-const SEASON_RACES_URL = 'https://api.jolpi.ca/ergast/f1/2025/results/1.json';
-const RACE_DETAILS_URL = (round: string) => `https://api.jolpi.ca/ergast/f1/2025/${round}/results.json`;
+// URLs de la API Ergast
+const DRIVER_URL        = 'https://api.jolpi.ca/ergast/f1/2025/driverstandings.json';
+const CONSTRUCTOR_URL   = 'https://api.jolpi.ca/ergast/f1/2025/constructorstandings.json';
+// Endpoint de calendario para obtener todas las carreras
+const SEASON_SCHEDULE_URL = 'https://api.jolpi.ca/ergast/f1/2025.json';
+const RACE_DETAILS_URL   = (round: string) => `https://api.jolpi.ca/ergast/f1/2025/${round}/results.json`;
 
+/** Ranking item (pilotos / equipos) */
 interface DisplayItem {
   position:    string;
   points:      string;
@@ -28,19 +31,22 @@ interface DisplayItem {
   logoUrl?:    string;
 }
 
+/** Entrada de podio para carreras */
 interface PodiumEntry {
   position: string;
   driver:   string;
 }
 
+/** Elemento a mostrar en la vista de carreras */
 interface DisplayRace {
   round:        string;
   race:         string;
   date:         string;
-  podium:       PodiumEntry[];
+  podium:       PodiumEntry[];       // vacío si no hay resultados
   circuitImage?: string;
 }
 
+/** Tipado del JSON de circuitos */
 interface CircuitInfo {
   id:         number;
   name:       string;
@@ -71,11 +77,11 @@ interface CircuitInfo {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RankingComponent implements OnInit {
-  private http          = inject(HttpClient);
-  private route         = inject(ActivatedRoute);
+  private http         = inject(HttpClient);
+  private route        = inject(ActivatedRoute);
 
-  private teamsData     = teamsJson.response as TeamResponse[];
-  private circuitsData  = circuitosJson as CircuitInfo[];
+  private teamsData    = teamsJson.response as TeamResponse[];
+  private circuitsData = circuitosJson as CircuitInfo[];
 
   public items:     WritableSignal<DisplayItem[]> = signal([]);
   public carreras:  WritableSignal<DisplayRace[]>  = signal([]);
@@ -91,6 +97,7 @@ export class RankingComponent implements OnInit {
     });
   }
 
+  /** Carga ranking de pilotos */
   loadDrivers() {
     this.isDrivers.set(true);
     this.carreras.set([]);
@@ -101,6 +108,7 @@ export class RankingComponent implements OnInit {
     ).subscribe(data => this.items.set(data));
   }
 
+  /** Carga ranking de equipos */
   loadTeams() {
     this.isDrivers.set(false);
     this.carreras.set([]);
@@ -111,33 +119,33 @@ export class RankingComponent implements OnInit {
     ).subscribe(data => this.items.set(data));
   }
 
+  /** Carga todas las carreras (calendario) y sus resultados opcionales */
   loadRaces() {
     this.isDrivers.set(false);
     this.items.set([]);
 
-    this.http.get<RaceListApiResponse>(SEASON_RACES_URL).pipe(
+    this.http.get<ScheduleResponse>(SEASON_SCHEDULE_URL).pipe(
+      // obtenemos todas las carreras programadas
       map(res => res.MRData.RaceTable.Races ?? []),
       switchMap(races => {
         const calls = races.map(race =>
+          // por cada carrera, intentamos cargar resultados (puede no haberlos)
           this.http.get<RaceListApiResponse>(RACE_DETAILS_URL(race.round)).pipe(
             map(det => det.MRData.RaceTable.Races?.[0]?.Results ?? []),
-            map(results => results.slice(0, 3).map(rs => ({
-              position: rs.position,
-              driver:   `${rs.Driver.givenName} ${rs.Driver.familyName}`
-            }))),
+            map(results => results.slice(0,3).map(rs => ({ position: rs.position, driver: `${rs.Driver.givenName} ${rs.Driver.familyName}` }))),
             catchError(() => of([] as PodiumEntry[]))
           )
         );
         return forkJoin(calls).pipe(
           map(podiums => races.map((race, idx) => {
-            const circuitInfo = this.circuitsData.find(c => c.circuitId === race.Circuit.circuitId);
+            const info = this.circuitsData.find(c => c.circuitId === race.Circuit.circuitId);
             return {
               round:        race.round,
               race:         race.raceName  ?? '—',
               date:         race.date      ?? '—',
-              podium:       podiums[idx],
-              circuitImage: circuitInfo?.image
-            };
+              podium:       podiums[idx],        // [] si no hay resultados
+              circuitImage: info?.image
+            } as DisplayRace;
           }))
         );
       }),
@@ -153,23 +161,18 @@ export class RankingComponent implements OnInit {
       wins:       ds.wins,
       driverName: `${ds.Driver.givenName} ${family}`,
       teamName:   ds.Constructors[0]?.name ?? '—',
-      imageUrl:   `https://media.formula1.com/image/upload/f_auto,c_limit,q_auto,w_1320/content/dam/fom-website/drivers/2025Drivers/${family}.jpg`
+      imageUrl:   `https://media.formula1.com/image/upload/.../2025Drivers/${family}.jpg`
     };
   }
 
   private mapConstructor(cs: ConstructorStanding): DisplayItem {
-    const name  = cs.Constructor.name;
+    const name = cs.Constructor.name;
     const match = this.teamsData.find(t => t.name === name || t.name.includes(name));
-    return {
-      position: cs.position,
-      points:   cs.points,
-      wins:     cs.wins,
-      teamName: name,
-      logoUrl:  match?.logo
-    };
+    return { position: cs.position, points: cs.points, wins: cs.wins, teamName: name, logoUrl: match?.logo };
   }
 }
 
+// Tipados Ergast y esquemas
 interface DriverApiResponse { MRData: { StandingsTable: { StandingsLists: { DriverStandings: DriverStanding[] }[] } } }
 interface DriverStanding { position: string; points: string; wins: string; Driver: { givenName: string; familyName: string }; Constructors: { name: string }[] }
 interface ConstructorApiResponse { MRData: { StandingsTable: { StandingsLists: { ConstructorStandings: ConstructorStanding[] }[] } } }
@@ -177,5 +180,6 @@ interface ConstructorStanding { position: string; points: string; wins: string; 
 interface RaceListApiResponse { MRData: { RaceTable: { Races: RaceEntry[] } } }
 interface RaceEntry { round: string; raceName?: string; date?: string; Circuit: { circuitId: string }; Results?: RaceResult[] }
 interface RaceResult { position: string; Driver: { givenName: string; familyName: string } }
-interface TeamResponse { id: number; name: string; logo: string; pole_positions: number | null; fastest_laps: number | null }
-interface CircuitInfo { id: number; name: string; image: string; name_GP: string; country: string; laps: number; length: string; lap_record: string; circuitId: string }
+interface TeamResponse { id: number; name: string; logo: string; pole_positions: number|null; fastest_laps: number|null }
+interface ScheduleResponse { MRData: { RaceTable: { Races: Array<{ round:string; raceName?:string; date?:string; Circuit:{circuitId:string}; }> } } }
+interface CircuitInfo { id:number; name:string; image:string; name_GP:string; country:string; laps:number; length:string; lap_record:string; circuitId:string; }
