@@ -63,7 +63,7 @@ export class LastTempsComponent {
   temporadaControl = new FormControl<number | null>(null, [
     Validators.required,
     Validators.min(1950),
-    Validators.max(2025),
+    Validators.max(2024),
   ]);
 
   pilotos = signal<DriverRow[]>([]);

@@ -33,19 +33,14 @@
           Clasificación
         </button>
         <mat-menu #Clasificacion="matMenu">
-          <button
-            mat-menu-item
-            [routerLink]="['/ranking']"
-            [queryParams]="{ view: 'drivers' }"
-          >
+          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'drivers' }">
             Pilotos
           </button>
-          <button
-            mat-menu-item
-            [routerLink]="['/ranking']"
-            [queryParams]="{ view: 'teams' }"
-          >
+          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'teams' }">
             Equipos
+          </button>
+          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'races' }">
+            Carreras
           </button>
         </mat-menu>
 
@@ -73,7 +68,7 @@
               El número de temporada no puede ser menor a 1950
             </mat-error>
             <mat-error *ngIf="temporadaControl.hasError('max')">
-              El número de temporada no puede ser mayor a 2025
+              El número de temporada no puede ser mayor a 2024
             </mat-error>
             <mat-error *ngIf="temporadaControl.hasError('required')">
               La temporada es requerida
@@ -171,7 +166,7 @@
             *ngIf="currentView() === 'races' && carreras().length"
           >
             <ng-container matColumnDef="round">
-              <th mat-header-cell *matHeaderCellDef>Ronda</th>
+              <th mat-header-cell *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let row">{{ row.round }}</td>
             </ng-container>
 

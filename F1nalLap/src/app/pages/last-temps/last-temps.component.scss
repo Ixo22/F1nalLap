@@ -58,6 +58,29 @@ table tr:nth-child(even) {
 }
 
 @media (max-width: 400px) {
+  #tabla-carreras {
+    margin: -20px !important;
+  }
+    #tabla-pilotos {
+    margin: -15px !important;
+  }
+  .rankings {
+    grid-template-columns: repeat(1, 100%)!important;
+  }
+}
+
+@media (max-width: 380) {
+   th,
+  td {
+    font-size: 9px;
+  }
+  #tabla-carreras {
+    font-size: 8px !important;
+    margin: -40px !important;
+  }
+  #tabla-pilotos {
+    margin: -15px !important;
+  }
   .rankings {
     grid-template-columns: repeat(1, 100%)!important;
   }

@@ -26,11 +26,14 @@
           Clasificación
         </button>
         <mat-menu #Clasificacion="matMenu">
-          <button mat-menu-item [routerLink]="['/../ranking']" [queryParams]="{ view: 'drivers' }">
+          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'drivers' }">
             Pilotos
           </button>
-          <button mat-menu-item [routerLink]="['/../ranking']" [queryParams]="{ view: 'teams' }">
+          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'teams' }">
             Equipos
+          </button>
+          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'races' }">
+            Carreras
           </button>
         </mat-menu>
 

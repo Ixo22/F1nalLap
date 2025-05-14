@@ -7,7 +7,8 @@
     "country": "Australia",
     "laps": 58,
     "length": "5.278 km",
-    "lap_record": "1:19.813"
+    "lap_record": "1:19.813",
+    "circuitId": "albert_park"
   },
   {
     "id": 2,
@@ -17,7 +18,8 @@
     "country": "China",
     "laps": 56,
     "length": "5.451 Kms",
-    "lap_record": "1:30.641"
+    "lap_record": "1:30.641",
+    "circuitId": "shanghai"
   },
   {
     "id": 3,
@@ -27,7 +29,8 @@
     "country": "Japan",
     "laps": 53,
     "length": "5.807 Kms",
-    "lap_record": "1:30.983"
+    "lap_record": "1:30.983",
+    "circuitId": "suzuka"
   },
   {
     "id": 4,
@@ -37,7 +40,8 @@
     "country": "Bahrain",
     "laps": 57,
     "length": "5.412 Kms",
-    "lap_record": "1:31.447"
+    "lap_record": "1:31.447",
+    "circuitId": "bahrain"
   },
   {
     "id": 5,
@@ -47,7 +51,8 @@
     "country": "Saudi Arabia",
     "laps": 50,
     "length": "6.174 Kms",
-    "lap_record": "1:30.734"
+    "lap_record": "1:30.734",
+    "circuitId": "jeddah"
   },
   {
     "id": 6,
@@ -57,7 +62,8 @@
     "country": "USA",
     "laps": 57,
     "length": "5.412 km",
-    "lap_record": "1:29.708"
+    "lap_record": "1:29.708",
+    "circuitId": "miami"
   },
   {
     "id": 7,
@@ -67,7 +73,8 @@
     "country": "Italy",
     "laps": 63,
     "length": "4.909 km",
-    "lap_record": "1:15.484"
+    "lap_record": "1:15.484",
+    "circuitId": "imola"
   },
   {
     "id": 8,
@@ -77,7 +84,8 @@
     "country": "Monaco",
     "laps": 78,
     "length": "3.337 Kms",
-    "lap_record": "1:12.909"
+    "lap_record": "1:12.909",
+    "circuitId": "monaco"
   },
   {
     "id": 9,
@@ -87,7 +95,8 @@
     "country": "Spain",
     "laps": 66,
     "length": "4.657 km",
-    "lap_record": "1:16.330"
+    "lap_record": "1:16.330",
+    "circuitId": "catalunya"
   },
   {
     "id": 10,
@@ -97,7 +106,8 @@
     "country": "Canada",
     "laps": 70,
     "length": "4.361 Kms",
-    "lap_record": "1:13.078"
+    "lap_record": "1:13.078",
+    "circuitId": "villeneuve"
   },
   {
     "id": 11,
@@ -107,7 +117,8 @@
     "country": "Austria",
     "laps": 71,
     "length": "4.318 km",
-    "lap_record": "1:05.619"
+    "lap_record": "1:05.619",
+    "circuitId": "red_bull_ring"
   },
   {
     "id": 12,
@@ -117,7 +128,8 @@
     "country": "United Kingdom",
     "laps": 52,
     "length": "5.891 Kms",
-    "lap_record": "1:27.097"
+    "lap_record": "1:27.097",
+    "circuitId": "silverstone"
   },
   {
     "id": 13,
@@ -127,7 +139,8 @@
     "country": "Belgium",
     "laps": 44,
     "length": "7.004 Kms",
-    "lap_record": "1:44.701"
+    "lap_record": "1:44.701",
+    "circuitId": "spa"
   },
   {
     "id": 14,
@@ -137,7 +150,8 @@
     "country": "Hungary",
     "laps": 70,
     "length": "4.381 Kms",
-    "lap_record": "1:16.627"
+    "lap_record": "1:16.627",
+    "circuitId": "hungaroring"
   },
   {
     "id": 15,
@@ -147,7 +161,8 @@
     "country": "Netherlands",
     "laps": 72,
     "length": "4.259 kms",
-    "lap_record": "1:11.097"
+    "lap_record": "1:11.097",
+    "circuitId": "zandvoort"
   },
   {
     "id": 16,
@@ -157,7 +172,8 @@
     "country": "Italy",
     "laps": 53,
     "length": "5.793 Kms",
-    "lap_record": "1:21.046"
+    "lap_record": "1:21.046",
+    "circuitId": "monza"
   },
   {
     "id": 17,
@@ -167,7 +183,8 @@
     "country": "Azerbaijan",
     "laps": 51,
     "length": "6.003 Kms",
-    "lap_record": "1:43.009"
+    "lap_record": "1:43.009",
+    "circuitId": "baku"
   },
   {
     "id": 18,
@@ -177,7 +194,8 @@
     "country": "Singapore",
     "laps": 62,
     "length": "4.940 km",
-    "lap_record": "1:34.486"
+    "lap_record": "1:34.486",
+    "circuitId": "marina_bay"
   },
   {
     "id": 19,
@@ -187,7 +205,8 @@
     "country": "USA",
     "laps": 56,
     "length": "5.513 km",
-    "lap_record": "1:36.169"
+    "lap_record": "1:36.169",
+    "circuitId": "americas"
   },
   {
     "id": 20,
@@ -197,7 +216,8 @@
     "country": "Mexico",
     "laps": 71,
     "length": "4.304 Kms",
-    "lap_record": "1:17.774"
+    "lap_record": "1:17.774",
+    "circuitId": "rodriguez"
   },
   {
     "id": 21,
@@ -207,7 +227,8 @@
     "country": "Brazil",
     "laps": 71,
     "length": "4.309 Kms",
-    "lap_record": "1:10.540"
+    "lap_record": "1:10.540",
+    "circuitId": "interlagos"
   },
   {
     "id": 22,
@@ -217,7 +238,8 @@
     "country": "USA",
     "laps": 50,
     "length": "6.201 kms",
-    "lap_record": "1:34.876"
+    "lap_record": "1:34.876",
+    "circuitId": "vegas"
   },
   {
     "id": 23,
@@ -227,7 +249,8 @@
     "country": "Qatar",
     "laps": 57,
     "length": "5.419 km",
-    "lap_record": "1:22.384"
+    "lap_record": "1:22.384",
+    "circuitId": "losail"
   },
   {
     "id": 24,
@@ -237,6 +260,7 @@
     "country": "United Arab Emirates",
     "laps": 58,
     "length": "5.281 km",
-    "lap_record": "1:25.637"
+    "lap_record": "1:25.637",
+    "circuitId": "yas_marina"
   }
 ]
