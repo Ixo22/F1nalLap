@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>Resultado de {{ data.race }} - {{ data.season }}</h2>
+
+<mat-dialog-content class="mat-typography">
+  <div class="results-grid">
+    <div class="rankings">
+      <div *ngFor="let res of data.raceData[0].results" class="driver-card">
+        <!-- Foto del piloto -->
+        <img
+          class="driver-img"
+          [src]="getDriverImageUrl(res.driver)"
+          [alt]="res.driver"
+        />
+        <div class="driver-details">
+          <div class="driver-header">
+            <span class="position">#{{ res.position }}</span>
+            <strong class="driver-name">{{ res.driver }}</strong>
+            <span class="team"> ({{ res.constructor }})</span>
+          </div>
+          
+          <div class="stats">
+            <span class="fastest-lap"
+              >- Pos. Salida: {{ res.grid }}</span
+            ><br>
+            <span class="fastest-lap"
+              >- Vuelta rápida: {{ res.fastestLapTime }}</span
+            ><br>
+            <span class="points">- Puntos: +{{ res.points }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-container *ngIf="data.raceData[0].results.length === 0">
+      <p class="no-results">No hay resultados disponibles.</p>
+    </ng-container>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close id="dialogo">Cerrar</button>
+</mat-dialog-actions>

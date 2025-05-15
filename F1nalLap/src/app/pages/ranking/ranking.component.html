@@ -159,6 +159,7 @@
                         </li>
                       </ul>
                     </div>
+                    <button (click)="openDialog(r.round, r.race)">Mostrar Resultado</button>
                   </ng-container>
                   <ng-container *ngIf="r.podium.length == 0">
                     <div class="podium">

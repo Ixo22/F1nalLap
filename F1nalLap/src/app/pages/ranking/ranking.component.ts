@@ -8,15 +8,16 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { CloseOtherMenusDirective } from '../../Cerrado/cerrado.component';
+import { Dialog2025RaceResultsComponent } from '../../components/dialog-2025-race-results/dialog-2025-race-results.component';
 import teamsJson from '../../../assets/json/teams.json';
 import circuitosJson from '../../../assets/json/circuitos2025.json';
 
-// URLs de la API Ergast
-const DRIVER_URL        = 'https://api.jolpi.ca/ergast/f1/2025/driverstandings.json';
-const CONSTRUCTOR_URL   = 'https://api.jolpi.ca/ergast/f1/2025/constructorstandings.json';
-// Endpoint de calendario para obtener todas las carreras
+// API URLs
+const DRIVER_URL         = 'https://api.jolpi.ca/ergast/f1/2025/driverstandings.json';
+const CONSTRUCTOR_URL    = 'https://api.jolpi.ca/ergast/f1/2025/constructorstandings.json';
 const SEASON_SCHEDULE_URL = 'https://api.jolpi.ca/ergast/f1/2025.json';
 const RACE_DETAILS_URL   = (round: string) => `https://api.jolpi.ca/ergast/f1/2025/${round}/results.json`;
 
@@ -42,7 +43,7 @@ interface DisplayRace {
   round:        string;
   race:         string;
   date:         string;
-  podium:       PodiumEntry[];       // vacío si no hay resultados
+  podium:       PodiumEntry[];
   circuitImage?: string;
 }
 
@@ -70,6 +71,7 @@ interface CircuitInfo {
     MatMenuModule,
     MatButtonModule,
     MatTableModule,
+    MatDialogModule,
     CloseOtherMenusDirective
   ],
   templateUrl: './ranking.component.html',
@@ -79,6 +81,7 @@ interface CircuitInfo {
 export class RankingComponent implements OnInit {
   private http         = inject(HttpClient);
   private route        = inject(ActivatedRoute);
+  private dialog       = inject(MatDialog);
 
   private teamsData    = teamsJson.response as TeamResponse[];
   private circuitsData = circuitosJson as CircuitInfo[];
@@ -125,11 +128,9 @@ export class RankingComponent implements OnInit {
     this.items.set([]);
 
     this.http.get<ScheduleResponse>(SEASON_SCHEDULE_URL).pipe(
-      // obtenemos todas las carreras programadas
       map(res => res.MRData.RaceTable.Races ?? []),
       switchMap(races => {
         const calls = races.map(race =>
-          // por cada carrera, intentamos cargar resultados (puede no haberlos)
           this.http.get<RaceListApiResponse>(RACE_DETAILS_URL(race.round)).pipe(
             map(det => det.MRData.RaceTable.Races?.[0]?.Results ?? []),
             map(results => results.slice(0,3).map(rs => ({ position: rs.position, driver: `${rs.Driver.givenName} ${rs.Driver.familyName}` }))),
@@ -143,7 +144,7 @@ export class RankingComponent implements OnInit {
               round:        race.round,
               race:         race.raceName  ?? '—',
               date:         race.date      ?? '—',
-              podium:       podiums[idx],        // [] si no hay resultados
+              podium:       podiums[idx],
               circuitImage: info?.image
             } as DisplayRace;
           }))
@@ -153,15 +154,43 @@ export class RankingComponent implements OnInit {
     ).subscribe(data => this.carreras.set(data));
   }
 
+  openDialog(round: string, race: string) {
+    const overlay = document.querySelector('#progress-container') as HTMLElement;
+    overlay?.style.setProperty('z-index', '950', 'important');
+
+    this.http.get<any>(RACE_DETAILS_URL(round)).subscribe(data => {
+      const raw = data.MRData.RaceTable.Races ?? [];
+      const raceData = raw.map((d: any) => ({
+        raceName: d.raceName ?? '—',
+        results: d.Results?.map((r: any) => ({
+          position: r.position ?? '—',
+          driver: `${r.Driver.givenName ?? '—'} ${r.Driver.familyName ?? '—'}`,
+          constructor: r.Constructor.name ?? '—',
+          fastestLapTime: r.FastestLap?.Time?.time ?? '—',
+          points: r.points ?? '—',
+          grid: r.grid ?? '—'
+        })) ?? []
+      }));
+
+      const dialogRef = this.dialog.open(Dialog2025RaceResultsComponent, {
+        data: { season: 2025, round, race, raceData }
+      });
+
+      dialogRef.afterClosed().subscribe(() => {
+        overlay?.style.removeProperty('z-index');
+      });
+    });
+  }
+
   private mapDriver(ds: DriverStanding): DisplayItem {
     const family = ds.Driver.familyName;
     return {
-      position:   ds.position,
-      points:     ds.points,
-      wins:       ds.wins,
+      position: ds.position,
+      points:   ds.points,
+      wins:     ds.wins,
       driverName: `${ds.Driver.givenName} ${family}`,
-      teamName:   ds.Constructors[0]?.name ?? '—',
-      imageUrl:   `https://media.formula1.com/image/upload/.../2025Drivers/${family}.jpg`
+      teamName: ds.Constructors[0]?.name ?? '—',
+      imageUrl: `https://media.formula1.com/image/upload/f_auto,c_limit,q_auto,w_1320/content/dam/fom-website/drivers/2025Drivers/${family}.jpg`
     };
   }
 
