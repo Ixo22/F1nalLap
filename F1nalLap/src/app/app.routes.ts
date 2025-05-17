@@ -60,6 +60,14 @@ export const routes: Routes = [
         (m) => m.RankingComponent
       ),
   },
+
+    {
+    path: 'comparar',
+    loadComponent: () =>
+      import('./pages/comparar/comparar.component').then(
+        (m) => m.CompararComponent
+      ),
+  },
   
 
   {

@@ -56,6 +56,7 @@
           </button>
         </mat-menu>
 
+        <a mat-button href="comparar">Análisis</a>
         <a mat-button href="circuits">Simulador</a>
       </nav>
 
@@ -131,12 +132,12 @@
           </ng-container>
         </ng-container>
 
-        <!-- Vista Carreras como tarjetas con Top 3 e imagen de circuito -->
+        <!-- Vista Carreras -->
         <ng-template #carrerasTpl>
           <ng-container *ngIf="carreras().length > 0; else placeholder">
             <div class="rankings">
               <div *ngFor="let r of carreras()" class="team race-card">
-                <!-- Imagen del circuito arriba -->
+                
                 <img
                   *ngIf="r.circuitImage"
                   class="circuit-img"
@@ -173,7 +174,7 @@
         </ng-template>
 
         <ng-template #placeholder>
-          <p class="placeholder">No hay datos disponibles.</p>
+          <p class="placeholder">Cargando datos...</p>
         </ng-template>
       </section>
     </div>
