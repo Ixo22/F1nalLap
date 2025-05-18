@@ -44,13 +44,13 @@ table tr:nth-child(even) {
 }
 
 @media (max-width: 800px) {
-  .rankings {
+  .selectors {
     grid-template-columns: repeat(1, 80%);
   }
 }
 
 @media (max-width: 500px) {
-  .rankings {
+  .selectors {
     grid-template-columns: repeat(1, 100%);
   }
 }
@@ -62,7 +62,7 @@ table tr:nth-child(even) {
   #tabla-pilotos {
     margin: -15px !important;
   }
-  .rankings {
+  .selectors {
     grid-template-columns: repeat(1, 100%) !important;
   }
 }
@@ -79,7 +79,7 @@ table tr:nth-child(even) {
   #tabla-pilotos {
     margin: -15px !important;
   }
-  .rankings {
+  .selectors {
     grid-template-columns: repeat(1, 100%) !important;
   }
 }
