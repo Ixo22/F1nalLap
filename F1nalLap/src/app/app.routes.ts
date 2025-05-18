@@ -1,5 +1,4 @@
 import { RouterModule, Routes } from '@angular/router';
-import { SimuladorComponent } from './pages/simulador/simulador.component';
 import { NgModule } from '@angular/core';
 
 export const routes: Routes = [
@@ -35,21 +34,6 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/circuits/circuits.component').then(
         (m) => m.CircuitsComponent
-      ),
-  },
-  {
-    path: 'simulador',
-    loadComponent: () =>
-      import('./pages/simulador/simulador.component').then(
-        (m) => m.SimuladorComponent
-      ),
-  },
-  {
-    //path: 'simulador/:id', // Mostramos el id en la ruta "simulador/3"
-    path: 'simulador/:name_GP', // Mostramos el nombre del GP en la ruta "simulador/Japan%20Grand%20Prix"
-    loadComponent: () =>
-      import('./pages/simulador/simulador.component').then(
-        (m) => m.SimuladorComponent
       ),
   },
 
