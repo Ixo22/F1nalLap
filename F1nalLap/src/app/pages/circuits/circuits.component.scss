@@ -8,6 +8,32 @@
   margin: 2rem auto;
 }
 
+.tarjetas-contenedor.seleccionado {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  grid-template-columns: none; 
+}
+
+.tarjetas-contenedor.seleccionado .tarjeta {
+  width: 90%;
+  min-width: 300px;
+  img {
+    max-width: 300px;
+  }
+}
+
+.tarjetas-contenedor.seleccionado .tarjeta:hover {
+  transform: none !important;
+  cursor: auto;
+}
+
+.tarjetas-contenedor.seleccionado .tarjeta-imagen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 ::ng-deep .tarjeta {
   border: 2px solid black;
   border-radius: 2rem;
@@ -40,6 +66,7 @@
     .boton {
       display: inline-block;
       margin-top: 0.5rem;
+      margin-left: 0.5rem;
       padding: 0.5rem 1rem;
       background-color: black;
       color: white;
@@ -53,6 +80,14 @@
   }
 }
 
+.tarjeta-detalles {
+  margin: 0.5rem 0 1rem 0;
+  font-size: 1rem;
+  color: #444;
+  p {
+    margin: 0.2rem 0;
+  }
+}
 
 @media (max-width: 768px) {
     
@@ -67,3 +102,85 @@
       grid-template-columns: repeat(2, 1fr); // 2 columnas en pantallas pequeñas
     }
   }
+
+  
+
+  /* Botones */
+.buttons {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Placeholder antes de cargar datos */
+.placeholder {
+  text-align: center;
+  color: #666;
+}
+
+::ng-deep
+  .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
+  .mdc-floating-label {
+  color: #da0000 !important;
+}
+
+::ng-deep
+  .mdc-text-field--filled:not(.mdc-text-field--disabled)
+  .mdc-line-ripple::after {
+  border-bottom-color: #da0000 !important;
+}
+
+::ng-deep .limpiar {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+button.limpiar:hover,
+.limpiar:hover,
+button.limpiar:focus,
+.limpiar:focus {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: inherit !important;
+}
+
+h3 {
+  border-bottom: none;
+}
+
+.estrategias {
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+li {
+  list-style: none;
+}
+
+#volver {
+  width: 50px;
+  margin: 0;
+  margin-top: 0;
+  margin-bottom: 3rem;
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: rgb(163, 21, 21);
+  padding-left: 0;
+  padding-right: 0;
+
+  &:hover {
+    background-color: rgb(216, 0, 0);
+    scale: 1.08;
+  }
+}
+
+.flecha-volver {
+  max-width: 40px;
+  margin: 0;
+  padding: 0;
+}

@@ -9,10 +9,14 @@
     </header>
 
     <div id="progress-container">
-      <nav appCloseOtherMenus >
+      <nav appCloseOtherMenus>
         <a mat-button href="home">Inicio</a>
-        
-        <button mat-button [matMenuTriggerFor]="Informacion" #triggerTemp="matMenuTrigger">
+
+        <button
+          mat-button
+          [matMenuTriggerFor]="Informacion"
+          #triggerTemp="matMenuTrigger"
+        >
           Formula 1
         </button>
         <mat-menu #Informacion="matMenu">
@@ -21,17 +25,33 @@
           <a mat-menu-item href="memorable">Temporadas Memorables</a>
         </mat-menu>
 
-        <button mat-button [matMenuTriggerFor]="Clasificacion" #triggerClas="matMenuTrigger">
+        <button
+          mat-button
+          [matMenuTriggerFor]="Clasificacion"
+          #triggerClas="matMenuTrigger"
+        >
           Clasificación
         </button>
         <mat-menu #Clasificacion="matMenu">
-          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'drivers' }">
+          <button
+            mat-menu-item
+            [routerLink]="['/ranking']"
+            [queryParams]="{ view: 'drivers' }"
+          >
             Pilotos
           </button>
-          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'teams' }">
+          <button
+            mat-menu-item
+            [routerLink]="['/ranking']"
+            [queryParams]="{ view: 'teams' }"
+          >
             Equipos
           </button>
-          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'races' }">
+          <button
+            mat-menu-item
+            [routerLink]="['/ranking']"
+            [queryParams]="{ view: 'races' }"
+          >
             Carreras
           </button>
         </mat-menu>
@@ -44,19 +64,146 @@
     </div>
 
     <div class="contenedor-section">
-      <div class="tarjetas-contenedor">
-        <div *ngFor="let circuito of circuits" class="tarjeta">
-          <div class="tarjeta-imagen">
-            <img [src]="circuito.image" [alt]="circuito.name" />
-          </div>
-          <div class="tarjeta-contenido">
-            <h3>{{ circuito.name_GP }}</h3>
-            
-            <a [routerLink]="['/simulador', circuito.name_GP]" class="boton">Mostrar más</a>
+      <section>
+        <h2>Circuitos</h2>
+        <a
+          href="circuits"
+          class="boton"
+          id="volver"
+          *ngIf="selectedCircuit"
+        >
+          <img
+            src="./../../../assets/images/flecha.png"
+            alt="Volver"
+            class="flecha-volver"
+          />
+        </a>
+        <div class="buttons">
+          <mat-form-field appearance="fill">
+            <mat-label>Filtrar circuito</mat-label>
+            <input
+              type="text"
+              placeholder="Ej: Japan"
+              matInput
+              [formControl]="circuitControl"
+              [matAutocomplete]="auto"
+            />
+            <button
+              mat-icon-button
+              matSuffix
+              aria-label="limpiar"
+              *ngIf="circuitControl.value"
+              (click)="clearSelection()"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              (optionSelected)="onCircuitSelected($event.option.value)"
+              [displayWith]="displayCircuitName"
+            >
+              <mat-option
+                *ngFor="let circuito of filteredCircuits"
+                [value]="circuito"
+              >
+                {{ circuito.name_GP }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
 
+        <div
+          *ngIf="selectedCircuit; else listaCircuitos"
+          class="tarjetas-contenedor seleccionado"
+        >
+          <div class="tarjeta">
+            <div class="tarjeta-imagen">
+              <img [src]="selectedCircuit.image" [alt]="selectedCircuit.name" />
+            </div>
+            <div class="tarjeta-contenido">
+              <h3>{{ selectedCircuit.name_GP }}</h3>
+              <div class="tarjeta-detalles">
+                <p>
+                  Vueltas: {{ selectedCircuit.laps }} | Longitud:
+                  {{ selectedCircuit.length }}
+                </p>
+                <p>Vuelta rápida: {{ selectedCircuit.lap_record }}</p>
+              </div>
+              <a
+                class="boton"
+                (click)="showBestStrategies(selectedCircuit)"
+                style="cursor: pointer"
+                >Mostrar más</a
+              >
+              <div *ngIf="bestStrategies.length > 0" class="estrategias">
+                <h4 style="grid-column: 1 / -1;">Mejores estrategias:</h4>
+                <div *ngFor="let estrategia of bestStrategies">
+                  <strong>
+                    Estrategia {{ estrategia.estrategia }} ({{
+                      estrategia.paradas
+                    }}
+                    paradas):
+                  </strong>
+                  <ul>
+                    <li>
+                      Salir con:
+                      {{ estrategia.stints[0].compuesto | titlecase }}
+                    </li>
+                    <ng-container
+                      *ngFor="
+                        let stop of getPitStops(estrategia.stints);
+                        let i = index
+                      "
+                    >
+                      <li>
+                        Parada {{ i + 1 }}: {{ stop.compuesto | titlecase }} en
+                        la vuelta {{ stop.vuelta }}
+                      </li>
+                    </ng-container>
+                  </ul>
+                  <span>
+                    Tiempo total: {{ estrategia.tiempo_formateado }}
+                    <br /><br />
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+
+        <ng-template #listaCircuitos>
+          <div
+            class="tarjetas-contenedor"
+            [ngClass]="{ seleccionado: filteredCircuits.length === 1 }"
+          >
+            <div
+              class="tarjeta"
+              *ngFor="let circuito of filteredCircuits"
+              (click)="onCircuitSelected(circuito)"
+            >
+              <div class="tarjeta-imagen">
+                <img [src]="circuito.image" [alt]="circuito.name" />
+              </div>
+              <div class="tarjeta-contenido">
+                <h3>{{ circuito.name_GP }}</h3>
+                <div class="tarjeta-detalles">
+                  <p>
+                    Vueltas: {{ circuito.laps }} | Longitud:
+                    {{ circuito.length }}
+                  </p>
+                  <p>Vuelta rápida: {{ circuito.lap_record }}</p>
+                </div>
+                <a
+                  class="boton"
+                  (click)="onCircuitSelected(circuito); showBestStrategies(circuito)"
+                  style="cursor: pointer"
+                  >Estrategias</a
+                >
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </section>
     </div>
   </div>
 
@@ -66,5 +213,3 @@
     >
   </footer>
 </div>
-
-
