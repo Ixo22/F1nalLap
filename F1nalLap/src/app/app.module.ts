@@ -14,6 +14,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { CargarScriptsService } from './cargar-scripts.service';
 // FIN SERVICIOS
 
+
+
 @NgModule({
   declarations: [],
   imports: [
@@ -22,7 +24,7 @@ import { CargarScriptsService } from './cargar-scripts.service';
     HttpClientModule,
     MatMenuModule,
     MatButtonModule,
-    MatMenuTrigger
+    MatMenuTrigger,
   ],
   providers: [
     CargarScriptsService
