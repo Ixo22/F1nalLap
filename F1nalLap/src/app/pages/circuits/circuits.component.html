@@ -66,18 +66,18 @@
     <div class="contenedor-section">
       <section>
         <h2>Circuitos</h2>
-        <a
-          href="circuits"
+        <button
           class="boton"
           id="volver"
           *ngIf="selectedCircuit"
+          (click)="clearSelection()"
         >
           <img
             src="./../../../assets/images/flecha.png"
             alt="Volver"
             class="flecha-volver"
           />
-        </a>
+        </button>
         <div class="buttons">
           <mat-form-field appearance="fill">
             <mat-label>Filtrar circuito</mat-label>
@@ -91,6 +91,7 @@
             <button
               mat-icon-button
               matSuffix
+              class="limpiar"
               aria-label="limpiar"
               *ngIf="circuitControl.value"
               (click)="clearSelection()"
@@ -133,10 +134,21 @@
                 class="boton"
                 (click)="showBestStrategies(selectedCircuit)"
                 style="cursor: pointer"
-                >Mostrar más</a
+                >Estrategias</a
               >
-              <div *ngIf="bestStrategies.length > 0" class="estrategias">
-                <h4 style="grid-column: 1 / -1;">Mejores estrategias:</h4>
+              <a
+                class="boton"
+                (click)="onSimulador(selectedCircuit)"
+                style="cursor: pointer"
+                >Simulador</a
+              >
+
+              <!-- Estrategias -->
+              <div
+                *ngIf="bestStrategiesVisible && bestStrategies.length > 0"
+                class="estrategias"
+              >
+                <h4 style="grid-column: 1 / -1">Mejores estrategias:</h4>
                 <div *ngFor="let estrategia of bestStrategies">
                   <strong>
                     Estrategia {{ estrategia.estrategia }} ({{
@@ -144,29 +156,131 @@
                     }}
                     paradas):
                   </strong>
-                  <ul>
-                    <li>
-                      Salir con:
-                      {{ estrategia.stints[0].compuesto | titlecase }}
-                    </li>
-                    <ng-container
-                      *ngFor="
-                        let stop of getPitStops(estrategia.stints);
-                        let i = index
-                      "
-                    >
-                      <li>
-                        Parada {{ i + 1 }}: {{ stop.compuesto | titlecase }} en
-                        la vuelta {{ stop.vuelta }}
-                      </li>
-                    </ng-container>
-                  </ul>
+                  <br />
+                  <br />
+                  <span>
+                    Salir con:
+                    {{ estrategia.stints[0].compuesto | titlecase }}
+                  </span>
+                  <br />
+
+                  <ng-container
+                    *ngFor="
+                      let stop of getPitStops(estrategia.stints);
+                      let i = index
+                    "
+                  >
+                    <span>
+                      Parada {{ i + 1 }}: {{ stop.compuesto | titlecase }} en la
+                      vuelta {{ stop.vuelta }}
+                    </span>
+                    <br />
+                  </ng-container>
+                  <br />
                   <span>
                     Tiempo total: {{ estrategia.tiempo_formateado }}
                     <br /><br />
                   </span>
                 </div>
               </div>
+
+              <!-- Simulador dentro de la tarjeta -->
+              <div *ngIf="simuladorActivo" class="simulador-form">
+                <br />
+                <br />
+                <h4>Simulador de Estrategia Personalizada</h4>
+                <div>
+                  <button (click)="agregarStint()">Añadir Stint</button>
+                </div>
+                <br />
+                <div
+                  style="margin-bottom: 10px"
+                  *ngIf="simuladorStints.length > 0"
+                >
+                  <strong
+                    >{{ vueltasLibres }} vueltas libres por asignar</strong
+                  >
+                </div>
+                <div *ngFor="let stint of simuladorStints; let i = index">
+                  <label>
+                    <mat-form-field appearance="fill">
+                      <input
+                        type="text"
+                        placeholder="Compuesto"
+                        matInput
+                        [matAutocomplete]="autoCompuesto"
+                        [(ngModel)]="stint.compuesto"
+                        [ngModelOptions]="{ standalone: true }"
+                      />
+                      <button
+                        mat-icon-button
+                        matSuffix
+                        class="limpiar"
+                        aria-label="limpiar"
+                        *ngIf="stint.compuesto"
+                        (click)="stint.compuesto = ''"
+                      >
+                        <mat-icon>close</mat-icon>
+                      </button>
+                      <mat-autocomplete #autoCompuesto="matAutocomplete">
+                        <mat-option *ngFor="let c of compuestos" [value]="c">
+                          {{ c | titlecase }}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </label>
+                  <label>
+                    <mat-form-field class="vueltas" appearance="fill">
+                      <input
+                        type="number"
+                        matInput
+                        placeholder="Vueltas"
+                        [(ngModel)]="stint.vueltas"
+                        min="1"
+                        [ngModelOptions]="{ standalone: true }"
+                      />
+                    </mat-form-field>
+                  </label>
+                  <button (click)="eliminarStint(i)">Eliminar</button>
+                </div>
+                <button
+                  (click)="simularEstrategiaLibre()"
+                  *ngIf="simuladorStints.length > 0"
+                >
+                  Simular
+                </button>
+
+                <div *ngIf="simuladorResultado">
+                  <h4>Estrategia Personalizada:</h4>
+                  <span>
+                    Salir con:
+                    {{ simuladorResultado.stints[0].compuesto | titlecase }}
+                  </span>
+                  <br />
+                  <ng-container
+                    *ngFor="
+                      let stop of getPitStops(simuladorResultado.stints);
+                      let i = index
+                    "
+                  >
+                    <span>
+                      Parada {{ i + 1 }}: {{ stop.compuesto | titlecase }} en la
+                      vuelta {{ stop.vuelta }}
+                    </span>
+                    <br />
+                  </ng-container>
+                  <br />
+                  <span>
+                    Tiempo total: {{ simuladorResultado.tiempo_formateado }}
+                  </span>
+                  <br />
+                  <br />
+                  <span *ngIf="bestStrategies.length > 0">
+                    Tiempo óptimo: {{ bestStrategies[0]?.tiempo_formateado }}
+                  </span>
+                </div>
+              </div>
+              <!-- Fin simulador -->
             </div>
           </div>
         </div>
@@ -195,9 +309,17 @@
                 </div>
                 <a
                   class="boton"
-                  (click)="onCircuitSelected(circuito); showBestStrategies(circuito)"
+                  (click)="
+                    onCircuitSelected(circuito); showBestStrategies(circuito)
+                  "
                   style="cursor: pointer"
                   >Estrategias</a
+                >
+                <a
+                  class="boton"
+                  (click)="onSimulador(circuito)"
+                  style="cursor: pointer"
+                  >Simulador</a
                 >
               </div>
             </div>
