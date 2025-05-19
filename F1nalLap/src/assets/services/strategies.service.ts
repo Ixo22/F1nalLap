@@ -5,36 +5,33 @@ import { Observable, of } from 'rxjs';
   providedIn: 'root'
 })
 export class EstrategiasService {
-  // Datos de vida útil y degradación (en vueltas y segundos por vuelta)
   private vidaUtil = {
     blandos: 22,
     medios: 33,
     duros: 50
   };
 
-  // Mínimos de vueltas por compuesto
   private minimosVueltas = {
     blandos: [9, 15],
     medios: [15, 30],
     duros: [25, 40]
   };
 
-  // Degradación no lineal por fases para cada compuesto
   private degradacionPorFase = {
     blandos: {
-      inicial: [0.1, 0.15],
-      media: [0.05, 0.1],
-      final: [0.15, 0.2]
+      inicial: [0.2, 0.25],
+      media: [0.15, 0.2],
+      final: [0.25, 0.3]
     },
     medios: {
-      inicial: [0.05, 0.1],
-      media: [0.03, 0.07],
-      final: [0.08, 0.16]
+      inicial: [0.15, 0.2],
+      media: [0.13, 0.17],
+      final: [0.18, 0.26]
     },
     duros: {
-      inicial: [0.03, 0.07],
-      media: [0.02, 0.05],
-      final: [0.05, 0.9]
+      inicial: [0.12, 0.16],
+      media: [0.09, 0.14],
+      final: [0.15, 1]
     }
   };
 
@@ -73,8 +70,8 @@ export class EstrategiasService {
 
   private calcularTiemposBase(circuito: any) {
     const tiempoBaseBlandos = this.lapRecordToSeconds(circuito.lap_record);
-    const tiempoBaseMedios = tiempoBaseBlandos + (78.918 - 78.149);
-    const tiempoBaseDuros = tiempoBaseBlandos + (79.748 - 78.149);
+    const tiempoBaseMedios = tiempoBaseBlandos + (0.9);
+    const tiempoBaseDuros = tiempoBaseBlandos + (1.7);
     return {
       blandos: tiempoBaseBlandos,
       medios: tiempoBaseMedios,
@@ -83,7 +80,6 @@ export class EstrategiasService {
   }
 
   private lapRecordToSeconds(lapRecord: string): number {
-    // Ejemplo: "1:19.813" => 1*60 + 19.813 = 79.813
     if (!lapRecord) return 0;
     const [min, sec] = lapRecord.split(':');
     return Number(min) * 60 + Number(sec.replace(',', '.'));
@@ -91,7 +87,6 @@ export class EstrategiasService {
 
   private generarEstrategias(vueltasTotales: number): [keyof typeof this.vidaUtil, number][][] {
     const estrategias: [keyof typeof this.vidaUtil, number][][] = [];
-    // Una parada
     for (const compuesto1 of Object.keys(this.vidaUtil) as (keyof typeof this.vidaUtil)[]) {
       for (const compuesto2 of Object.keys(this.vidaUtil) as (keyof typeof this.vidaUtil)[]) {
         if (compuesto1 !== compuesto2) {
@@ -107,7 +102,6 @@ export class EstrategiasService {
         }
       }
     }
-    // Dos paradas
     for (const compuesto1 in this.vidaUtil) {
       for (const compuesto2 in this.vidaUtil) {
         if (compuesto1 !== compuesto2) {
@@ -126,7 +120,6 @@ export class EstrategiasService {
         }
       }
     }
-    // Tres compuestos
     for (let vueltasBlando = this.minimosVueltas.blandos[0]; vueltasBlando < Math.min(this.vidaUtil.blandos, vueltasTotales); vueltasBlando++) {
       for (let vueltasMedio = this.minimosVueltas.medios[0]; vueltasMedio < Math.min(this.vidaUtil.medios, vueltasTotales - vueltasBlando); vueltasMedio++) {
         const vueltasDuro = vueltasTotales - vueltasBlando - vueltasMedio;
@@ -150,7 +143,6 @@ export class EstrategiasService {
   }
 
   private convertirTiempo(ms: number): string {
-    // ms: milisegundos
     const horas = Math.floor(ms / (60 * 60 * 1000));
     let msRestantes = ms % (60 * 60 * 1000);
     const minutos = Math.floor(msRestantes / (60 * 1000));
@@ -181,7 +173,6 @@ export class EstrategiasService {
   }
 
   calcularMejoresEstrategias(circuito: any) {
-    // Usa 'vueltas' o 'laps'
     const vueltas = circuito.vueltas ?? circuito.laps;
     const estrategias = this.generarEstrategias(vueltas);
 
@@ -194,7 +185,7 @@ export class EstrategiasService {
         const [tiempo, estrategiaAjustadaActual] = this.simularEstrategia(circuito, vueltas, estrategia);
         let penalizacion = 0;
         if (estrategiaAjustadaActual.length === 3 && estrategiaAjustadaActual[0][0] === estrategiaAjustadaActual[1][0]) {
-          penalizacion = 60;
+          penalizacion = 50;
         }
         if (estrategiaAjustadaActual.length === 2) {
           penalizacion = -10;
@@ -256,28 +247,45 @@ export class EstrategiasService {
     return [tiempoTotal - this.tiempoParada, estrategiaAjustada];
   }
 
-  simularEstrategiaPersonalizada(
+  simularEstrategiaLibre(
     circuito: any,
     estrategia: [keyof typeof this.vidaUtil, number][]
   ): Observable<any> {
-    try {
-      const [tiempo, estrategiaAjustada] = this.simularEstrategia(circuito, circuito.vueltas ?? circuito.laps, estrategia);
-      return of({
-        paradas: estrategiaAjustada.length - 1,
-        stints: estrategiaAjustada.map(stint => ({
-          compuesto: stint[0],
-          vueltas: stint[1]
-        })),
-        tiempo_total_segundos: Math.round(tiempo * 1000) / 1000,
-        tiempo_formateado: isNaN(tiempo) ? 'N/A' : this.convertirTiempo(Math.floor(tiempo * 1000))
-      });
-    } catch (e) {
-      return of({ error: (e as Error).message });
+    let tiempoTotal = 0;
+    const tiemposBase = this.calcularTiemposBase(circuito);
+
+    for (let i = 0; i < estrategia.length; i++) {
+      const [compuesto, vueltas] = estrategia[i];
+      const tiempoBase = tiemposBase[compuesto];
+      let tiempoStint = 0;
+      for (let vuelta = 0; vuelta < vueltas; vuelta++) {
+        let degradacion: number;
+        if (vuelta + 1 > this.vidaUtil[compuesto]) {
+          const vueltasFueraVidaUtil = vuelta + 1 - this.vidaUtil[compuesto];
+          degradacion = 0.5 + Math.pow(vueltasFueraVidaUtil, 1.5) * 1.5;
+        } else {
+          degradacion = this.calcularDegradacion(compuesto, vuelta, vueltas);
+        }
+        tiempoStint += tiempoBase + degradacion;
+      }
+      tiempoTotal += tiempoStint;
+      if (i < estrategia.length - 1) {
+        tiempoTotal += this.tiempoParada;
+      }
     }
+
+    return of({
+      paradas: estrategia.length - 1,
+      stints: estrategia.map(stint => ({
+        compuesto: stint[0],
+        vueltas: stint[1]
+      })),
+      tiempo_total_segundos: Math.round(tiempoTotal * 1000) / 1000,
+      tiempo_formateado: isNaN(tiempoTotal) ? 'N/A' : this.convertirTiempo(Math.floor(tiempoTotal * 1000))
+    });
   }
 
   getBestStrategies(circuito: any): Observable<any[]> {
-    // Calcula las 3 mejores estrategias reales para el circuito recibido
     const estrategias = this.calcularMejoresEstrategias(circuito);
     return of(estrategias);
   }
