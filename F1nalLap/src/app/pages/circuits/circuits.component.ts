@@ -128,6 +128,10 @@ export class CircuitsComponent implements OnInit {
   }
 
   simularEstrategiaLibre() {
+    // Si no hay estrategias óptimas calculadas, calcúlalas antes de simular
+    if (!this.bestStrategies || this.bestStrategies.length === 0) {
+      this.calcularMejoresEstrategias(this.selectedCircuit);
+    }
     const totalVueltas = this.simuladorStints.reduce((acc, s) => acc + Number(s.vueltas), 0);
     const vueltasCircuito = this.selectedCircuit.laps ?? this.selectedCircuit.vueltas;
 
@@ -145,6 +149,12 @@ export class CircuitsComponent implements OnInit {
       .map(s => [s.compuesto.toLowerCase() as "blandos" | "medios" | "duros", Number(s.vueltas)] as ["blandos" | "medios" | "duros", number]);
     this.strategiesService.simularEstrategiaLibre(this.selectedCircuit, estrategia)
       .subscribe(res => this.simuladorResultado = res);
+  }
+
+  calcularMejoresEstrategias(circuit: any): void {
+    this.strategiesService.getBestStrategies(circuit).subscribe((strategies: any[]) => {
+      this.bestStrategies = strategies;
+    });
   }
 
   get vueltasLibres(): number {
