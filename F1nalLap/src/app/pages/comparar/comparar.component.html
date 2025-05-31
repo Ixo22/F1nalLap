@@ -210,122 +210,178 @@
           </mat-form-field>
         </div>
 
-        <!-- Tabla detalles piloto seleccionado -->
-        <table
-          mat-table
-          *ngIf="pilotoSeleccionado()"
-          [dataSource]="[pilotoSeleccionado()]"
-          class="mat-elevation-z8"
-        >
-          <ng-container matColumnDef="piloto">
-            <th mat-header-cell *matHeaderCellDef>Piloto</th>
-            <td mat-cell *matCellDef="let row">{{ row.piloto }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="wins">
-            <th mat-header-cell *matHeaderCellDef>Victorias</th>
-            <td mat-cell *matCellDef="let row">{{ row.wins }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="points">
-            <th mat-header-cell *matHeaderCellDef>Puntos</th>
-            <td mat-cell *matCellDef="let row">{{ row.points }}</td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumnsDriver"></tr>
-          <tr
-            mat-row
-            *matRowDef="let row; columns: displayedColumnsDriver"
-          ></tr>
-        </table>
-
-        <!-- Tabla detalles equipo seleccionado -->
-        <table
-          mat-table
-          *ngIf="equipoSeleccionado()"
-          [dataSource]="[equipoSeleccionado()]"
-          class="mat-elevation-z8"
-        >
-          <ng-container matColumnDef="position">
-            <th mat-header-cell *matHeaderCellDef>Pos.</th>
-            <td mat-cell *matCellDef="let row">{{ row.position }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="constructor">
-            <th mat-header-cell *matHeaderCellDef>Escudería</th>
-            <td mat-cell *matCellDef="let row">{{ row.constructor }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="wins">
-            <th mat-header-cell *matHeaderCellDef>Victorias</th>
-            <td mat-cell *matCellDef="let row">{{ row.wins }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="points">
-            <th mat-header-cell *matHeaderCellDef>Puntos</th>
-            <td mat-cell *matCellDef="let row">{{ row.points }}</td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumnsTeam"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumnsTeam"></tr>
-        </table>
-
-        <!-- Tabla comparación pilotos -->
-        <table
-          mat-table
+        <!-- Gráficos comparación pilotos -->
+        <div
           *ngIf="
             modoComparar === 'pilotos' && pilotoComparar1 && pilotoComparar2
           "
-          [dataSource]="[pilotoComparar1, pilotoComparar2]"
-          class="mat-elevation-z8"
+          class="graficos-container"
         >
-          <ng-container matColumnDef="piloto">
-            <th mat-header-cell *matHeaderCellDef>Piloto</th>
-            <td mat-cell *matCellDef="let row">{{ row.piloto }}</td>
-          </ng-container>
-          <ng-container matColumnDef="wins">
-            <th mat-header-cell *matHeaderCellDef>Victorias</th>
-            <td mat-cell *matCellDef="let row">{{ row.wins }}</td>
-          </ng-container>
-          <ng-container matColumnDef="points">
-            <th mat-header-cell *matHeaderCellDef>Puntos</th>
-            <td mat-cell *matCellDef="let row">{{ row.points }}</td>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="displayedColumnsDriver"></tr>
-          <tr
-            mat-row
-            *matRowDef="let row; columns: displayedColumnsDriver"
-          ></tr>
-        </table>
+          <div class="grafico-pie-container">
+            <h4 class="titulo-grafico">
+              Victorias totales:
+              {{ (+pilotoComparar1.wins || 0) + (+pilotoComparar2.wins || 0) }}
+            </h4>
+            <ngx-charts-pie-chart
+              class="grafico-pie"
+              [results]="pilotosVictoriasChart"
+              [legend]="true"
+              [legendTitle]="''"
+              [legendPosition]="LegendPosition.Below"
+              [labels]="true"
+              [doughnut]="true"
+              [arcWidth]="0.45"
+              [explodeSlices]="true"
+              [gradient]="true"
+              [trimLabels]="false"
+              [maxLabelLength]="50"
+              [view]="chartView"
+              [scheme]="colorSchemeP"
+            ></ngx-charts-pie-chart>
+          </div>
+          <div class="grafico-pie-container">
+            <h4 class="titulo-grafico">
+              Puntos totales:
+              {{
+                (+pilotoComparar1.points || 0) + (+pilotoComparar2.points || 0)
+              }}
+            </h4>
+            <ngx-charts-bar-vertical
+              class="grafico-pie"
+              [results]="pilotosPuntosChart"
+              [legend]="true"
+              [legendTitle]="''"
+              [legendPosition]="LegendPosition.Below"
+              [xAxis]="true"
+              [yAxis]="true"
+              [showXAxisLabel]="true"
+              [showYAxisLabel]="true"
+              [xAxisLabel]="'Piloto'"
+              [yAxisLabel]="'Puntos'"
+              [scheme]="colorSchemeP"
+              [gradient]="false"
+              [view]="chartView"
+              [barPadding]="25"
+            ></ngx-charts-bar-vertical>
+          </div>
+          <div
+            *ngIf="modoComparar === 'pilotos' && pilotoComparar1 && pilotoComparar2"
+            class="grafico-pie-container"
+          >
+            <h4 class="titulo-grafico">Puntos por carrera</h4>
+            <div *ngIf="cargandoPuntos" class="placeholder">
+              <span class="spinner"></span>
+              Cargando puntos por carrera...
+            </div>
+            <ngx-charts-line-chart
+              *ngIf="!cargandoPuntos && puntosPorCarrera.length"
+              class="grafico-pie"
+              [results]="puntosPorCarrera"
+              [legend]="true"
+              [legendTitle]="''"
+              [legendPosition]="LegendPosition.Below"
+              [xAxis]="true"
+              [yAxis]="true"
+              [showXAxisLabel]="true"
+              [showYAxisLabel]="true"
+              [xAxisLabel]="'Carrera'"
+              [yAxisLabel]="'Puntos'"
+              [scheme]="colorSchemeP"
+              [autoScale]="true"
+              [timeline]="true"
+              [animations]="true"
+              [roundDomains]="true"
+              [showGridLines]="true"
+              [showRefLines]="false"
+              [tooltipDisabled]="false"
+              [gradient]="false"
+              [view]="pointView"
+            ></ngx-charts-line-chart>
+          </div>
+        </div>
 
-        <!-- Tabla comparación equipos -->
-        <table
-          mat-table
+        <!-- Gráficos comparación equipos -->
+        <div
           *ngIf="
             modoComparar === 'equipos' && equipoComparar1 && equipoComparar2
           "
-          [dataSource]="[equipoComparar1, equipoComparar2]"
-          class="mat-elevation-z8"
+          class="graficos-container"
         >
-          <ng-container matColumnDef="position">
-            <th mat-header-cell *matHeaderCellDef>Pos.</th>
-            <td mat-cell *matCellDef="let row">{{ row.position }}</td>
-          </ng-container>
-          <ng-container matColumnDef="constructor">
-            <th mat-header-cell *matHeaderCellDef>Escudería</th>
-            <td mat-cell *matCellDef="let row">{{ row.constructor }}</td>
-          </ng-container>
-          <ng-container matColumnDef="wins">
-            <th mat-header-cell *matHeaderCellDef>Victorias</th>
-            <td mat-cell *matCellDef="let row">{{ row.wins }}</td>
-          </ng-container>
-          <ng-container matColumnDef="points">
-            <th mat-header-cell *matHeaderCellDef>Puntos</th>
-            <td mat-cell *matCellDef="let row">{{ row.points }}</td>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="displayedColumnsTeam"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumnsTeam"></tr>
-        </table>
+          <div class="grafico-pie-container">
+            <h4 class="titulo-grafico">
+              Victorias totales:
+              {{ (+equipoComparar1.wins || 0) + (+equipoComparar2.wins || 0) }}
+            </h4>
+            <ngx-charts-pie-chart
+              class="grafico-pie"
+              [results]="equiposVictoriasChart"
+              [legend]="true"
+              [legendTitle]="''"
+              [legendPosition]="LegendPosition.Below"
+              [labels]="true"
+              [doughnut]="true"
+              [arcWidth]="0.45"
+              [explodeSlices]="false"
+              [gradient]="true"
+              [view]="chartView"
+              [scheme]="colorSchemeT"
+            ></ngx-charts-pie-chart>
+          </div>
+          <div class="grafico-pie-container">
+            <h4 class="titulo-grafico">
+              Puntos totales:
+              {{
+                (+equipoComparar1.points || 0) + (+equipoComparar2.points || 0)
+              }}
+            </h4>
+            <ngx-charts-bar-vertical
+              class="grafico-pie"
+              [results]="equiposPuntosChart"
+              [legend]="true"
+              [legendTitle]="''"
+              [legendPosition]="LegendPosition.Below"
+              [xAxis]="true"
+              [yAxis]="true"
+              [showXAxisLabel]="true"
+              [showYAxisLabel]="true"
+              [xAxisLabel]="'Equipo'"
+              [yAxisLabel]="'Puntos'"
+              [scheme]="colorSchemeT"
+              [gradient]="false"
+              [view]="chartView"
+              [barPadding]="25"
+            ></ngx-charts-bar-vertical>
+          </div>
+          <div
+            *ngIf="modoComparar === 'equipos' && puntosPorCarrera.length"
+            class="grafico-pie-container"
+          >
+            <h4 class="titulo-grafico">Puntos por carrera</h4>
+            <ngx-charts-line-chart
+              class="grafico-pie"
+              [results]="puntosPorCarrera"
+              [legend]="true"
+              [legendTitle]="''"
+              [legendPosition]="LegendPosition.Below"
+              [xAxis]="true"
+              [yAxis]="true"
+              [showXAxisLabel]="true"
+              [showYAxisLabel]="true"
+              [xAxisLabel]="'Carrera'"
+              [yAxisLabel]="'Puntos'"
+              [scheme]="colorSchemeT"
+              [autoScale]="true"
+              [timeline]="true"
+              [animations]="true"
+              [roundDomains]="true"
+              [showGridLines]="true"
+              [showRefLines]="false"
+              [tooltipDisabled]="false"
+              [gradient]="false"
+              [view]="pointView"
+            ></ngx-charts-line-chart>
+          </div>
+        </div>
       </section>
     </div>
   </div>
