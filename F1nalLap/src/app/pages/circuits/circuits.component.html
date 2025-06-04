@@ -270,13 +270,26 @@
                     <br />
                   </ng-container>
                   <br />
-                  <span>
-                    Tiempo total: {{ simuladorResultado.tiempo_formateado }}
+                  <span
+                    [ngClass]="{
+                      'tiempo-mejor': simuladorResultado?.tiempo_total_segundos < bestStrategies[0]?.tiempo_total_segundos,
+                      'tiempo-peor': simuladorResultado?.tiempo_total_segundos > bestStrategies[0]?.tiempo_total_segundos,
+                      'tiempo-igual': simuladorResultado?.tiempo_total_segundos === bestStrategies[0]?.tiempo_total_segundos
+                    }"
+                  >
+                    Tiempo simulado: {{ simuladorResultado.tiempo_formateado }}
                   </span>
                   <br />
                   <br />
-                  <span *ngIf="bestStrategies.length > 0">
-                    Tiempo óptimo: {{ bestStrategies[0]?.tiempo_formateado }}
+                  <span
+                    *ngIf="bestStrategies.length > 0"
+                    [ngClass]="{
+                      'tiempo-mejor': bestStrategies[0]?.tiempo_total_segundos < simuladorResultado?.tiempo_total_segundos,
+                      'tiempo-peor': bestStrategies[0]?.tiempo_total_segundos > simuladorResultado?.tiempo_total_segundos,
+                      'tiempo-igual': bestStrategies[0]?.tiempo_total_segundos === simuladorResultado?.tiempo_total_segundos
+                    }"
+                  >
+                    Tiempo calculado: {{ bestStrategies[0]?.tiempo_formateado }}
                   </span>
                 </div>
               </div>

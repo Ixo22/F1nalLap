@@ -211,3 +211,27 @@ h3 {
   margin-left: 25px;
   max-width: 120px;
 }
+
+.tiempo-mejor {
+  color: #0a7d32; // verde más oscuro para mejor contraste
+  background-color: #e6f4ea; // fondo verde muy claro
+  font-weight: bold;
+  padding: 0.15em 0.5em;
+  border-radius: 0.4em;
+}
+
+.tiempo-peor {
+  color: #b71c1c; // rojo más oscuro para mejor contraste
+  background-color: #fdeaea; // fondo rojo muy claro
+  font-weight: bold;
+  padding: 0.15em 0.5em;
+  border-radius: 0.4em;
+}
+
+.tiempo-igual {
+  color: #0056b3;
+  background-color: #e6f0fa;
+  font-weight: bold;
+  padding: 0.15em 0.5em;
+  border-radius: 0.4em;
+}

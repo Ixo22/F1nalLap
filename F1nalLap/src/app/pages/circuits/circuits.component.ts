@@ -148,12 +148,21 @@ export class CircuitsComponent implements OnInit {
       .filter(s => s.compuesto && s.vueltas)
       .map(s => [s.compuesto.toLowerCase() as "blandos" | "medios" | "duros", Number(s.vueltas)] as ["blandos" | "medios" | "duros", number]);
     this.strategiesService.simularEstrategiaLibre(this.selectedCircuit, estrategia)
-      .subscribe(res => this.simuladorResultado = res);
+      .subscribe(res => {
+        this.simuladorResultado = res;
+        console.log('Simulado resultado:', this.simuladorResultado);
+        if (this.bestStrategies[0]) {
+          console.log('Best completa:', this.bestStrategies[0]);
+        }
+      });
   }
 
   calcularMejoresEstrategias(circuit: any): void {
     this.strategiesService.getBestStrategies(circuit).subscribe((strategies: any[]) => {
       this.bestStrategies = strategies;
+      if (this.bestStrategies[0]) {
+        console.log('Best completa:', this.bestStrategies[0]);
+      }
     });
   }
 
