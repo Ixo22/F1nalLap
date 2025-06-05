@@ -188,6 +188,13 @@
               <div *ngIf="simuladorActivo" class="simulador-form">
                 <br />
                 <br />
+                <!-- Instrucciones para el simulador -->
+                <div class="simulador-instrucciones" style="margin-bottom: 10px; color: #555;">
+                  <strong>¿Cómo funciona?</strong><br>
+                  Añade los stints de tu estrategia, elige el compuesto y asigna las vueltas para cada uno. 
+                  <br>
+                  Cuando termines, pulsa "Simular" para comparar tu tiempo con la mejor estrategia calculada.
+                </div>
                 <h4>Simulador de Estrategia Personalizada</h4>
                 <div>
                   <button (click)="agregarStint()">Añadir Stint</button>

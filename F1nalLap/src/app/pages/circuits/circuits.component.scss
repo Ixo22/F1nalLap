@@ -1,6 +1,5 @@
 .tarjetas-contenedor {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); // 3 columnas
   gap: 2rem;
   padding: 2rem;
   border-radius: 1rem;
@@ -92,7 +91,7 @@
 
 @media (max-width: 768px) {
   .tarjetas-contenedor {
-    grid-template-columns: 1fr; // 1 columna en móviles
+    grid-template-columns: 1fr;  
     padding: 1rem;
     gap: 1rem;
   }
@@ -120,11 +119,11 @@
 
 @media (min-width: 769px) and (max-width: 1024px) {
   .tarjetas-contenedor {
-    grid-template-columns: repeat(2, 1fr); // 2 columnas en tablets
+    grid-template-columns: repeat(2, 1fr); 
     gap: 1.5rem;
   }
   .estrategias {
-    grid-template-columns: repeat(2, 1fr); // 2 columnas para estrategias en tablets
+    grid-template-columns: repeat(2, 1fr); 
     gap: 1rem;
   }
 }
@@ -213,16 +212,16 @@ h3 {
 }
 
 .tiempo-mejor {
-  color: #0a7d32; // verde más oscuro para mejor contraste
-  background-color: #e6f4ea; // fondo verde muy claro
+  color: #0a7d32; 
+  background-color: #e6f4ea; 
   font-weight: bold;
   padding: 0.15em 0.5em;
   border-radius: 0.4em;
 }
 
 .tiempo-peor {
-  color: #b71c1c; // rojo más oscuro para mejor contraste
-  background-color: #fdeaea; // fondo rojo muy claro
+  color: #b71c1c; 
+  background-color: #fdeaea; 
   font-weight: bold;
   padding: 0.15em 0.5em;
   border-radius: 0.4em;
