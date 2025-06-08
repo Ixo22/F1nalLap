@@ -31,7 +31,7 @@ export class EstrategiasService {
     duros: {
       inicial: [0.12, 0.16],
       media: [0.09, 0.14],
-      final: [0.15, 1]
+      final: [0.15, 0.8]
     }
   };
 
