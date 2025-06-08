@@ -189,11 +189,16 @@
                 <br />
                 <br />
                 <!-- Instrucciones para el simulador -->
-                <div class="simulador-instrucciones" style="margin-bottom: 10px; color: #555;">
-                  <strong>¿Cómo funciona?</strong><br>
-                  Añade los stints de tu estrategia, elige el compuesto y asigna las vueltas para cada uno. 
-                  <br>
-                  Cuando termines, pulsa "Simular" para comparar tu tiempo con la mejor estrategia calculada.
+                <div
+                  class="simulador-instrucciones"
+                  style="margin-bottom: 10px; color: #555"
+                >
+                  <strong>¿Cómo funciona?</strong><br />
+                  Añade los stints de tu estrategia, elige el compuesto y asigna
+                  las vueltas para cada uno.
+                  <br />
+                  Cuando termines, pulsa "Simular" para comparar tu tiempo con
+                  la mejor estrategia calculada.
                 </div>
                 <h4>Simulador de Estrategia Personalizada</h4>
                 <div>
@@ -279,9 +284,15 @@
                   <br />
                   <span
                     [ngClass]="{
-                      'tiempo-mejor': simuladorResultado?.tiempo_total_segundos < bestStrategies[0]?.tiempo_total_segundos,
-                      'tiempo-peor': simuladorResultado?.tiempo_total_segundos > bestStrategies[0]?.tiempo_total_segundos,
-                      'tiempo-igual': simuladorResultado?.tiempo_total_segundos === bestStrategies[0]?.tiempo_total_segundos
+                      'tiempo-mejor':
+                        simuladorResultado?.tiempo_total_segundos <
+                        bestStrategies[0]?.tiempo_total_segundos,
+                      'tiempo-peor':
+                        simuladorResultado?.tiempo_total_segundos >
+                        bestStrategies[0]?.tiempo_total_segundos,
+                      'tiempo-igual':
+                        simuladorResultado?.tiempo_total_segundos ===
+                        bestStrategies[0]?.tiempo_total_segundos
                     }"
                   >
                     Tiempo simulado: {{ simuladorResultado.tiempo_formateado }}
@@ -291,13 +302,83 @@
                   <span
                     *ngIf="bestStrategies.length > 0"
                     [ngClass]="{
-                      'tiempo-mejor': bestStrategies[0]?.tiempo_total_segundos < simuladorResultado?.tiempo_total_segundos,
-                      'tiempo-peor': bestStrategies[0]?.tiempo_total_segundos > simuladorResultado?.tiempo_total_segundos,
-                      'tiempo-igual': bestStrategies[0]?.tiempo_total_segundos === simuladorResultado?.tiempo_total_segundos
+                      'tiempo-mejor':
+                        bestStrategies[0]?.tiempo_total_segundos <
+                        simuladorResultado?.tiempo_total_segundos,
+                      'tiempo-peor':
+                        bestStrategies[0]?.tiempo_total_segundos >
+                        simuladorResultado?.tiempo_total_segundos,
+                      'tiempo-igual':
+                        bestStrategies[0]?.tiempo_total_segundos ===
+                        simuladorResultado?.tiempo_total_segundos
                     }"
                   >
                     Tiempo calculado: {{ bestStrategies[0]?.tiempo_formateado }}
                   </span>
+                  <div class="graficos-container">
+                    <!-- Gráfico de la estrategia simulada -->
+                    <div
+                      style="
+                        margin-top: 2rem;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                      "
+                      class="grafico-pie-container"
+                    >
+                      <h4 class="titulo-grafico">
+                        Degradación por stint y fase (simulada)
+                      </h4>
+                      <ngx-charts-line-chart
+                        class="grafico-pie"
+                        [view]="degradacionChartView"
+                        [results]="degradacionSimuladaChartData"
+                        [xAxis]="true"
+                        [yAxis]="true"
+                        [legend]="true"
+                        [legendTitle]="''"
+                        [legendPosition]="LegendPosition.Below"
+                        [showXAxisLabel]="true"
+                        [showYAxisLabel]="true"
+                        [xAxisLabel]="'Vuelta'"
+                        [yAxisLabel]="'Degradación (s)'"
+                        [autoScale]="true"
+                      >
+                      </ngx-charts-line-chart>
+                    </div>
+
+                    <!-- Gráfico de la estrategia calculada -->
+                    <div
+                      style="
+                        margin-top: 2rem;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                      "
+                      class="grafico-pie-container"
+                    >
+                      <h4 class="titulo-grafico">
+                        Degradación por stint y fase (calculada)
+                      </h4>
+                      <ngx-charts-line-chart
+                        class="grafico-pie"
+                        [view]="degradacionChartView"
+                        [results]="degradacionCalculadaChartData"
+                        [xAxis]="true"
+                        [yAxis]="true"
+                        [legend]="true"
+                        [legendTitle]="''"
+                        [legendPosition]="LegendPosition.Below"
+                        [showXAxisLabel]="true"
+                        [showYAxisLabel]="true"
+                        [xAxisLabel]="'Vuelta'"
+                        [yAxisLabel]="'Degradación (s)'"
+                        [autoScale]="true"
+                      >
+                      </ngx-charts-line-chart>
+                    </div>
+                    
+                  </div>
                 </div>
               </div>
               <!-- Fin simulador -->

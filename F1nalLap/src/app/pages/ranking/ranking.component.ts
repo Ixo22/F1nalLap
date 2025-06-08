@@ -201,7 +201,7 @@ export class RankingComponent implements OnInit {
   }
 }
 
-// Tipados Ergast y esquemas
+
 interface DriverApiResponse { MRData: { StandingsTable: { StandingsLists: { DriverStandings: DriverStanding[] }[] } } }
 interface DriverStanding { position: string; points: string; wins: string; Driver: { givenName: string; familyName: string }; Constructors: { name: string }[] }
 interface ConstructorApiResponse { MRData: { StandingsTable: { StandingsLists: { ConstructorStandings: ConstructorStanding[] }[] } } }

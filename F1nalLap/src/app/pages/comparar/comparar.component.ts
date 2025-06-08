@@ -272,12 +272,12 @@ LegendPosition = LegendPosition;
   }
   puntosPorCarrera: any[] = [];
 carrerasLabels: string[] = [];
-cargandoPuntos = false; // <--- Añade esto
+cargandoPuntos = false;  
 
 async obtenerPuntosPorCarreraPilotos() {
   if (!this.temporadaControl.value || !this.pilotoComparar1 || !this.pilotoComparar2) return;
 
-  this.cargandoPuntos = true; // <--- Añade esto
+  this.cargandoPuntos = true;
   this.puntosPorCarrera = [];
   this.carrerasLabels = [];
 
@@ -302,10 +302,8 @@ async obtenerPuntosPorCarreraPilotos() {
       );
       puntos1.push(piloto1 ? +piloto1.points : 0);
       puntos2.push(piloto2 ? +piloto2.points : 0);
-      // Espera 200ms entre peticiones para evitar el 429
       await new Promise(res => setTimeout(res, 10));
     } catch (err) {
-      // Si hay error, agrega 0 puntos y continúa
       puntos1.push(0);
       puntos2.push(0);
     }
@@ -315,13 +313,13 @@ async obtenerPuntosPorCarreraPilotos() {
     { name: this.pilotoComparar1.piloto, series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos1[i] })) },
     { name: this.pilotoComparar2.piloto, series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos2[i] })) }
   ];
-  this.cargandoPuntos = false; // <--- Añade esto
+  this.cargandoPuntos = false; 
 }
 
 async obtenerPuntosPorCarreraEquipos() {
   if (!this.temporadaControl.value || !this.equipoComparar1 || !this.equipoComparar2) return;
 
-  this.cargandoPuntos = true; // <--- Añade esto
+  this.cargandoPuntos = true;
   this.puntosPorCarrera = [];
   this.carrerasLabels = [];
 
@@ -338,7 +336,6 @@ async obtenerPuntosPorCarreraEquipos() {
     try {
       const res = await this.http.get<any>(`https://api.jolpi.ca/ergast/f1/${this.temporadaControl.value}/${c.round}/results.json`).toPromise();
       const results = res.MRData.RaceTable.Races[0]?.Results || [];
-      // Suma los puntos de todos los pilotos del equipo en esa carrera
       const equipo1Puntos = results
         .filter((r: any) => r.Constructor.name === this.equipoComparar1!.constructor)
         .reduce((acc: number, curr: any) => acc + +curr.points, 0);
@@ -358,7 +355,7 @@ async obtenerPuntosPorCarreraEquipos() {
     { name: this.equipoComparar1.constructor, series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos1[i] })) },
     { name: this.equipoComparar2.constructor, series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos2[i] })) }
   ];
-  this.cargandoPuntos = false; // <--- Añade esto
+  this.cargandoPuntos = false;
 }
 
 get chartView(): [number, number] {

@@ -100,7 +100,7 @@ export function convertirTiempo(ms: number): string {
   const minutos = Math.floor(resto / 60000);
   resto %= 60000;
   const segundos = Math.floor(resto / 1000);
-  const milisegundos = Math.floor(resto % 1000); // Redondear milisegundos a 3 dígitos
+  const milisegundos = Math.floor(resto % 1000); 
 
   return horas > 0
     ? `${horas}:${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}.${milisegundos.toString().padStart(3, '0')}`
@@ -301,7 +301,7 @@ export function generarEstrategias(
 
   for (const nueva of estrategias) {
     const yaExiste = estrategiasUnicas.some(
-      (existente) => estrategiasEquivalentes(nueva, existente, 8) // La tolerancia es de 8 vueltas
+      (existente) => estrategiasEquivalentes(nueva, existente, 8) 
     );
 
     if (!yaExiste) {
@@ -312,20 +312,17 @@ export function generarEstrategias(
   return estrategiasUnicas;
 }
 
-// Normaliza las estrategias antes de compararlas para que no importe el orden de los compuestos
+
 export function estrategiasEquivalentes(
   est1: [Compuesto, number][],
   est2: [Compuesto, number][],
   toleranciaVueltas = 8
 ): boolean {
-  // Normalizamos las estrategias antes de compararlas
   const est1Normalizada = normalizarEstrategia(est1);
   const est2Normalizada = normalizarEstrategia(est2);
 
-  // Comprobamos si tienen la misma longitud
   if (est1Normalizada.length !== est2Normalizada.length) return false;
 
-  // Comparamos las estrategias normalizadas
   for (let i = 0; i < est1Normalizada.length; i++) {
     const [comp1, vueltas1] = est1Normalizada[i];
     const [comp2, vueltas2] = est2Normalizada[i];
