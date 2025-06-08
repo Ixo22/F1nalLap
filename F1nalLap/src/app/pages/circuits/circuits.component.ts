@@ -236,18 +236,8 @@ export class CircuitsComponent implements OnInit {
         })),
       });
 
-      let tiempoTotal = 0;
-      for (let i = 0; i < stint.vueltas; i++) {
-        tiempoTotal += this.strategiesService.calcularTiempoStintPublico(
-          comp,
-          1,
-          1.2
-        );
-      }
-      this.tiemposPorVueltaSimulada.push({
-        vuelta: idx + 1,
-        tiempo: tiempoTotal / stint.vueltas,
-      });
+
+
     });
 
     vueltaGlobal = 1;
@@ -270,18 +260,7 @@ export class CircuitsComponent implements OnInit {
         })),
       });
 
-      let tiempoTotal = 0;
-      for (let i = 0; i < stint.vueltas; i++) {
-        tiempoTotal += this.strategiesService.calcularTiempoStintPublico(
-          comp,
-          1,
-          1.2
-        ); 
-      }
-      this.tiemposPorVueltaCalculada.push({
-        vuelta: idx + 1,
-        tiempo: tiempoTotal / stint.vueltas,
-      });
+
     });
 
     const diferenciaTiempos = this.tiemposPorVueltaSimulada.map(
