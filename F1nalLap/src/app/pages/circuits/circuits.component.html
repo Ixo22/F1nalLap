@@ -128,7 +128,7 @@
                   Vueltas: {{ selectedCircuit.laps }} | Longitud:
                   {{ selectedCircuit.length }}
                 </p>
-                <p>Vuelta rápida: {{ selectedCircuit.lap_record }}</p>
+                <p>Vuelta rápida: {{ selectedCircuit.lap_record }} min</p>
               </div>
               <a
                 class="boton"
@@ -178,7 +178,7 @@
                   </ng-container>
                   <br />
                   <span>
-                    Tiempo total: {{ estrategia.tiempo_formateado }}
+                    Tiempo total: {{ estrategia.tiempo_formateado }} h
                     <br /><br />
                   </span>
                 </div>
@@ -295,7 +295,7 @@
                         bestStrategies[0]?.tiempo_total_segundos
                     }"
                   >
-                    Tiempo simulado: {{ simuladorResultado.tiempo_formateado }}
+                    Tiempo simulado: {{ simuladorResultado.tiempo_formateado }} h
                   </span>
                   <br />
                   <br />
@@ -313,7 +313,7 @@
                         simuladorResultado?.tiempo_total_segundos
                     }"
                   >
-                    Tiempo calculado: {{ bestStrategies[0]?.tiempo_formateado }}
+                    Tiempo mejor estrategia: {{ bestStrategies[0]?.tiempo_formateado }} h
                   </span>
                   <div class="graficos-container">
                     <!-- Gráfico de la estrategia simulada -->
@@ -406,7 +406,7 @@
                     Vueltas: {{ circuito.laps }} | Longitud:
                     {{ circuito.length }}
                   </p>
-                  <p>Vuelta rápida: {{ circuito.lap_record }}</p>
+                  <p>Vuelta rápida: {{ circuito.lap_record }} min</p>
                 </div>
                 <a
                   class="boton"

@@ -35,7 +35,7 @@ export class EstrategiasService {
     }
   };
 
-  private tiempoParada = 22.5;
+  private tiempoParada = 11.5;
 
   private calcularDegradacion(compuesto: keyof typeof this.vidaUtil, vueltaActual: number, vueltasTotales: number): number {
     const vidaUtilMax = this.vidaUtil[compuesto];
@@ -190,7 +190,7 @@ export class EstrategiasService {
         if (estrategiaAjustadaActual.length === 2) {
           penalizacion = -10;
         }
-        mejoresEstrategias.push([tiempo + penalizacion, tiempo, estrategiaAjustadaActual]);
+        mejoresEstrategias.push([tiempo + penalizacion,  tiempo , estrategiaAjustadaActual]);
       } catch (e) {
         continue;
       }
