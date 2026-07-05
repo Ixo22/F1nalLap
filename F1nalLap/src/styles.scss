@@ -4,13 +4,11 @@ body {
   padding: 0;
   font-family: Arial, sans-serif;
   background-color: black;
-  /*background-color: #f4f4f4; /* Fondo claro para contraste */
-  /* cursor: url('RUTA DEL ARCHIVO.extension'), auto; */
   position: relative;
 }
 
 body::before {
-  content: "";
+  content: '';
   /* 
     Necesario para crear un pseudo-elemento 
     Posiciona el pseudo-elemento en relación al body 
@@ -20,7 +18,7 @@ body::before {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url("https://static4.depositphotos.com/1008458/383/i/450/depositphotos_3838148-stock-photo-chequered-flag.jpg");
+  background-image: url('https://static4.depositphotos.com/1008458/383/i/450/depositphotos_3838148-stock-photo-chequered-flag.jpg');
   background-repeat: repeat;
   background-size: auto;
   background-position: top left;
@@ -64,7 +62,7 @@ header {
 }
 
 header h1 {
-  font-family: "Audiowide", sans-serif;
+  font-family: 'Audiowide', sans-serif;
   font-size: 45px;
   margin: 0;
   flex: 1;
@@ -120,7 +118,7 @@ footer {
   text-align: center;
   padding: 10px 0;
   margin-top: auto;
-  background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Checkered_Flag.svg/1200px-Checkered_Flag.svg.png");
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Checkered_Flag.svg/1200px-Checkered_Flag.svg.png');
   background-repeat: repeat;
   background-size: 50px 50px;
   box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
@@ -183,7 +181,9 @@ button {
   border: 2px solid #a5a5a5;
   background-color: #e2e2e2;
   cursor: pointer;
-  transition: background-color 0.6s ease, border 1s ease;
+  transition:
+    background-color 0.6s ease,
+    border 1s ease;
 }
 
 button:hover {
@@ -224,11 +224,8 @@ button:hover {
   background-color: #da0000; /* Color de la barra de progreso */
 }
 
-
-
-
-
-.mat-mdc-button:not(:disabled) { // Boton principal
+.mat-mdc-button:not(:disabled) {
+  // Boton principal
   background-color: black !important;
   color: white !important;
   border-radius: 0 !important;
@@ -246,11 +243,12 @@ button:hover {
 
 .mat-mdc-menu-content {
   background-color: rgb(24, 24, 24) !important;
-  padding: 10px 0!important;
+  padding: 10px 0 !important;
   border: 1px solid #ffffff !important;
 }
 
-.mat-mdc-menu-item.mat-focus-indicator { // Subitem
+.mat-mdc-menu-item.mat-focus-indicator {
+  // Subitem
   //z-index:  !important;
   color: white !important;
   background-color: rgb(24, 24, 24) !important;
@@ -262,7 +260,6 @@ button:hover {
   color: white !important;
   border: 1px solid #ffffff !important;
 }
-
 
 @media (max-width: 1020px) {
   nav a {
@@ -289,7 +286,8 @@ button:hover {
     font-size: 18px;
   }
 
-  body p, body ul{
+  body p,
+  body ul {
     font-size: 14px;
   }
 
@@ -303,7 +301,8 @@ button:hover {
   nav a {
     font-size: 11px;
   }
-  .mdc-dialog--open .mat-mdc-dialog-surface, .mdc-dialog--closing .mat-mdc-dialog-surface {
+  .mdc-dialog--open .mat-mdc-dialog-surface,
+  .mdc-dialog--closing .mat-mdc-dialog-surface {
     width: 80%;
   }
 }
@@ -318,7 +317,8 @@ button:hover {
     font-size: 17px;
   }
 
-  body p, body ul {
+  body p,
+  body ul {
     font-size: 12px;
   }
 
@@ -335,17 +335,16 @@ button:hover {
     padding: 0;
   }
 
-  .mat-mdc-button:not(:disabled) { // Boton principal
+  .mat-mdc-button:not(:disabled) {
+    // Boton principal
     width: 100px !important;
     font-size: 12px !important;
   }
 
-  .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text{ // Subitem
+  .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
+    // Subitem
     font-size: 11px !important;
   }
-
-  
-
 }
 
 /* Pantalla MUY Pequeña */
@@ -363,7 +362,8 @@ button:hover {
     font-size: 16px;
   }
 
-  body p, body ul{
+  body p,
+  body ul {
     font-size: 11px;
   }
 
@@ -374,23 +374,21 @@ button:hover {
   footer a {
     font-size: 9px;
   }
-
 }
-
-
-
 
 #dialogo {
   font-size: 10px !important;
-  color:black !important;
-  padding: 0!important;
-  margin: 0!important;
-  width: 2rem!important;
-  border-radius: 5px!important;
-  border: 2px solid #a5a5a5!important;
-  background-color: #e2e2e2!important;
-  cursor: pointer!important;
-  transition: background-color 0.6s ease, border 1s ease!important;
+  color: black !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 2rem !important;
+  border-radius: 5px !important;
+  border: 2px solid #a5a5a5 !important;
+  background-color: #e2e2e2 !important;
+  cursor: pointer !important;
+  transition:
+    background-color 0.6s ease,
+    border 1s ease !important;
 }
 
 #dialogo:hover {

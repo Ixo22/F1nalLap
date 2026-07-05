@@ -80,6 +80,10 @@ export class LastTempsComponent {
   displayedColumnsTeams = ['position', 'constructor', 'points'];
   displayedColumnsRaces = ['round', 'race', 'date', 'winner'];
 
+  /** Baja el z-index de #progress-container mientras el diálogo de resultados está abierto,
+   *  para que su overlay no quede tapado por la barra de progreso (z-index: 1050). */
+  dialogOpen = signal(false);
+
   mostrarPilotos() {
     if (this.temporadaControl.invalid) return;
     const s = this.temporadaControl.value!;
@@ -132,11 +136,7 @@ export class LastTempsComponent {
   readonly dialog = inject(MatDialog);
 
   openDialog(round: string | null, race: string | null) {
-    const overlayContainer = document.querySelector('#progress-container') as HTMLElement;
-    overlayContainer?.style.setProperty('z-index', '950', 'important');
-
-    const ancho = document.querySelector('.mat-dialog-container') as HTMLElement;
-    ancho?.style.setProperty('max-width', '75%', 'important');
+    this.dialogOpen.set(true);
 
     const season = this.temporadaControl.value!;
     this.f1Api.getRaceResults(season, round!).subscribe((results) => {
@@ -154,6 +154,7 @@ export class LastTempsComponent {
       ];
 
       const dialogRef = this.dialog.open(DialogSeasonResultsComponent, {
+        maxWidth: '75vw',
         data: {
           season,
           round,
@@ -163,7 +164,7 @@ export class LastTempsComponent {
       });
 
       dialogRef.afterClosed().subscribe(() => {
-        overlayContainer?.style.removeProperty('z-index');
+        this.dialogOpen.set(false);
       });
     });
   }

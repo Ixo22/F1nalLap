@@ -8,7 +8,7 @@
       />
     </header>
 
-    <div id="progress-container">
+    <div id="progress-container" [style.z-index]="dialogOpen() ? 950 : null">
       <nav appCloseOtherMenus>
         <a mat-button href="home">Inicio</a>
 

@@ -91,6 +91,9 @@ export class RankingComponent implements OnInit {
   public items: WritableSignal<DisplayItem[]> = signal([]);
   public carreras: WritableSignal<DisplayRace[]> = signal([]);
   public isDrivers: WritableSignal<boolean> = signal(true);
+  /** Baja el z-index de #progress-container mientras el diálogo de resultados está abierto,
+   *  para que su overlay no quede tapado por la barra de progreso (z-index: 1050). */
+  public dialogOpen: WritableSignal<boolean> = signal(false);
 
   ngOnInit() {
     this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
@@ -168,8 +171,7 @@ export class RankingComponent implements OnInit {
   }
 
   openDialog(round: string, race: string) {
-    const overlay = document.querySelector('#progress-container') as HTMLElement;
-    overlay?.style.setProperty('z-index', '950', 'important');
+    this.dialogOpen.set(true);
 
     this.f1Api.getRaceResults(SEASON, round).subscribe((results) => {
       const raceData = [
@@ -191,7 +193,7 @@ export class RankingComponent implements OnInit {
       });
 
       dialogRef.afterClosed().subscribe(() => {
-        overlay?.style.removeProperty('z-index');
+        this.dialogOpen.set(false);
       });
     });
   }

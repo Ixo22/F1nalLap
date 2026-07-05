@@ -8,7 +8,7 @@
       />
     </header>
 
-    <div id="progress-container">
+    <div id="progress-container" [style.z-index]="dialogOpen() ? 950 : null">
       <nav appCloseOtherMenus>
         <a mat-button href="home">Inicio</a>
 
@@ -160,6 +160,14 @@
               <tr mat-header-row *matHeaderRowDef="displayedColumnsRaces"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumnsRaces"></tr>
             </table>
+          }
+
+          @if (
+            (currentView() === 'drivers' && !pilotos().length) ||
+            (currentView() === 'teams' && !equipos().length) ||
+            (currentView() === 'races' && !carreras().length)
+          ) {
+            <p class="placeholder">Cargando datos...</p>
           }
         </div>
       </section>
