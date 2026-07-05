@@ -1,27 +1,28 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
+import { RaceResultsDialogData, RaceResultsDialogEntry } from '../../models/dialog.models';
 
 @Component({
   selector: 'app-dialog-season-results',
-  imports: [CommonModule, MatDialogModule, MatButtonModule, MatTableModule],
+  imports: [MatDialogModule, MatButtonModule, MatTableModule],
   templateUrl: './dialog-season-results.component.html',
   styleUrl: './dialog-season-results.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DialogSeasonResultsComponent {
-   season: number;
-   race: string;
-   raceData: any[] = [];
+  data = inject<RaceResultsDialogData>(MAT_DIALOG_DATA);
 
-   displayedColumns: string[] = ['position', 'driver', 'constructor', 'fastestLapTime', 'points'];
+  season: number;
+  race: string | null;
+  raceData: RaceResultsDialogEntry[] = [];
 
+  displayedColumns: string[] = ['position', 'driver', 'constructor', 'fastestLapTime', 'points'];
 
-    constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
+  constructor() {
+    const data = this.data;
+
     this.season = data.season;
     this.raceData = data.raceData;
     this.race = data.race;

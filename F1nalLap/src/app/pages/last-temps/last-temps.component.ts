@@ -7,27 +7,31 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {
-  FormControl,
-  FormsModule,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormControl, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 
 import { MatDialog } from '@angular/material/dialog';
 import { DialogSeasonResultsComponent } from '../../components/dialog-season-results/dialog-season-results.component';
 import { F1ApiService } from '../../services/f1-api.service';
 
-type DriverRow = {
+interface DriverRow {
   position: string;
   piloto: string;
   constructor: string;
   points: string;
-};
-type TeamRow = { position: string; constructor: string; points: string };
-type RaceRow = { round: string; race: string; date: string; winner: string };
-type ResultadosRow = {
+}
+interface TeamRow {
+  position: string;
+  constructor: string;
+  points: string;
+}
+interface RaceRow {
+  round: string;
+  race: string;
+  date: string;
+  winner: string;
+}
+interface ResultadosRow {
   raceName: string;
   position: string;
   grid: string;
@@ -35,7 +39,7 @@ type ResultadosRow = {
   constructor: string;
   fastestLapTime: string;
   points: string;
-};
+}
 
 @Component({
   selector: 'app-last-temps',
@@ -128,14 +132,10 @@ export class LastTempsComponent {
   readonly dialog = inject(MatDialog);
 
   openDialog(round: string | null, race: string | null) {
-    const overlayContainer = document.querySelector(
-      '#progress-container'
-    ) as HTMLElement;
+    const overlayContainer = document.querySelector('#progress-container') as HTMLElement;
     overlayContainer?.style.setProperty('z-index', '950', 'important');
 
-    const ancho = document.querySelector(
-      '.mat-dialog-container'
-    ) as HTMLElement;
+    const ancho = document.querySelector('.mat-dialog-container') as HTMLElement;
     ancho?.style.setProperty('max-width', '75%', 'important');
 
     const season = this.temporadaControl.value!;
@@ -145,9 +145,7 @@ export class LastTempsComponent {
           raceName: race ?? '—',
           results: results.map((result) => ({
             position: result.position ?? '—',
-            driver: `${result.Driver.givenName ?? '—'} ${
-              result.Driver.familyName ?? '—'
-            }`,
+            driver: `${result.Driver.givenName ?? '—'} ${result.Driver.familyName ?? '—'}`,
             constructor: result.Constructor.name ?? '—',
             fastestLapTime: result.FastestLap?.Time?.time ?? '—',
             points: result.points ?? '—',

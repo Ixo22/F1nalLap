@@ -1,0 +1,1 @@
+cd F1nalLap && npx lint-staged

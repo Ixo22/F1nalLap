@@ -1,26 +1,26 @@
-import { Directive, ContentChildren, AfterContentInit, QueryList } from '@angular/core';
+import { Directive, ContentChildren, AfterContentInit, QueryList, OnDestroy } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Subscription } from 'rxjs';
 
 @Directive({
   selector: '[appCloseOtherMenus]',
-  standalone: true
+  standalone: true,
 })
-export class CloseOtherMenusDirective implements AfterContentInit {
+export class CloseOtherMenusDirective implements AfterContentInit, OnDestroy {
   @ContentChildren(MatMenuTrigger, { descendants: true })
   triggers!: QueryList<MatMenuTrigger>;
 
   private subs: Subscription[] = [];
 
   ngAfterContentInit() {
-    this.triggers.forEach(trigger => {
+    this.triggers.forEach((trigger) => {
       const sub = trigger.menuOpened.subscribe(() => this.onMenuOpen(trigger));
       this.subs.push(sub);
     });
   }
 
   private onMenuOpen(opened: MatMenuTrigger) {
-    this.triggers.forEach(trigger => {
+    this.triggers.forEach((trigger) => {
       if (trigger !== opened) {
         trigger.closeMenu();
       }
@@ -28,6 +28,6 @@ export class CloseOtherMenusDirective implements AfterContentInit {
   }
 
   ngOnDestroy() {
-    this.subs.forEach(s => s.unsubscribe());
+    this.subs.forEach((s) => s.unsubscribe());
   }
 }

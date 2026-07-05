@@ -12,11 +12,7 @@
       <nav appCloseOtherMenus>
         <a mat-button href="home">Inicio</a>
 
-        <button
-          mat-button
-          [matMenuTriggerFor]="Informacion"
-          #triggerTemp="matMenuTrigger"
-        >
+        <button mat-button [matMenuTriggerFor]="Informacion" #triggerTemp="matMenuTrigger">
           Formula 1
         </button>
         <mat-menu #Informacion="matMenu">
@@ -25,33 +21,17 @@
           <a mat-menu-item href="memorable">Temporadas Memorables</a>
         </mat-menu>
 
-        <button
-          mat-button
-          [matMenuTriggerFor]="Clasificacion"
-          #triggerClas="matMenuTrigger"
-        >
+        <button mat-button [matMenuTriggerFor]="Clasificacion" #triggerClas="matMenuTrigger">
           Clasificación
         </button>
         <mat-menu #Clasificacion="matMenu">
-          <button
-            mat-menu-item
-            [routerLink]="['/ranking']"
-            [queryParams]="{ view: 'drivers' }"
-          >
+          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'drivers' }">
             Pilotos
           </button>
-          <button
-            mat-menu-item
-            [routerLink]="['/ranking']"
-            [queryParams]="{ view: 'teams' }"
-          >
+          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'teams' }">
             Equipos
           </button>
-          <button
-            mat-menu-item
-            [routerLink]="['/ranking']"
-            [queryParams]="{ view: 'races' }"
-          >
+          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'races' }">
             Carreras
           </button>
         </mat-menu>
@@ -76,15 +56,15 @@
               placeholder="Ej: 2012"
               (keyup.enter)="compararPilotos()"
             />
-            <mat-error *ngIf="temporadaControl.hasError('min')">
-              El número de temporada no puede ser menor a 1950
-            </mat-error>
-            <mat-error *ngIf="temporadaControl.hasError('max')">
-              El número de temporada no puede ser mayor a 2025
-            </mat-error>
-            <mat-error *ngIf="temporadaControl.hasError('required')">
-              La temporada es requerida
-            </mat-error>
+            @if (temporadaControl.hasError('min')) {
+              <mat-error> El número de temporada no puede ser menor a 1950 </mat-error>
+            }
+            @if (temporadaControl.hasError('max')) {
+              <mat-error> El número de temporada no puede ser mayor a 2025 </mat-error>
+            }
+            @if (temporadaControl.hasError('required')) {
+              <mat-error> La temporada es requerida </mat-error>
+            }
           </mat-form-field>
           <div class="buttons">
             <button (click)="compararPilotos()">Comparar Pilotos</button>
@@ -92,296 +72,291 @@
           </div>
         </div>
 
-        <div *ngIf="modoComparar === 'pilotos'" class="selectors">
-          <mat-form-field appearance="fill" class="autocomplete-field">
-            <mat-label>Piloto 1</mat-label>
-            <input
-              type="text"
-              matInput
-              [formControl]="piloto1Control"
-              [matAutocomplete]="autoPiloto1"
-              placeholder="Selecciona el primer piloto"
-            />
-            <button
-              mat-icon-button
-              matSuffix
-              aria-label="Limpiar piloto 1"
-              class="limpiar"
-              *ngIf="piloto1Control.value"
-              (click)="piloto1Control.setValue('')"
-            >
-              <mat-icon>close</mat-icon>
-            </button>
-            <mat-autocomplete #autoPiloto1="matAutocomplete">
-              <mat-option
-                *ngFor="let piloto of pilotosFiltrados1$ | async"
-                [value]="piloto.piloto"
-              >
-                {{ piloto.piloto }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-          <mat-form-field appearance="fill" class="autocomplete-field">
-            <mat-label>Piloto 2</mat-label>
-            <input
-              type="text"
-              matInput
-              [formControl]="piloto2Control"
-              [matAutocomplete]="autoPiloto2"
-              placeholder="Selecciona el segundo piloto"
-            />
-            <button
-              mat-icon-button
-              matSuffix
-              aria-label="Limpiar piloto 2"
-              class="limpiar"
-              *ngIf="piloto2Control.value"
-              (click)="piloto2Control.setValue('')"
-            >
-              <mat-icon>close</mat-icon>
-            </button>
-            <mat-autocomplete #autoPiloto2="matAutocomplete">
-              <mat-option
-                *ngFor="let piloto of pilotosFiltrados2$ | async"
-                [value]="piloto.piloto"
-              >
-                {{ piloto.piloto }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-        </div>
+        @if (modoComparar === 'pilotos') {
+          <div class="selectors">
+            <mat-form-field appearance="fill" class="autocomplete-field">
+              <mat-label>Piloto 1</mat-label>
+              <input
+                type="text"
+                matInput
+                [formControl]="piloto1Control"
+                [matAutocomplete]="autoPiloto1"
+                placeholder="Selecciona el primer piloto"
+              />
+              @if (piloto1Control.value) {
+                <button
+                  mat-icon-button
+                  matSuffix
+                  aria-label="Limpiar piloto 1"
+                  class="limpiar"
+                  (click)="piloto1Control.setValue('')"
+                >
+                  <mat-icon>close</mat-icon>
+                </button>
+              }
+              <mat-autocomplete #autoPiloto1="matAutocomplete">
+                @for (piloto of pilotosFiltrados1$ | async; track piloto) {
+                  <mat-option [value]="piloto.piloto">
+                    {{ piloto.piloto }}
+                  </mat-option>
+                }
+              </mat-autocomplete>
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="autocomplete-field">
+              <mat-label>Piloto 2</mat-label>
+              <input
+                type="text"
+                matInput
+                [formControl]="piloto2Control"
+                [matAutocomplete]="autoPiloto2"
+                placeholder="Selecciona el segundo piloto"
+              />
+              @if (piloto2Control.value) {
+                <button
+                  mat-icon-button
+                  matSuffix
+                  aria-label="Limpiar piloto 2"
+                  class="limpiar"
+                  (click)="piloto2Control.setValue('')"
+                >
+                  <mat-icon>close</mat-icon>
+                </button>
+              }
+              <mat-autocomplete #autoPiloto2="matAutocomplete">
+                @for (piloto of pilotosFiltrados2$ | async; track piloto) {
+                  <mat-option [value]="piloto.piloto">
+                    {{ piloto.piloto }}
+                  </mat-option>
+                }
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+        }
 
-        <div *ngIf="modoComparar === 'equipos'" class="selectors">
-          <mat-form-field appearance="fill" class="autocomplete-field">
-            <mat-label>Equipo 1</mat-label>
-            <input
-              type="text"
-              matInput
-              [formControl]="equipo1Control"
-              [matAutocomplete]="autoEquipo1"
-              placeholder="Selecciona el primer equipo"
-            />
-            <button
-              mat-icon-button
-              matSuffix
-              aria-label="Limpiar equipo 1"
-              class="limpiar"
-              *ngIf="equipo1Control.value"
-              (click)="equipo1Control.setValue('')"
-            >
-              <mat-icon>close</mat-icon>
-            </button>
-            <mat-autocomplete #autoEquipo1="matAutocomplete">
-              <mat-option
-                *ngFor="let equipo of equiposFiltrados1$ | async"
-                [value]="equipo.constructor"
-              >
-                {{ equipo.constructor }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-          <mat-form-field appearance="fill" class="autocomplete-field">
-            <mat-label>Equipo 2</mat-label>
-            <input
-              type="text"
-              matInput
-              [formControl]="equipo2Control"
-              [matAutocomplete]="autoEquipo2"
-              placeholder="Selecciona el segundo equipo"
-            />
-            <button
-              mat-icon-button
-              matSuffix
-              aria-label="Limpiar equipo 2"
-              class="limpiar"
-              *ngIf="equipo2Control.value"
-              (click)="equipo2Control.setValue('')"
-            >
-              <mat-icon>close</mat-icon>
-            </button>
-            <mat-autocomplete #autoEquipo2="matAutocomplete">
-              <mat-option
-                *ngFor="let equipo of equiposFiltrados2$ | async"
-                [value]="equipo.constructor"
-              >
-                {{ equipo.constructor }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-        </div>
+        @if (modoComparar === 'equipos') {
+          <div class="selectors">
+            <mat-form-field appearance="fill" class="autocomplete-field">
+              <mat-label>Equipo 1</mat-label>
+              <input
+                type="text"
+                matInput
+                [formControl]="equipo1Control"
+                [matAutocomplete]="autoEquipo1"
+                placeholder="Selecciona el primer equipo"
+              />
+              @if (equipo1Control.value) {
+                <button
+                  mat-icon-button
+                  matSuffix
+                  aria-label="Limpiar equipo 1"
+                  class="limpiar"
+                  (click)="equipo1Control.setValue('')"
+                >
+                  <mat-icon>close</mat-icon>
+                </button>
+              }
+              <mat-autocomplete #autoEquipo1="matAutocomplete">
+                @for (equipo of equiposFiltrados1$ | async; track equipo) {
+                  <mat-option [value]="equipo.constructor">
+                    {{ equipo.constructor }}
+                  </mat-option>
+                }
+              </mat-autocomplete>
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="autocomplete-field">
+              <mat-label>Equipo 2</mat-label>
+              <input
+                type="text"
+                matInput
+                [formControl]="equipo2Control"
+                [matAutocomplete]="autoEquipo2"
+                placeholder="Selecciona el segundo equipo"
+              />
+              @if (equipo2Control.value) {
+                <button
+                  mat-icon-button
+                  matSuffix
+                  aria-label="Limpiar equipo 2"
+                  class="limpiar"
+                  (click)="equipo2Control.setValue('')"
+                >
+                  <mat-icon>close</mat-icon>
+                </button>
+              }
+              <mat-autocomplete #autoEquipo2="matAutocomplete">
+                @for (equipo of equiposFiltrados2$ | async; track equipo) {
+                  <mat-option [value]="equipo.constructor">
+                    {{ equipo.constructor }}
+                  </mat-option>
+                }
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+        }
 
         <!-- Gráficos comparación pilotos -->
-        <div
-          *ngIf="
-            modoComparar === 'pilotos' && pilotoComparar1 && pilotoComparar2
-          "
-          class="graficos-container"
-        >
-          <div class="grafico-pie-container">
-            <h4 class="titulo-grafico">
-              Victorias totales:
-              {{ (+pilotoComparar1.wins || 0) + (+pilotoComparar2.wins || 0) }}
-            </h4>
-            <ngx-charts-pie-chart
-              class="grafico-pie"
-              [results]="pilotosVictoriasChart"
-              [legend]="true"
-              [legendTitle]="''"
-              [legendPosition]="LegendPosition.Below"
-              [labels]="true"
-              [doughnut]="true"
-              [arcWidth]="0.45"
-              [explodeSlices]="true"
-              [gradient]="true"
-              [trimLabels]="false"
-              [maxLabelLength]="50"
-              [view]="chartView"
-              [scheme]="colorSchemeP"
-            ></ngx-charts-pie-chart>
-          </div>
-          <div class="grafico-pie-container">
-            <h4 class="titulo-grafico">
-              Puntos totales:
-              {{
-                (+pilotoComparar1.points || 0) + (+pilotoComparar2.points || 0)
-              }}
-            </h4>
-            <ngx-charts-bar-vertical
-              class="grafico-pie"
-              [results]="pilotosPuntosChart"
-              [legend]="true"
-              [legendTitle]="''"
-              [legendPosition]="LegendPosition.Below"
-              [xAxis]="true"
-              [yAxis]="true"
-              [showXAxisLabel]="true"
-              [showYAxisLabel]="true"
-              [xAxisLabel]="'Piloto'"
-              [yAxisLabel]="'Puntos'"
-              [scheme]="colorSchemeP"
-              [gradient]="false"
-              [view]="chartView"
-              [barPadding]="25"
-            ></ngx-charts-bar-vertical>
-          </div>
-          <div
-            *ngIf="modoComparar === 'pilotos' && pilotoComparar1 && pilotoComparar2"
-            class="grafico-pie-container"
-          >
-            <h4 class="titulo-grafico">Puntos por carrera</h4>
-            <div *ngIf="cargandoPuntos" class="placeholder">
-              <span class="spinner"></span>
-              Cargando puntos por carrera...
+        @if (modoComparar === 'pilotos' && pilotoComparar1 && pilotoComparar2) {
+          <div class="graficos-container">
+            <div class="grafico-pie-container">
+              <h4 class="titulo-grafico">
+                Victorias totales:
+                {{ (+pilotoComparar1.wins || 0) + (+pilotoComparar2.wins || 0) }}
+              </h4>
+              <ngx-charts-pie-chart
+                class="grafico-pie"
+                [results]="pilotosVictoriasChart"
+                [legend]="true"
+                [legendTitle]="''"
+                [legendPosition]="LegendPosition.Below"
+                [labels]="true"
+                [doughnut]="true"
+                [arcWidth]="0.45"
+                [explodeSlices]="true"
+                [gradient]="true"
+                [trimLabels]="false"
+                [maxLabelLength]="50"
+                [view]="chartView"
+                [scheme]="colorSchemeP"
+              ></ngx-charts-pie-chart>
             </div>
-            <ngx-charts-line-chart
-              *ngIf="!cargandoPuntos && puntosPorCarrera.length"
-              class="grafico-pie"
-              [results]="puntosPorCarrera"
-              [legend]="true"
-              [legendTitle]="''"
-              [legendPosition]="LegendPosition.Below"
-              [xAxis]="true"
-              [yAxis]="true"
-              [showXAxisLabel]="true"
-              [showYAxisLabel]="true"
-              [xAxisLabel]="'Carrera'"
-              [yAxisLabel]="'Puntos'"
-              [scheme]="colorSchemeP"
-              [autoScale]="true"
-              [timeline]="true"
-              [animations]="true"
-              [roundDomains]="true"
-              [showGridLines]="true"
-              [showRefLines]="false"
-              [tooltipDisabled]="false"
-              [gradient]="false"
-              [view]="pointView"
-            ></ngx-charts-line-chart>
+            <div class="grafico-pie-container">
+              <h4 class="titulo-grafico">
+                Puntos totales:
+                {{ (+pilotoComparar1.points || 0) + (+pilotoComparar2.points || 0) }}
+              </h4>
+              <ngx-charts-bar-vertical
+                class="grafico-pie"
+                [results]="pilotosPuntosChart"
+                [legend]="true"
+                [legendTitle]="''"
+                [legendPosition]="LegendPosition.Below"
+                [xAxis]="true"
+                [yAxis]="true"
+                [showXAxisLabel]="true"
+                [showYAxisLabel]="true"
+                [xAxisLabel]="'Piloto'"
+                [yAxisLabel]="'Puntos'"
+                [scheme]="colorSchemeP"
+                [gradient]="false"
+                [view]="chartView"
+                [barPadding]="25"
+              ></ngx-charts-bar-vertical>
+            </div>
+            @if (modoComparar === 'pilotos' && pilotoComparar1 && pilotoComparar2) {
+              <div class="grafico-pie-container">
+                <h4 class="titulo-grafico">Puntos por carrera</h4>
+                @if (cargandoPuntos) {
+                  <div class="placeholder">
+                    <span class="spinner"></span>
+                    Cargando puntos por carrera...
+                  </div>
+                }
+                @if (!cargandoPuntos && puntosPorCarrera.length) {
+                  <ngx-charts-line-chart
+                    class="grafico-pie"
+                    [results]="puntosPorCarrera"
+                    [legend]="true"
+                    [legendTitle]="''"
+                    [legendPosition]="LegendPosition.Below"
+                    [xAxis]="true"
+                    [yAxis]="true"
+                    [showXAxisLabel]="true"
+                    [showYAxisLabel]="true"
+                    [xAxisLabel]="'Carrera'"
+                    [yAxisLabel]="'Puntos'"
+                    [scheme]="colorSchemeP"
+                    [autoScale]="true"
+                    [timeline]="true"
+                    [animations]="true"
+                    [roundDomains]="true"
+                    [showGridLines]="true"
+                    [showRefLines]="false"
+                    [tooltipDisabled]="false"
+                    [gradient]="false"
+                    [view]="pointView"
+                  ></ngx-charts-line-chart>
+                }
+              </div>
+            }
           </div>
-        </div>
+        }
 
         <!-- Gráficos comparación equipos -->
-        <div
-          *ngIf="
-            modoComparar === 'equipos' && equipoComparar1 && equipoComparar2
-          "
-          class="graficos-container"
-        >
-          <div class="grafico-pie-container">
-            <h4 class="titulo-grafico">
-              Victorias totales:
-              {{ (+equipoComparar1.wins || 0) + (+equipoComparar2.wins || 0) }}
-            </h4>
-            <ngx-charts-pie-chart
-              class="grafico-pie"
-              [results]="equiposVictoriasChart"
-              [legend]="true"
-              [legendTitle]="''"
-              [legendPosition]="LegendPosition.Below"
-              [labels]="true"
-              [doughnut]="true"
-              [arcWidth]="0.45"
-              [explodeSlices]="false"
-              [gradient]="true"
-              [view]="chartView"
-              [scheme]="colorSchemeT"
-            ></ngx-charts-pie-chart>
+        @if (modoComparar === 'equipos' && equipoComparar1 && equipoComparar2) {
+          <div class="graficos-container">
+            <div class="grafico-pie-container">
+              <h4 class="titulo-grafico">
+                Victorias totales:
+                {{ (+equipoComparar1.wins || 0) + (+equipoComparar2.wins || 0) }}
+              </h4>
+              <ngx-charts-pie-chart
+                class="grafico-pie"
+                [results]="equiposVictoriasChart"
+                [legend]="true"
+                [legendTitle]="''"
+                [legendPosition]="LegendPosition.Below"
+                [labels]="true"
+                [doughnut]="true"
+                [arcWidth]="0.45"
+                [explodeSlices]="false"
+                [gradient]="true"
+                [view]="chartView"
+                [scheme]="colorSchemeT"
+              ></ngx-charts-pie-chart>
+            </div>
+            <div class="grafico-pie-container">
+              <h4 class="titulo-grafico">
+                Puntos totales:
+                {{ (+equipoComparar1.points || 0) + (+equipoComparar2.points || 0) }}
+              </h4>
+              <ngx-charts-bar-vertical
+                class="grafico-pie"
+                [results]="equiposPuntosChart"
+                [legend]="true"
+                [legendTitle]="''"
+                [legendPosition]="LegendPosition.Below"
+                [xAxis]="true"
+                [yAxis]="true"
+                [showXAxisLabel]="true"
+                [showYAxisLabel]="true"
+                [xAxisLabel]="'Equipo'"
+                [yAxisLabel]="'Puntos'"
+                [scheme]="colorSchemeT"
+                [gradient]="false"
+                [view]="chartView"
+                [barPadding]="25"
+              ></ngx-charts-bar-vertical>
+            </div>
+            @if (modoComparar === 'equipos' && puntosPorCarrera.length) {
+              <div class="grafico-pie-container">
+                <h4 class="titulo-grafico">Puntos por carrera</h4>
+                <ngx-charts-line-chart
+                  class="grafico-pie"
+                  [results]="puntosPorCarrera"
+                  [legend]="true"
+                  [legendTitle]="''"
+                  [legendPosition]="LegendPosition.Below"
+                  [xAxis]="true"
+                  [yAxis]="true"
+                  [showXAxisLabel]="true"
+                  [showYAxisLabel]="true"
+                  [xAxisLabel]="'Carrera'"
+                  [yAxisLabel]="'Puntos'"
+                  [scheme]="colorSchemeT"
+                  [autoScale]="true"
+                  [timeline]="true"
+                  [animations]="true"
+                  [roundDomains]="true"
+                  [showGridLines]="true"
+                  [showRefLines]="false"
+                  [tooltipDisabled]="false"
+                  [gradient]="false"
+                  [view]="pointView"
+                ></ngx-charts-line-chart>
+              </div>
+            }
           </div>
-          <div class="grafico-pie-container">
-            <h4 class="titulo-grafico">
-              Puntos totales:
-              {{
-                (+equipoComparar1.points || 0) + (+equipoComparar2.points || 0)
-              }}
-            </h4>
-            <ngx-charts-bar-vertical
-              class="grafico-pie"
-              [results]="equiposPuntosChart"
-              [legend]="true"
-              [legendTitle]="''"
-              [legendPosition]="LegendPosition.Below"
-              [xAxis]="true"
-              [yAxis]="true"
-              [showXAxisLabel]="true"
-              [showYAxisLabel]="true"
-              [xAxisLabel]="'Equipo'"
-              [yAxisLabel]="'Puntos'"
-              [scheme]="colorSchemeT"
-              [gradient]="false"
-              [view]="chartView"
-              [barPadding]="25"
-            ></ngx-charts-bar-vertical>
-          </div>
-          <div
-            *ngIf="modoComparar === 'equipos' && puntosPorCarrera.length"
-            class="grafico-pie-container"
-          >
-            <h4 class="titulo-grafico">Puntos por carrera</h4>
-            <ngx-charts-line-chart
-              class="grafico-pie"
-              [results]="puntosPorCarrera"
-              [legend]="true"
-              [legendTitle]="''"
-              [legendPosition]="LegendPosition.Below"
-              [xAxis]="true"
-              [yAxis]="true"
-              [showXAxisLabel]="true"
-              [showYAxisLabel]="true"
-              [xAxisLabel]="'Carrera'"
-              [yAxisLabel]="'Puntos'"
-              [scheme]="colorSchemeT"
-              [autoScale]="true"
-              [timeline]="true"
-              [animations]="true"
-              [roundDomains]="true"
-              [showGridLines]="true"
-              [showRefLines]="false"
-              [tooltipDisabled]="false"
-              [gradient]="false"
-              [view]="pointView"
-            ></ngx-charts-line-chart>
-          </div>
-        </div>
+        }
       </section>
     </div>
   </div>

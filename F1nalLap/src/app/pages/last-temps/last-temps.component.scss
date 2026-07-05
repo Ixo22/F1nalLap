@@ -1,5 +1,5 @@
 table {
-  max-width: 40%!important;
+  max-width: 40% !important;
   border-collapse: collapse;
   margin: 20px 0;
 }
@@ -20,12 +20,10 @@ table tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-
 /* Botones */
 .buttons {
   text-align: center;
   margin-bottom: 1.5rem;
-
 }
 
 /* Placeholder antes de cargar datos */
@@ -41,7 +39,7 @@ table tr:nth-child(even) {
   //gap: 2rem;
   row-gap: 1rem;
   column-gap: 1.5rem;
-  padding: 0 .5rem;
+  padding: 0 0.5rem;
   margin-top: 1rem;
 }
 
@@ -61,16 +59,16 @@ table tr:nth-child(even) {
   #tabla-carreras {
     margin: -20px !important;
   }
-    #tabla-pilotos {
+  #tabla-pilotos {
     margin: -15px !important;
   }
   .rankings {
-    grid-template-columns: repeat(1, 100%)!important;
+    grid-template-columns: repeat(1, 100%) !important;
   }
 }
 
 @media (max-width: 380) {
-   th,
+  th,
   td {
     font-size: 9px;
   }
@@ -82,17 +80,25 @@ table tr:nth-child(even) {
     margin: -15px !important;
   }
   .rankings {
-    grid-template-columns: repeat(1, 100%)!important;
+    grid-template-columns: repeat(1, 100%) !important;
   }
 }
 
-
-
-::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label{
-  color:#da0000 !important;
+::ng-deep
+  .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
+  .mdc-floating-label {
+  color: #da0000 !important;
 }
-
 
 ::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::after {
   border-bottom-color: #da0000 !important;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
 }

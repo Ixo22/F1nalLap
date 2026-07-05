@@ -1,36 +1,44 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
+import { RaceResultsDialogData, RaceResultsDialogEntry } from '../../models/dialog.models';
 
 @Component({
   selector: 'app-dialog-2025-race-results',
-  imports: [CommonModule, MatDialogModule, MatButtonModule, MatTableModule],
+  imports: [MatDialogModule, MatButtonModule, MatTableModule],
   templateUrl: './dialog-2025-race-results.component.html',
   styleUrl: './dialog-2025-race-results.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Dialog2025RaceResultsComponent {
-   season: number;
-   race: string;
-   raceData: any[] = [];
+  data = inject<RaceResultsDialogData>(MAT_DIALOG_DATA);
 
-   displayedColumns: string[] = ['position', 'driver', 'constructor', 'grid', 'fastestLapTime', 'points'];
+  season: number;
+  race: string | null;
+  raceData: RaceResultsDialogEntry[] = [];
 
+  displayedColumns: string[] = [
+    'position',
+    'driver',
+    'constructor',
+    'grid',
+    'fastestLapTime',
+    'points',
+  ];
 
-    constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
+  constructor() {
+    const data = this.data;
+
     this.season = data.season;
     this.raceData = data.raceData;
     this.race = data.race;
   }
 
   getDriverImageUrl(driverName: string): string {
-  const family = driverName.split(' ').pop();
-  return family ? `https://media.formula1.com/image/upload/f_auto,c_limit,q_auto,w_1320/content/dam/fom-website/drivers/2025Drivers/${family}.jpg` : '';
+    const family = driverName.split(' ').pop();
+    return family
+      ? `https://media.formula1.com/image/upload/f_auto,c_limit,q_auto,w_1320/content/dam/fom-website/drivers/2025Drivers/${family}.jpg`
+      : '';
   }
-
-
 }

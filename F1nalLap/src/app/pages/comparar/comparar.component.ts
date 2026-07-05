@@ -1,4 +1,11 @@
-import { Component, ChangeDetectionStrategy, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  DestroyRef,
+  OnInit,
+  inject,
+  signal,
+} from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, forkJoin } from 'rxjs';
@@ -18,14 +25,21 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Color, LegendPosition, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 import { F1ApiService } from '../../services/f1-api.service';
 
-type DriverRow = { piloto: string; wins: string; points: string };
-type TeamRow = {
+interface DriverRow {
+  piloto: string;
+  wins: string;
+  points: string;
+}
+interface TeamRow {
   position: string;
   constructor: string;
   wins: string;
   points: string;
-};
-type PuntosPorCarreraSerie = { name: string; series: { name: string; value: number }[] };
+}
+interface PuntosPorCarreraSerie {
+  name: string;
+  series: { name: string; value: number }[];
+}
 
 const colorSchemeP: Color = {
   name: 'pilotos',
@@ -149,9 +163,7 @@ export class CompararComponent implements OnInit {
           (e[campo] as string).toLowerCase().includes(filterValue)
         );
         if (seleccionSignal) {
-          const match = lista.find(
-            (e) => (e[campo] as string).toLowerCase() === filterValue
-          );
+          const match = lista.find((e) => (e[campo] as string).toLowerCase() === filterValue);
           seleccionSignal(match ?? null);
         }
         return filtrados;
@@ -230,26 +242,30 @@ export class CompararComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.piloto1Control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((nombre) => {
-      this.pilotoComparar1 =
-        this.pilotos().find((p) => p.piloto === nombre) ?? null;
-      if (this.pilotoComparar1 && this.pilotoComparar2) this.obtenerPuntosPorCarreraPilotos();
-    });
-    this.piloto2Control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((nombre) => {
-      this.pilotoComparar2 =
-        this.pilotos().find((p) => p.piloto === nombre) ?? null;
-      if (this.pilotoComparar1 && this.pilotoComparar2) this.obtenerPuntosPorCarreraPilotos();
-    });
-    this.equipo1Control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((nombre) => {
-      this.equipoComparar1 =
-        this.equipos().find((e) => e.constructor === nombre) ?? null;
-      if (this.equipoComparar1 && this.equipoComparar2) this.obtenerPuntosPorCarreraEquipos();
-    });
-    this.equipo2Control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((nombre) => {
-      this.equipoComparar2 =
-        this.equipos().find((e) => e.constructor === nombre) ?? null;
-      if (this.equipoComparar1 && this.equipoComparar2) this.obtenerPuntosPorCarreraEquipos();
-    });
+    this.piloto1Control.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((nombre) => {
+        this.pilotoComparar1 = this.pilotos().find((p) => p.piloto === nombre) ?? null;
+        if (this.pilotoComparar1 && this.pilotoComparar2) this.obtenerPuntosPorCarreraPilotos();
+      });
+    this.piloto2Control.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((nombre) => {
+        this.pilotoComparar2 = this.pilotos().find((p) => p.piloto === nombre) ?? null;
+        if (this.pilotoComparar1 && this.pilotoComparar2) this.obtenerPuntosPorCarreraPilotos();
+      });
+    this.equipo1Control.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((nombre) => {
+        this.equipoComparar1 = this.equipos().find((e) => e.constructor === nombre) ?? null;
+        if (this.equipoComparar1 && this.equipoComparar2) this.obtenerPuntosPorCarreraEquipos();
+      });
+    this.equipo2Control.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((nombre) => {
+        this.equipoComparar2 = this.equipos().find((e) => e.constructor === nombre) ?? null;
+        if (this.equipoComparar1 && this.equipoComparar2) this.obtenerPuntosPorCarreraEquipos();
+      });
 
     if (this.temporadaControl.value) this.cargarDatosTemporada();
     this.temporadaControl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
@@ -313,8 +329,14 @@ export class CompararComponent implements OnInit {
           });
 
           this.puntosPorCarrera = [
-            { name: piloto1.piloto, series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos1[i] })) },
-            { name: piloto2.piloto, series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos2[i] })) },
+            {
+              name: piloto1.piloto,
+              series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos1[i] })),
+            },
+            {
+              name: piloto2.piloto,
+              series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos2[i] })),
+            },
           ];
           this.cargandoPuntos = false;
         }
@@ -351,8 +373,14 @@ export class CompararComponent implements OnInit {
           );
 
           this.puntosPorCarrera = [
-            { name: equipo1.constructor, series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos1[i] })) },
-            { name: equipo2.constructor, series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos2[i] })) },
+            {
+              name: equipo1.constructor,
+              series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos1[i] })),
+            },
+            {
+              name: equipo2.constructor,
+              series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos2[i] })),
+            },
           ];
           this.cargandoPuntos = false;
         }

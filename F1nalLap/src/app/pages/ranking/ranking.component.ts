@@ -22,6 +22,7 @@ import { CloseOtherMenusDirective } from '../../Cerrado/cerrado.component';
 import { Dialog2025RaceResultsComponent } from '../../components/dialog-2025-race-results/dialog-2025-race-results.component';
 import { F1ApiService } from '../../services/f1-api.service';
 import { ConstructorStanding, DriverStanding } from '../../models/f1-api.models';
+import { CircuitInfo } from '../../models/circuit.models';
 import teamsJson from '../../../assets/json/teams.json';
 import circuitosJson from '../../../assets/json/circuitos2025.json';
 
@@ -51,19 +52,6 @@ interface DisplayRace {
   date: string;
   podium: PodiumEntry[];
   circuitImage?: string;
-}
-
-/** Tipado del JSON de circuitos */
-interface CircuitInfo {
-  id: number;
-  name: string;
-  image: string;
-  name_GP: string;
-  country: string;
-  laps: number;
-  length: string;
-  lap_record: string;
-  circuitId: string;
 }
 
 interface TeamResponse {
@@ -151,12 +139,10 @@ export class RankingComponent implements OnInit {
           const calls = races.map((race) =>
             this.f1Api.getRaceResults(SEASON, race.round).pipe(
               map((results) =>
-                results
-                  .slice(0, 3)
-                  .map((rs) => ({
-                    position: rs.position,
-                    driver: `${rs.Driver.givenName} ${rs.Driver.familyName}`,
-                  }))
+                results.slice(0, 3).map((rs) => ({
+                  position: rs.position,
+                  driver: `${rs.Driver.givenName} ${rs.Driver.familyName}`,
+                }))
               ),
               catchError(() => of([] as PodiumEntry[]))
             )
@@ -164,9 +150,7 @@ export class RankingComponent implements OnInit {
           return forkJoin(calls).pipe(
             map((podiums) =>
               races.map((race, idx) => {
-                const info = this.circuitsData.find(
-                  (c) => c.circuitId === race.Circuit.circuitId
-                );
+                const info = this.circuitsData.find((c) => c.circuitId === race.Circuit.circuitId);
                 return {
                   round: race.round,
                   race: race.raceName ?? '—',
@@ -184,9 +168,7 @@ export class RankingComponent implements OnInit {
   }
 
   openDialog(round: string, race: string) {
-    const overlay = document.querySelector(
-      '#progress-container'
-    ) as HTMLElement;
+    const overlay = document.querySelector('#progress-container') as HTMLElement;
     overlay?.style.setProperty('z-index', '950', 'important');
 
     this.f1Api.getRaceResults(SEASON, round).subscribe((results) => {
@@ -236,9 +218,7 @@ export class RankingComponent implements OnInit {
 
   private mapConstructor(cs: ConstructorStanding): DisplayItem {
     const name = cs.Constructor.name;
-    const match = this.teamsData.find(
-      (t) => t.name === name || t.name.includes(name)
-    );
+    const match = this.teamsData.find((t) => t.name === name || t.name.includes(name));
     return {
       position: cs.position,
       points: cs.points,
