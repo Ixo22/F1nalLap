@@ -172,6 +172,14 @@ export class EstrategiasService {
     return false;
   }
 
+  getVidaUtil(compuesto: keyof typeof this.vidaUtil): number {
+    return this.vidaUtil[compuesto];
+  }
+
+  calcularDegradacionPorVuelta(compuesto: keyof typeof this.vidaUtil, vueltaActual: number, vueltasTotales: number): number {
+    return this.calcularDegradacion(compuesto, vueltaActual, vueltasTotales);
+  }
+
   calcularMejoresEstrategias(circuito: any) {
     const vueltas = circuito.vueltas ?? circuito.laps;
     const estrategias = this.generarEstrategias(vueltas);

@@ -38,7 +38,7 @@ type ResultadosRow = {
 };
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-last-temps',
   standalone: true,
   imports: [
     MatSlideToggleModule,
@@ -182,8 +182,7 @@ export class LastTempsComponent {
           },
         });
 
-        dialogRef.afterClosed().subscribe((result) => {
-          console.log(`Dialog result: ${result}`);
+        dialogRef.afterClosed().subscribe(() => {
           overlayContainer?.style.removeProperty('z-index');
         });
       });

@@ -52,15 +52,6 @@ export const routes: Routes = [
         (m) => m.CompararComponent
       ),
   },
-  
-
-  {
-    path: 'prueba',
-    loadComponent: () =>
-      import('./pages/prueba/prueba.component').then(
-        (m) => m.PruebaComponent
-      ),
-  },
 ];
 
 @NgModule({

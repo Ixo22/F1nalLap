@@ -27,7 +27,7 @@ type TeamRow = {
 };
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-comparar',
   standalone: true,
   imports: [
     MatSlideToggleModule,

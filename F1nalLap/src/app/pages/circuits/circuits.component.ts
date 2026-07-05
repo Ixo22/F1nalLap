@@ -10,6 +10,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { EstrategiasService } from '../../../assets/services/strategies.service';
 import { LegendPosition, NgxChartsModule } from '@swimlane/ngx-charts';
 
@@ -30,6 +31,7 @@ import { LegendPosition, NgxChartsModule } from '@swimlane/ngx-charts';
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatSnackBarModule,
     NgxChartsModule,
   ],
   providers: [EstrategiasService],
@@ -59,7 +61,8 @@ export class CircuitsComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    @Inject(EstrategiasService) private strategiesService: EstrategiasService
+    @Inject(EstrategiasService) private strategiesService: EstrategiasService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -154,14 +157,18 @@ export class CircuitsComponent implements OnInit {
       this.selectedCircuit.laps ?? this.selectedCircuit.vueltas;
 
     if (totalVueltas > vueltasCircuito) {
-      alert(
-        `La suma de vueltas (${totalVueltas}) no puede superar las vueltas del circuito (${vueltasCircuito}).`
+      this.snackBar.open(
+        `La suma de vueltas (${totalVueltas}) no puede superar las vueltas del circuito (${vueltasCircuito}).`,
+        'Cerrar',
+        { duration: 5000 }
       );
       return;
     }
     if (totalVueltas < vueltasCircuito) {
-      alert(
-        `La suma de vueltas (${totalVueltas}) no puede ser menor que las vueltas del circuito (${vueltasCircuito}).`
+      this.snackBar.open(
+        `La suma de vueltas (${totalVueltas}) no puede ser menor que las vueltas del circuito (${vueltasCircuito}).`,
+        'Cerrar',
+        { duration: 5000 }
       );
       return;
     }
@@ -180,10 +187,6 @@ export class CircuitsComponent implements OnInit {
       .subscribe((res) => {
         this.simuladorResultado = res;
         this.actualizarGraficaDegradacion();
-        console.log('Simulado resultado:', this.simuladorResultado);
-        if (this.bestStrategies[0]) {
-          console.log('Best completa:', this.bestStrategies[0]);
-        }
       });
   }
 
@@ -193,9 +196,6 @@ export class CircuitsComponent implements OnInit {
       .subscribe((strategies: any[]) => {
         this.bestStrategies = strategies;
         this.actualizarGraficaDegradacion();
-        if (this.bestStrategies[0]) {
-          console.log('Best completa:', this.bestStrategies[0]);
-        }
       });
   }
 
@@ -311,7 +311,7 @@ export class CircuitsComponent implements OnInit {
     service: EstrategiasService
   ): { vuelta: number; value: number; fase: string }[] {
     const fases: string[] = [];
-    const vidaUtil = (service as any).vidaUtil[compuesto];
+    const vidaUtil = service.getVidaUtil(compuesto);
     const vidaUtilPromedio = Math.floor(vidaUtil / 2);
     const degradaciones: { vuelta: number; value: number; fase: string }[] = [];
 
@@ -327,8 +327,7 @@ export class CircuitsComponent implements OnInit {
         const vueltasFueraVidaUtil = vuelta - vidaUtil;
         degradacion = 0.5 + Math.pow(vueltasFueraVidaUtil, 1.5) * 1.5;
       } else {
-        degradacion = (service as any).calcularDegradacion.call(
-          service,
+        degradacion = service.calcularDegradacionPorVuelta(
           compuesto,
           vuelta,
           vueltas
