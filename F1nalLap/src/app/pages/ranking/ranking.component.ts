@@ -2,12 +2,13 @@ import {
   Component,
   OnInit,
   ChangeDetectionStrategy,
+  DestroyRef,
   inject,
   signal,
   WritableSignal,
 } from '@angular/core';
 import { RouterModule, ActivatedRoute } from '@angular/router';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map, catchError, of, switchMap, forkJoin } from 'rxjs';
 
 import { CommonModule } from '@angular/common';
@@ -19,16 +20,12 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { CloseOtherMenusDirective } from '../../Cerrado/cerrado.component';
 import { Dialog2025RaceResultsComponent } from '../../components/dialog-2025-race-results/dialog-2025-race-results.component';
+import { F1ApiService } from '../../services/f1-api.service';
+import { ConstructorStanding, DriverStanding } from '../../models/f1-api.models';
 import teamsJson from '../../../assets/json/teams.json';
 import circuitosJson from '../../../assets/json/circuitos2025.json';
 
-// API URLs
-const DRIVER_URL = 'https://api.jolpi.ca/ergast/f1/2025/driverstandings.json';
-const CONSTRUCTOR_URL =
-  'https://api.jolpi.ca/ergast/f1/2025/constructorstandings.json';
-const SEASON_SCHEDULE_URL = 'https://api.jolpi.ca/ergast/f1/2025.json';
-const RACE_DETAILS_URL = (round: string) =>
-  `https://api.jolpi.ca/ergast/f1/2025/${round}/results.json`;
+const SEASON = 2025;
 
 /** Ranking item (pilotos / equipos) */
 interface DisplayItem {
@@ -69,13 +66,20 @@ interface CircuitInfo {
   circuitId: string;
 }
 
+interface TeamResponse {
+  id: number;
+  name: string;
+  logo: string;
+  pole_positions: number | null;
+  fastest_laps: number | null;
+}
+
 @Component({
   selector: 'app-ranking',
   standalone: true,
   imports: [
     CommonModule,
     RouterModule,
-    HttpClientModule,
     MatSlideToggleModule,
     MatMenuModule,
     MatButtonModule,
@@ -88,9 +92,10 @@ interface CircuitInfo {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RankingComponent implements OnInit {
-  private http = inject(HttpClient);
+  private f1Api = inject(F1ApiService);
   private route = inject(ActivatedRoute);
   private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
 
   private teamsData = teamsJson.response as TeamResponse[];
   private circuitsData = circuitosJson as CircuitInfo[];
@@ -100,7 +105,7 @@ export class RankingComponent implements OnInit {
   public isDrivers: WritableSignal<boolean> = signal(true);
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       switch (params['view']) {
         case 'teams':
           this.loadTeams();
@@ -118,16 +123,9 @@ export class RankingComponent implements OnInit {
   loadDrivers() {
     this.isDrivers.set(true);
     this.carreras.set([]);
-    this.http
-      .get<DriverApiResponse>(DRIVER_URL)
-      .pipe(
-        map(
-          (res) =>
-            res.MRData.StandingsTable.StandingsLists?.[0]?.DriverStandings ?? []
-        ),
-        map((list) => list.map((ds) => this.mapDriver(ds))),
-        catchError(() => of([]))
-      )
+    this.f1Api
+      .getDriverStandings(SEASON)
+      .pipe(map((list) => list.map((ds) => this.mapDriver(ds))))
       .subscribe((data) => this.items.set(data));
   }
 
@@ -135,17 +133,9 @@ export class RankingComponent implements OnInit {
   loadTeams() {
     this.isDrivers.set(false);
     this.carreras.set([]);
-    this.http
-      .get<ConstructorApiResponse>(CONSTRUCTOR_URL)
-      .pipe(
-        map(
-          (res) =>
-            res.MRData.StandingsTable.StandingsLists?.[0]
-              ?.ConstructorStandings ?? []
-        ),
-        map((list) => list.map((cs) => this.mapConstructor(cs))),
-        catchError(() => of([]))
-      )
+    this.f1Api
+      .getConstructorStandings(SEASON)
+      .pipe(map((list) => list.map((cs) => this.mapConstructor(cs))))
       .subscribe((data) => this.items.set(data));
   }
 
@@ -154,26 +144,22 @@ export class RankingComponent implements OnInit {
     this.isDrivers.set(false);
     this.items.set([]);
 
-    this.http
-      .get<ScheduleResponse>(SEASON_SCHEDULE_URL)
+    this.f1Api
+      .getSeasonSchedule(SEASON)
       .pipe(
-        map((res) => res.MRData.RaceTable.Races ?? []),
         switchMap((races) => {
           const calls = races.map((race) =>
-            this.http
-              .get<RaceListApiResponse>(RACE_DETAILS_URL(race.round))
-              .pipe(
-                map((det) => det.MRData.RaceTable.Races?.[0]?.Results ?? []),
-                map((results) =>
-                  results
-                    .slice(0, 3)
-                    .map((rs) => ({
-                      position: rs.position,
-                      driver: `${rs.Driver.givenName} ${rs.Driver.familyName}`,
-                    }))
-                ),
-                catchError(() => of([] as PodiumEntry[]))
-              )
+            this.f1Api.getRaceResults(SEASON, race.round).pipe(
+              map((results) =>
+                results
+                  .slice(0, 3)
+                  .map((rs) => ({
+                    position: rs.position,
+                    driver: `${rs.Driver.givenName} ${rs.Driver.familyName}`,
+                  }))
+              ),
+              catchError(() => of([] as PodiumEntry[]))
+            )
           );
           return forkJoin(calls).pipe(
             map((podiums) =>
@@ -203,25 +189,23 @@ export class RankingComponent implements OnInit {
     ) as HTMLElement;
     overlay?.style.setProperty('z-index', '950', 'important');
 
-    this.http.get<any>(RACE_DETAILS_URL(round)).subscribe((data) => {
-      const raw = data.MRData.RaceTable.Races ?? [];
-      const raceData = raw.map((d: any) => ({
-        raceName: d.raceName ?? '—',
-        results:
-          d.Results?.map((r: any) => ({
+    this.f1Api.getRaceResults(SEASON, round).subscribe((results) => {
+      const raceData = [
+        {
+          raceName: race,
+          results: results.map((r) => ({
             position: r.position ?? '—',
-            driver: `${r.Driver.givenName ?? '—'} ${
-              r.Driver.familyName ?? '—'
-            }`,
+            driver: `${r.Driver.givenName ?? '—'} ${r.Driver.familyName ?? '—'}`,
             constructor: r.Constructor.name ?? '—',
             fastestLapTime: r.FastestLap?.Time?.time ?? '—',
             points: r.points ?? '—',
             grid: r.grid ?? '—',
-          })) ?? [],
-      }));
+          })),
+        },
+      ];
 
       const dialogRef = this.dialog.open(Dialog2025RaceResultsComponent, {
-        data: { season: 2025, round, race, raceData },
+        data: { season: SEASON, round, race, raceData },
       });
 
       dialogRef.afterClosed().subscribe(() => {
@@ -263,74 +247,4 @@ export class RankingComponent implements OnInit {
       logoUrl: match?.logo,
     };
   }
-}
-
-interface DriverApiResponse {
-  MRData: {
-    StandingsTable: { StandingsLists: { DriverStandings: DriverStanding[] }[] };
-  };
-}
-interface DriverStanding {
-  position: string;
-  points: string;
-  wins: string;
-  Driver: { givenName: string; familyName: string };
-  Constructors: { name: string }[];
-}
-interface ConstructorApiResponse {
-  MRData: {
-    StandingsTable: {
-      StandingsLists: { ConstructorStandings: ConstructorStanding[] }[];
-    };
-  };
-}
-interface ConstructorStanding {
-  position: string;
-  points: string;
-  wins: string;
-  Constructor: { name: string };
-}
-interface RaceListApiResponse {
-  MRData: { RaceTable: { Races: RaceEntry[] } };
-}
-interface RaceEntry {
-  round: string;
-  raceName?: string;
-  date?: string;
-  Circuit: { circuitId: string };
-  Results?: RaceResult[];
-}
-interface RaceResult {
-  position: string;
-  Driver: { givenName: string; familyName: string };
-}
-interface TeamResponse {
-  id: number;
-  name: string;
-  logo: string;
-  pole_positions: number | null;
-  fastest_laps: number | null;
-}
-interface ScheduleResponse {
-  MRData: {
-    RaceTable: {
-      Races: Array<{
-        round: string;
-        raceName?: string;
-        date?: string;
-        Circuit: { circuitId: string };
-      }>;
-    };
-  };
-}
-interface CircuitInfo {
-  id: number;
-  name: string;
-  image: string;
-  name_GP: string;
-  country: string;
-  laps: number;
-  length: string;
-  lap_record: string;
-  circuitId: string;
 }

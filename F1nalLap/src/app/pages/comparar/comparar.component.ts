@@ -1,6 +1,6 @@
-import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, forkJoin } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { RouterModule } from '@angular/router';
@@ -15,8 +15,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { LegendPosition, NgxChartsModule } from '@swimlane/ngx-charts';
-
+import { Color, LegendPosition, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
+import { F1ApiService } from '../../services/f1-api.service';
 
 type DriverRow = { piloto: string; wins: string; points: string };
 type TeamRow = {
@@ -24,6 +24,21 @@ type TeamRow = {
   constructor: string;
   wins: string;
   points: string;
+};
+type PuntosPorCarreraSerie = { name: string; series: { name: string; value: number }[] };
+
+const colorSchemeP: Color = {
+  name: 'pilotos',
+  selectable: true,
+  group: ScaleType.Ordinal,
+  domain: ['#2a6425', '#f09c1e'],
+};
+
+const colorSchemeT: Color = {
+  name: 'equipos',
+  selectable: true,
+  group: ScaleType.Ordinal,
+  domain: ['#a01d1d', '#0672ca'],
 };
 
 @Component({
@@ -41,7 +56,6 @@ type TeamRow = {
     MatAutocompleteModule,
     MatFormFieldModule,
     ReactiveFormsModule,
-    HttpClientModule,
     MatTableModule,
     MatSelectModule,
     NgxChartsModule,
@@ -50,7 +64,10 @@ type TeamRow = {
   styleUrl: './comparar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CompararComponent {
+export class CompararComponent implements OnInit {
+  private f1Api = inject(F1ApiService);
+  private destroyRef = inject(DestroyRef);
+
   temporadaControl = new FormControl<number | null>(null, [
     Validators.required,
     Validators.min(1950),
@@ -111,12 +128,11 @@ export class CompararComponent {
     this.equipos,
     'constructor'
   );
-colorSchemeP: string| any = colorSchemeP;
-colorSchemeT: string| any = colorSchemeT;
 
-LegendPosition = LegendPosition;
+  colorSchemeP: Color = colorSchemeP;
+  colorSchemeT: Color = colorSchemeT;
 
-  constructor(private http: HttpClient) {}
+  LegendPosition = LegendPosition;
 
   private filtrarControl<T>(
     control: FormControl,
@@ -161,35 +177,26 @@ LegendPosition = LegendPosition;
     this.pilotoControl.setValue('', { emitEvent: false });
     this.equipoControl.setValue('', { emitEvent: false });
 
-    this.http
-      .get<any>(`https://api.jolpi.ca/ergast/f1/${s}/driverstandings.json`)
-      .subscribe((data) => {
-        const list =
-          data.MRData.StandingsTable.StandingsLists?.[0]?.DriverStandings || [];
-        this.pilotos.set(
-          list.map((d: any) => ({
-            piloto: `${d.Driver.givenName} ${d.Driver.familyName}`,
-            wins: d.wins,
-            points: d.points,
-          }))
-        );
-      });
+    this.f1Api.getDriverStandings(s).subscribe((list) => {
+      this.pilotos.set(
+        list.map((d) => ({
+          piloto: `${d.Driver.givenName} ${d.Driver.familyName}`,
+          wins: d.wins,
+          points: d.points,
+        }))
+      );
+    });
 
-    this.http
-      .get<any>(`https://api.jolpi.ca/ergast/f1/${s}/constructorstandings.json`)
-      .subscribe((data) => {
-        const list =
-          data.MRData.StandingsTable.StandingsLists?.[0]
-            ?.ConstructorStandings || [];
-        this.equipos.set(
-          list.map((d: any) => ({
-            position: d.position,
-            constructor: d.Constructor.name ?? '—',
-            points: d.points,
-            wins: d.wins,
-          }))
-        );
-      });
+    this.f1Api.getConstructorStandings(s).subscribe((list) => {
+      this.equipos.set(
+        list.map((d) => ({
+          position: d.position,
+          constructor: d.Constructor.name ?? '—',
+          points: d.points,
+          wins: d.wins,
+        }))
+      );
+    });
   }
 
   clearPiloto() {
@@ -223,29 +230,29 @@ LegendPosition = LegendPosition;
   }
 
   ngOnInit() {
-    this.piloto1Control.valueChanges.subscribe((nombre) => {
+    this.piloto1Control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((nombre) => {
       this.pilotoComparar1 =
         this.pilotos().find((p) => p.piloto === nombre) ?? null;
       if (this.pilotoComparar1 && this.pilotoComparar2) this.obtenerPuntosPorCarreraPilotos();
     });
-    this.piloto2Control.valueChanges.subscribe((nombre) => {
+    this.piloto2Control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((nombre) => {
       this.pilotoComparar2 =
         this.pilotos().find((p) => p.piloto === nombre) ?? null;
       if (this.pilotoComparar1 && this.pilotoComparar2) this.obtenerPuntosPorCarreraPilotos();
     });
-    this.equipo1Control.valueChanges.subscribe((nombre) => {
+    this.equipo1Control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((nombre) => {
       this.equipoComparar1 =
         this.equipos().find((e) => e.constructor === nombre) ?? null;
       if (this.equipoComparar1 && this.equipoComparar2) this.obtenerPuntosPorCarreraEquipos();
     });
-    this.equipo2Control.valueChanges.subscribe((nombre) => {
+    this.equipo2Control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((nombre) => {
       this.equipoComparar2 =
         this.equipos().find((e) => e.constructor === nombre) ?? null;
       if (this.equipoComparar1 && this.equipoComparar2) this.obtenerPuntosPorCarreraEquipos();
     });
 
     if (this.temporadaControl.value) this.cargarDatosTemporada();
-    this.temporadaControl.valueChanges.subscribe(() => {
+    this.temporadaControl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       if (this.temporadaControl.valid) this.cargarDatosTemporada();
     });
   }
@@ -270,117 +277,104 @@ LegendPosition = LegendPosition;
       .filter(Boolean)
       .map((e) => ({ name: e!.constructor, value: +e!.points }));
   }
-  puntosPorCarrera: any[] = [];
-carrerasLabels: string[] = [];
-cargandoPuntos = false;  
 
-async obtenerPuntosPorCarreraPilotos() {
-  if (!this.temporadaControl.value || !this.pilotoComparar1 || !this.pilotoComparar2) return;
+  puntosPorCarrera: PuntosPorCarreraSerie[] = [];
+  carrerasLabels: string[] = [];
+  cargandoPuntos = false;
 
-  this.cargandoPuntos = true;
-  this.puntosPorCarrera = [];
-  this.carrerasLabels = [];
+  obtenerPuntosPorCarreraPilotos() {
+    if (!this.temporadaControl.value || !this.pilotoComparar1 || !this.pilotoComparar2) return;
+    const piloto1 = this.pilotoComparar1;
+    const piloto2 = this.pilotoComparar2;
 
-  const data = await this.http.get<any>(`https://api.jolpi.ca/ergast/f1/${this.temporadaControl.value}.json`).toPromise();
-  const carreras = data.MRData.RaceTable.Races;
-  this.carrerasLabels = carreras.map((c: any) =>
-  c.raceName.replace(/ Grand Prix/i, '').trim()
-);
+    this.cargandoPuntos = true;
+    this.puntosPorCarrera = [];
+    this.carrerasLabels = [];
 
-  const puntos1: number[] = [];
-  const puntos2: number[] = [];
-
-  for (const c of carreras) {
-    try {
-      const res = await this.http.get<any>(`https://api.jolpi.ca/ergast/f1/${this.temporadaControl.value}/${c.round}/results.json`).toPromise();
-      const results = res.MRData.RaceTable.Races[0]?.Results || [];
-      const piloto1 = results.find((r: any) =>
-        `${r.Driver.givenName} ${r.Driver.familyName}` === this.pilotoComparar1!.piloto
+    const season = this.temporadaControl.value;
+    this.f1Api.getSeasonSchedule(season).subscribe((carreras) => {
+      this.carrerasLabels = carreras.map((c) =>
+        (c.raceName ?? '—').replace(/ Grand Prix/i, '').trim()
       );
-      const piloto2 = results.find((r: any) =>
-        `${r.Driver.givenName} ${r.Driver.familyName}` === this.pilotoComparar2!.piloto
+
+      forkJoin(carreras.map((c) => this.f1Api.getRaceResults(season, c.round))).subscribe(
+        (resultadosPorCarrera) => {
+          const puntos1 = resultadosPorCarrera.map((results) => {
+            const resultado = results.find(
+              (r) => `${r.Driver.givenName} ${r.Driver.familyName}` === piloto1.piloto
+            );
+            return resultado ? +resultado.points! : 0;
+          });
+          const puntos2 = resultadosPorCarrera.map((results) => {
+            const resultado = results.find(
+              (r) => `${r.Driver.givenName} ${r.Driver.familyName}` === piloto2.piloto
+            );
+            return resultado ? +resultado.points! : 0;
+          });
+
+          this.puntosPorCarrera = [
+            { name: piloto1.piloto, series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos1[i] })) },
+            { name: piloto2.piloto, series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos2[i] })) },
+          ];
+          this.cargandoPuntos = false;
+        }
       );
-      puntos1.push(piloto1 ? +piloto1.points : 0);
-      puntos2.push(piloto2 ? +piloto2.points : 0);
-      await new Promise(res => setTimeout(res, 10));
-    } catch (err) {
-      puntos1.push(0);
-      puntos2.push(0);
-    }
+    });
   }
 
-  this.puntosPorCarrera = [
-    { name: this.pilotoComparar1.piloto, series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos1[i] })) },
-    { name: this.pilotoComparar2.piloto, series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos2[i] })) }
-  ];
-  this.cargandoPuntos = false; 
-}
+  obtenerPuntosPorCarreraEquipos() {
+    if (!this.temporadaControl.value || !this.equipoComparar1 || !this.equipoComparar2) return;
+    const equipo1 = this.equipoComparar1;
+    const equipo2 = this.equipoComparar2;
 
-async obtenerPuntosPorCarreraEquipos() {
-  if (!this.temporadaControl.value || !this.equipoComparar1 || !this.equipoComparar2) return;
+    this.cargandoPuntos = true;
+    this.puntosPorCarrera = [];
+    this.carrerasLabels = [];
 
-  this.cargandoPuntos = true;
-  this.puntosPorCarrera = [];
-  this.carrerasLabels = [];
+    const season = this.temporadaControl.value;
+    this.f1Api.getSeasonSchedule(season).subscribe((carreras) => {
+      this.carrerasLabels = carreras.map((c) =>
+        (c.raceName ?? '—').replace(/ Grand Prix/i, '').trim()
+      );
 
-  const data = await this.http.get<any>(`https://api.jolpi.ca/ergast/f1/${this.temporadaControl.value}.json`).toPromise();
-  const carreras = data.MRData.RaceTable.Races;
-  this.carrerasLabels = carreras.map((c: any) =>
-  c.raceName.replace(/ Grand Prix/i, '').trim()
-);
+      forkJoin(carreras.map((c) => this.f1Api.getRaceResults(season, c.round))).subscribe(
+        (resultadosPorCarrera) => {
+          const puntos1 = resultadosPorCarrera.map((results) =>
+            results
+              .filter((r) => r.Constructor.name === equipo1.constructor)
+              .reduce((acc, curr) => acc + +(curr.points ?? 0), 0)
+          );
+          const puntos2 = resultadosPorCarrera.map((results) =>
+            results
+              .filter((r) => r.Constructor.name === equipo2.constructor)
+              .reduce((acc, curr) => acc + +(curr.points ?? 0), 0)
+          );
 
-  const puntos1: number[] = [];
-  const puntos2: number[] = [];
-
-  for (const c of carreras) {
-    try {
-      const res = await this.http.get<any>(`https://api.jolpi.ca/ergast/f1/${this.temporadaControl.value}/${c.round}/results.json`).toPromise();
-      const results = res.MRData.RaceTable.Races[0]?.Results || [];
-      const equipo1Puntos = results
-        .filter((r: any) => r.Constructor.name === this.equipoComparar1!.constructor)
-        .reduce((acc: number, curr: any) => acc + +curr.points, 0);
-      const equipo2Puntos = results
-        .filter((r: any) => r.Constructor.name === this.equipoComparar2!.constructor)
-        .reduce((acc: number, curr: any) => acc + +curr.points, 0);
-      puntos1.push(equipo1Puntos);
-      puntos2.push(equipo2Puntos);
-      await new Promise(res => setTimeout(res, 10));
-    } catch (err) {
-      puntos1.push(0);
-      puntos2.push(0);
-    }
+          this.puntosPorCarrera = [
+            { name: equipo1.constructor, series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos1[i] })) },
+            { name: equipo2.constructor, series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos2[i] })) },
+          ];
+          this.cargandoPuntos = false;
+        }
+      );
+    });
   }
 
-  this.puntosPorCarrera = [
-    { name: this.equipoComparar1.constructor, series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos1[i] })) },
-    { name: this.equipoComparar2.constructor, series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos2[i] })) }
-  ];
-  this.cargandoPuntos = false;
-}
+  get chartView(): [number, number] {
+    const width = window.innerWidth;
+    if (width < 500) return [250, 200];
+    if (width < 800) return [400, 250];
+    if (width < 1000) return [500, 300];
+    return [600, 300];
+  }
 
-get chartView(): [number, number] {
-  const width = window.innerWidth;
-  if (width < 500) return [250, 200];
-  if (width < 800) return [400, 250];
-  if (width < 1000) return [500, 300];
-  return [600, 300];
+  get pointView(): [number, number] {
+    const width = window.innerWidth;
+    if (width < 400) return [250, 250];
+    if (width < 500) return [320, 250];
+    if (width < 800) return [400, 250];
+    if (width < 1000) return [600, 300];
+    if (width < 1200) return [800, 300];
+    return [1000, 400];
+  }
 }
-
-get pointView(): [number, number] {
-  const width = window.innerWidth;
-  if (width < 400) return [250, 250];
-  if (width < 500) return [320, 250];
-  if (width < 800) return [400, 250];
-  if (width < 1000) return [600, 300];
-  if (width < 1200) return [800, 300];
-  return [1000, 400];
-}
-}
-
-const colorSchemeP = {
-  domain: ['#2a6425', '#f09c1e'],
-};
-
-const colorSchemeT = {
-  domain: ['#a01d1d', '#0672ca'],
-};

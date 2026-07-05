@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,15 +10,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { EstrategiasService } from '../../../assets/services/strategies.service';
+import { EstrategiasService } from '../../services/strategies.service';
 import { LegendPosition, NgxChartsModule } from '@swimlane/ngx-charts';
+import circuitosJson from '../../../assets/json/circuitos2025.json';
 
 @Component({
   selector: 'app-circuits',
   standalone: true,
   imports: [
     CommonModule,
-    HttpClientModule,
     RouterModule,
     MatMenuModule,
     MatMenuTrigger,
@@ -34,7 +33,6 @@ import { LegendPosition, NgxChartsModule } from '@swimlane/ngx-charts';
     MatSnackBarModule,
     NgxChartsModule,
   ],
-  providers: [EstrategiasService],
   templateUrl: './circuits.component.html',
   styleUrl: './circuits.component.scss',
 })
@@ -60,18 +58,13 @@ export class CircuitsComponent implements OnInit {
   LegendPosition = LegendPosition;
 
   constructor(
-    private http: HttpClient,
     @Inject(EstrategiasService) private strategiesService: EstrategiasService,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    this.http
-      .get<any[]>('./../../../assets/json/circuitos2025.json')
-      .subscribe((data) => {
-        this.circuits = data;
-        this.filteredCircuits = data;
-      });
+    this.circuits = circuitosJson;
+    this.filteredCircuits = circuitosJson;
 
     this.circuitControl.valueChanges.subscribe((value) => {
       this.filteredCircuits = this._filterCircuits(value || '');

@@ -13,11 +13,11 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MatTableModule } from '@angular/material/table';
 
 import { MatDialog } from '@angular/material/dialog';
 import { DialogSeasonResultsComponent } from '../../components/dialog-season-results/dialog-season-results.component';
+import { F1ApiService } from '../../services/f1-api.service';
 
 type DriverRow = {
   position: string;
@@ -51,7 +51,6 @@ type ResultadosRow = {
     FormsModule,
     MatFormFieldModule,
     ReactiveFormsModule,
-    HttpClientModule,
     MatTableModule,
   ],
   templateUrl: './last-temps.component.html',
@@ -59,6 +58,8 @@ type ResultadosRow = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LastTempsComponent {
+  private f1Api = inject(F1ApiService);
+
   currentView = signal<'drivers' | 'teams' | 'races' | null>(null);
   temporadaControl = new FormControl<number | null>(null, [
     Validators.required,
@@ -75,68 +76,53 @@ export class LastTempsComponent {
   displayedColumnsTeams = ['position', 'constructor', 'points'];
   displayedColumnsRaces = ['round', 'race', 'date', 'winner'];
 
-  constructor(private http: HttpClient) {}
-
   mostrarPilotos() {
     if (this.temporadaControl.invalid) return;
     const s = this.temporadaControl.value!;
     this.currentView.set('drivers');
-    this.http
-      .get<any>(`https://api.jolpi.ca/ergast/f1/${s}/driverstandings.json`)
-      .subscribe((data) => {
-        const list =
-          data.MRData.StandingsTable.StandingsLists?.[0]?.DriverStandings || [];
-        this.pilotos.set(
-          list.map((d: any) => ({
-            position: d.position,
-            piloto: `${d.Driver.givenName} ${d.Driver.familyName}`,
-            constructor: d.Constructors[0]?.name ?? '—',
-            points: d.points,
-          }))
-        );
-      });
+    this.f1Api.getDriverStandings(s).subscribe((list) => {
+      this.pilotos.set(
+        list.map((d) => ({
+          position: d.position,
+          piloto: `${d.Driver.givenName} ${d.Driver.familyName}`,
+          constructor: d.Constructors[0]?.name ?? '—',
+          points: d.points,
+        }))
+      );
+    });
   }
 
   mostrarEquipos() {
     if (this.temporadaControl.invalid) return;
     const s = this.temporadaControl.value!;
     this.currentView.set('teams');
-    this.http
-      .get<any>(`https://api.jolpi.ca/ergast/f1/${s}/constructorstandings.json`)
-      .subscribe((data) => {
-        const list =
-          data.MRData.StandingsTable.StandingsLists?.[0]
-            ?.ConstructorStandings || [];
-        this.equipos.set(
-          list.map((d: any) => ({
-            position: d.position,
-            constructor: d.Constructor.name ?? '—',
-            points: d.points,
-          }))
-        );
-      });
+    this.f1Api.getConstructorStandings(s).subscribe((list) => {
+      this.equipos.set(
+        list.map((d) => ({
+          position: d.position,
+          constructor: d.Constructor.name ?? '—',
+          points: d.points,
+        }))
+      );
+    });
   }
 
   mostrarCarreras() {
     if (this.temporadaControl.invalid) return;
     const s = this.temporadaControl.value!;
     this.currentView.set('races');
-    this.http
-      .get<any>(`https://api.jolpi.ca/ergast/f1/${s}/results/1.json`)
-      .subscribe((data) => {
-        const raw = data.MRData.RaceTable.Races;
-        const list = Array.isArray(raw) ? raw : [];
-        this.carreras.set(
-          list.map((d: any) => ({
-            round: d.round,
-            race: d.raceName ?? '—',
-            date: d.date ?? '—',
-            winner: d.Results?.[0]
-              ? `${d.Results[0].Driver.givenName} ${d.Results[0].Driver.familyName}`
-              : '—',
-          }))
-        );
-      });
+    this.f1Api.getSeasonWinners(s).subscribe((list) => {
+      this.carreras.set(
+        list.map((d) => ({
+          round: d.round,
+          race: d.raceName ?? '—',
+          date: d.date ?? '—',
+          winner: d.Results?.[0]
+            ? `${d.Results[0].Driver.givenName} ${d.Results[0].Driver.familyName}`
+            : '—',
+        }))
+      );
+    });
   }
 
   readonly dialog = inject(MatDialog);
@@ -151,40 +137,36 @@ export class LastTempsComponent {
       '.mat-dialog-container'
     ) as HTMLElement;
     ancho?.style.setProperty('max-width', '75%', 'important');
-    this.http
-      .get<any>(
-        `https://api.jolpi.ca/ergast/f1/${this.temporadaControl.value}/${round}/results.json`
-      )
-      .subscribe((data) => {
-        const raw = data.MRData.RaceTable.Races;
-        const list = Array.isArray(raw) ? raw : [];
 
-        const raceData = list.map((d: any) => ({
-          raceName: d.raceName ?? '—',
-          results:
-            d.Results?.map((result: any) => ({
-              position: result.position ?? '—',
-              driver: `${result.Driver.givenName ?? '—'} ${
-                result.Driver.familyName ?? '—'
-              }`,
-              constructor: result.Constructor.name ?? '—',
-              fastestLapTime: result.FastestLap?.Time?.time ?? '—',
-              points: result.points ?? '—',
-            })) ?? [],
-        }));
+    const season = this.temporadaControl.value!;
+    this.f1Api.getRaceResults(season, round!).subscribe((results) => {
+      const raceData = [
+        {
+          raceName: race ?? '—',
+          results: results.map((result) => ({
+            position: result.position ?? '—',
+            driver: `${result.Driver.givenName ?? '—'} ${
+              result.Driver.familyName ?? '—'
+            }`,
+            constructor: result.Constructor.name ?? '—',
+            fastestLapTime: result.FastestLap?.Time?.time ?? '—',
+            points: result.points ?? '—',
+          })),
+        },
+      ];
 
-        const dialogRef = this.dialog.open(DialogSeasonResultsComponent, {
-          data: {
-            season: this.temporadaControl.value,
-            round: round,
-            race: race,
-            raceData: raceData,
-          },
-        });
-
-        dialogRef.afterClosed().subscribe(() => {
-          overlayContainer?.style.removeProperty('z-index');
-        });
+      const dialogRef = this.dialog.open(DialogSeasonResultsComponent, {
+        data: {
+          season,
+          round,
+          race,
+          raceData,
+        },
       });
+
+      dialogRef.afterClosed().subscribe(() => {
+        overlayContainer?.style.removeProperty('z-index');
+      });
+    });
   }
 }
