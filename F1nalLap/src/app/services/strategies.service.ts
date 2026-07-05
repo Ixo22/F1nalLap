@@ -219,10 +219,14 @@ export class EstrategiasService {
     return false;
   }
 
+  /** Vida útil estimada (en vueltas) del compuesto antes de exponerse a la penalización por desgaste. */
   getVidaUtil(compuesto: Compuesto): number {
     return this.vidaUtil[compuesto];
   }
 
+  /** Degradación (en segundos) de una vuelta concreta dentro de un stint, sin aplicar la
+   *  penalización por superar la vida útil del compuesto. Usado por CircuitsComponent para
+   *  dibujar la gráfica de degradación vuelta a vuelta. */
   calcularDegradacionPorVuelta(
     compuesto: Compuesto,
     vueltaActual: number,
@@ -231,6 +235,11 @@ export class EstrategiasService {
     return this.calcularDegradacion(compuesto, vueltaActual, vueltasTotales);
   }
 
+  /**
+   * Genera todas las estrategias legales (2 o 3 stints, mínimo dos compuestos distintos) para
+   * las vueltas totales del circuito, las simula y devuelve las 3 mejores por tiempo total.
+   * Si ninguna combinación es viable, devuelve un único elemento con `error`.
+   */
   calcularMejoresEstrategias(circuito: CircuitInfo): MejorEstrategiaResultado[] {
     const vueltas = circuito.laps;
     const estrategias = this.generarEstrategias(vueltas);
@@ -322,6 +331,12 @@ export class EstrategiasService {
     return [tiempoTotal - this.tiempoParada, estrategiaAjustada];
   }
 
+  /**
+   * Simula una estrategia armada libremente por el usuario (sin pasar por el filtro de
+   * legalidad de `calcularMejoresEstrategias`). Si un stint supera la vida útil del compuesto,
+   * cada vuelta de más aplica una penalización creciente (`0.5 + vueltasDeMas^1.5 * 1.5`) en vez
+   * de la degradación normal por fase.
+   */
   simularEstrategiaLibre(
     circuito: CircuitInfo,
     estrategia: [Compuesto, number][]

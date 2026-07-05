@@ -1,59 +1,60 @@
-# F1nalLap
+# F1nalLap — documentación técnica
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.6.
+Aplicación Angular que consume la API pública de Fórmula 1 [Ergast/jolpi.ca](https://api.jolpi.ca/ergast/) para mostrar clasificaciones, calendario, resultados y comparativas de pilotos/equipos, además de un simulador de estrategias de neumáticos. La descripción del producto está en el [README de la raíz del repositorio](../README.md); este documento cubre cómo desarrollar y mantener el proyecto.
 
-## Development server
+## Requisitos
 
-To start a local development server, run:
+- Node.js 20+ y npm.
+- Angular CLI (`npm install -g @angular/cli`), opcional si usas `npx`.
 
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Puesta en marcha
 
 ```bash
-ng generate component component-name
+npm install
+npm start        # ng serve, http://localhost:4200
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Arquitectura
 
-```bash
-ng generate --help
-```
+- **Componentes de página** (`src/app/pages/`): standalone, uno por ruta (`home`, `temp-actual`, `last-temps`, `memorable-temps`, `circuits`, `ranking`, `comparar`). Lazy-loaded desde `app.routes.ts`.
+- **`F1ApiService`** (`src/app/services/f1-api.service.ts`): único punto de acceso a la API de Ergast/jolpi.ca (clasificaciones, calendario, resultados de carrera). Todas las peticiones capturan errores de red y resuelven a un array vacío en vez de propagar la excepción.
+- **`EstrategiasService`** (`src/app/services/strategies.service.ts`): lógica pura del simulador de estrategias de neumáticos (degradación por compuesto y fase, generación y comparación de estrategias válidas para un circuito).
+- **Modelos** (`src/app/models/`): tipos compartidos de la respuesta de la API (`f1-api.models.ts`), del dominio del simulador (`estrategia.models.ts`), de los circuitos (`circuit.models.ts`) y de los datos que reciben los diálogos de resultados (`dialog.models.ts`).
+- **`src/environments/`**: `environment.ts` (desarrollo) y `environment.prod.ts` (producción, activado vía `fileReplacements` en `angular.json`). Ahí vive `f1ApiBaseUrl`, la única configuración de entorno del proyecto.
 
-## Building
+## Dependencia de la API externa
 
-To build the project run:
+Toda la app depende de `https://api.jolpi.ca/ergast/f1` (un espejo público y gratuito de la histórica API de Ergast). No requiere API key, pero tampoco documenta límites de rate de forma oficial ni ofrece SLA — si empieza a devolver errores o va lento, no hay nada que se pueda hacer del lado de la app salvo lo que ya hace `F1ApiService` (degradar a lista vacía). No hay caché de respuestas: cada vez que se entra en una vista se repite la petición.
 
-```bash
-ng build
-```
+## Scripts disponibles
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+| Comando         | Qué hace                                         |
+| --------------- | ------------------------------------------------ |
+| `npm start`     | Servidor de desarrollo (`ng serve`)              |
+| `npm run build` | Build de producción en `dist/f1nal-lap`          |
+| `npm test`      | Tests unitarios con Karma/Jasmine                |
+| `npm run lint`  | ESLint (`@angular-eslint`) sobre `.ts` y `.html` |
 
-## Running unit tests
+Para cobertura de tests: `ng test --code-coverage` (reporte HTML en `coverage/f1nal-lap/`). El umbral mínimo configurado en `karma.conf.js` es 70% de statements/lines, 60% de funciones y 50% de ramas — `ng test` falla si no se cumple.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Calidad de código
 
-```bash
-ng test
-```
+- **ESLint + Prettier**: configurados en `eslint.config.js` / `.prettierrc.json`.
+- **Husky + lint-staged**: hook de pre-commit que corre `eslint --fix` y `prettier --write` sobre los ficheros en stage. El hook vive en `.husky/` en la raíz del repositorio (el proyecto Angular está en un subdirectorio), y se instala automáticamente al hacer `npm install` (script `prepare`).
 
-## Running end-to-end tests
+## CI
 
-For end-to-end (e2e) testing, run:
+`.github/workflows/ci.yml` corre en cada push/PR contra `main`: instalación, lint, tests con cobertura y build de producción.
 
-```bash
-ng e2e
-```
+## Despliegue
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Netlify construye con `ng build --configuration production` y publica `dist/f1nal-lap/browser` (ver `netlify.toml` en la raíz del repositorio). El proyecto no usa SSR: todo es un SPA estático.
 
-## Additional Resources
+## Simulador de estrategias
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+`EstrategiasService` modela tres compuestos de neumático (`blandos`, `medios`, `duros`), cada uno con una vida útil máxima y una degradación por vuelta que varía según la fase del stint (inicial / media / final). Dado un circuito:
+
+- `calcularMejoresEstrategias` genera todas las combinaciones de 2 o 3 stints que sean legales (mínimo de vueltas por compuesto, al menos dos compuestos distintos) y devuelve las 3 mejores por tiempo total simulado, o un resultado de error si ninguna es viable para ese número de vueltas.
+- `simularEstrategiaLibre` calcula el tiempo total de una estrategia que arma el propio usuario en la pantalla de simulador, aplicando una penalización de degradación agresiva si algún stint supera la vida útil del compuesto elegido.
+
+Los valores de vida útil y rangos de degradación por fase son estimaciones manuales (no proceden de datos reales de neumáticos), documentadas como constantes en la parte superior de `strategies.service.ts`.

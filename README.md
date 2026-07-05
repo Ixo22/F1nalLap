@@ -1,5 +1,11 @@
 <h1 align="center"> 🏁 F1nalLap 🏎️ </h1>
 
+<p align="center">
+  <a href="https://github.com/Ixo22/F1nalLap/actions/workflows/ci.yml"><img src="https://github.com/Ixo22/F1nalLap/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+</p>
+
+> Documentación técnica (arquitectura, cómo levantar el entorno, tests, CI): [`F1nalLap/README.md`](./F1nalLap/README.md)
+
 ## Descripción
 ¡Bienvenidos a F1nalLap, una app web dedicada a Fórmula 1!
 
