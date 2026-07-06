@@ -408,11 +408,13 @@ git commit -m "refactor(pages): remove duplicated header/nav/footer now provided
 
 ---
 
-### Task 6: `RankingComponent` adopta `OverlayStateService` y quita su chrome duplicado
+### Task 6: `RankingComponent` y `LastTempsComponent` adoptan `OverlayStateService` y quitan su chrome duplicado
 
-**Files:** Modify `ranking.component.{html,ts,spec.ts}`
+**Files:** Modify `ranking.component.{html,ts,spec.ts}`, `last-temps.component.ts`
 
-- [ ] **Step 1:** `.html` pasa a contener solo `<div class="contenedor-section"><section>...</section></div>` con el contenido de ranking intacto (sin el `[style.z-index]` que vivía en su `#progress-container`, porque ese div ya no existe en esta página).
+> **Nota añadida tras la revisión de la Task 5:** `last-temps.component.ts` tiene exactamente el mismo patrón que `ranking` — una señal local `dialogOpen` que solo existía para bajar el z-index de su propio `#progress-container` mientras el diálogo de resultados de temporada estaba abierto. Se me pasó por alto en el diseño original (el spec y el plan solo contemplaban `ranking`). Como `last-temps.component.html` ya se extrajo en la Task 5 (su `#progress-container` ya no existe en la página), `dialogOpen` ha quedado como una señal huérfana sin ningún consumidor en la plantilla. Esta tarea la migra al mismo `OverlayStateService` compartido, igual que `ranking`.
+
+- [ ] **Step 1:** `ranking.component.html` pasa a contener solo `<div class="contenedor-section"><section>...</section></div>` con el contenido de ranking intacto (sin el `[style.z-index]` que vivía en su `#progress-container`, porque ese div ya no existe en esta página).
 
 - [ ] **Step 2:** en `.ts`, quitar del import y del array `imports: [...]` `MatMenuModule`, `MatButtonModule`, `CloseOtherMenusDirective` (mantener `RouterModule`, usado por `[routerLink]`/`[queryParams]` en los botones de vista propios del contenido). Añadir `import { OverlayStateService } from '../../layout/overlay-state.service';`, inyectarlo como `private overlayState = inject(OverlayStateService);`, quitar el campo `dialogOpen` y su comentario, y en `openDialog` sustituir `this.dialogOpen.set(true)` → `this.overlayState.setOpen(true)` y `this.dialogOpen.set(false)` → `this.overlayState.setOpen(false)`.
 
@@ -441,15 +443,27 @@ git commit -m "refactor(pages): remove duplicated header/nav/footer now provided
 
 - [ ] **Step 4:** Run: `npm test -- --include='**/ranking.component.spec.ts'` → PASS (5 specs).
 
-- [ ] **Step 5:** Run: `npm test -- --watch=false` → PASS completo.
+- [ ] **Step 5: `LastTempsComponent` — misma migración** — en `last-temps.component.ts`, añadir `import { OverlayStateService } from '../../layout/overlay-state.service';`, inyectarlo como `private overlayState = inject(OverlayStateService);`. Quitar el campo:
 
-- [ ] **Step 6: Verificación visual manual** — `/ranking`, vista Carreras, "Mostrar Resultado": el diálogo se abre por encima de la barra de progreso y se cierra bien.
+  ```ts
+  /** Baja el z-index de #progress-container mientras el diálogo de resultados está abierto,
+   *  para que su overlay no quede tapado por la barra de progreso (z-index: 1050). */
+  dialogOpen = signal(false);
+  ```
 
-- [ ] **Step 7: Commit**
+  y en `openDialog`, sustituir `this.dialogOpen.set(true)` → `this.overlayState.setOpen(true)` y, dentro de `dialogRef.afterClosed().subscribe(() => { this.dialogOpen.set(false); })`, sustituir por `this.overlayState.setOpen(false)`. No existe `last-temps.component.spec.ts` (esta página no tenía tests antes de la Fase 1) — no es objeto de esta tarea crear uno desde cero; basta con que `npm run build` compile sin referencias rotas a `dialogOpen`.
+
+- [ ] **Step 6:** Run: `npm run build -- --configuration development` → sin errores (confirma que no queda ninguna referencia a `dialogOpen` en `last-temps.component.html`, que ya no lo usaba desde la Task 5).
+
+- [ ] **Step 7:** Run: `npm test -- --watch=false` → PASS completo.
+
+- [ ] **Step 8: Verificación visual manual** — `/ranking`, vista Carreras, "Mostrar Resultado": el diálogo se abre por encima de la barra de progreso y se cierra bien. `/last`, buscar una temporada y en la tabla de carreras pulsar "mostrar todo": mismo comportamiento.
+
+- [ ] **Step 9: Commit**
 
 ```bash
-git add src/app/pages/ranking
-git commit -m "refactor(ranking): use OverlayStateService instead of shell-coupled dialogOpen signal"
+git add src/app/pages/ranking src/app/pages/last-temps/last-temps.component.ts
+git commit -m "refactor(ranking,last-temps): use OverlayStateService instead of shell-coupled dialogOpen signals"
 ```
 
 ---
