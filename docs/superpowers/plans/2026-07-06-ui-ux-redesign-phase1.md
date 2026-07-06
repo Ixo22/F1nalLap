@@ -62,9 +62,21 @@ $font-body: 'Inter', sans-serif;
 }
 ```
 
-- [ ] **Step 2: Reescribir `src/styles.scss`** para usar `@use 'styles/tokens' as *;` y sustituir todos los colores hardcoded (`#da0000`, `black`, `white`) por las variables, quitar el `body::before` con la imagen de bandera a cuadros tileada, y recolorear `#progress-bar` a `$color-gold`, los overrides `.mat-mdc-*` y `#dialogo` a los tokens de superficie/texto/rojo.
+- [ ] **Step 2: Reescribir `src/styles.scss`** para usar `@use 'styles/tokens' as *;` y sustituir **todos** los colores hardcoded por las variables, sin excepción — incluyendo estos que son fáciles de pasar por alto porque no están en `body`/`p`:
+  - `nav { background-color: rgba(0, 0, 0, 1); }` → `rgba(10, 10, 12, 0.95)`
+  - `footer { background-color: #000000; }` → `$color-surface`
+  - `section { background-color: white; border: 3px solid #000000; border-radius: 8px; }` → `@include surface-solid;` (fondo `$color-surface`, borde 1px `$color-surface-border`, radio 12px) — **crítico**: si `section` se queda en blanco mientras `p { color: $color-text }` (blanco cálido) se convierte, el texto queda casi invisible sobre fondo blanco.
+  - `section h3 { color: #000000; border-bottom: 2px solid #000000; }` → `color: $color-text; border-bottom: 2px solid $color-surface-border;`
+  - `button { border: 2px solid #a5a5a5; background-color: #e2e2e2; }` → `border: 1px solid $color-surface-border; background-color: transparent; color: $color-text;`
+  - `button:hover { border: 2px solid black; }` → `border: 1px solid $color-red; box-shadow: 0 0 16px $color-red-glow;`
 
-- [ ] **Step 3: Actualizar fuentes en `src/index.html`** — sustituir los links de Audiowide+Roboto por un único link combinado `Audiowide|Space+Grotesk:wght@500;700|Inter:wght@400;500;600`.
+  También quitar el `body::before` con la imagen de bandera a cuadros tileada, y recolorear `#progress-bar` a `$color-gold`, los overrides `.mat-mdc-*` y `#dialogo` a los tokens de superficie/texto/rojo.
+
+- [ ] **Step 3: Actualizar fuentes en `src/index.html`** — sustituir los links de Audiowide+Roboto por un único link de Google Fonts v2 con **parámetros `family=` repetidos** (el endpoint `css2` no acepta `|` como separador — esa es la sintaxis v1/legacy y devuelve HTTP 400):
+
+  ```html
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  ```
 
 - [ ] **Step 4: Verificar build**
 
