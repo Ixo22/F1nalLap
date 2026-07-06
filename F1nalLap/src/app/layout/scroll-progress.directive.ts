@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, inject } from '@angular/core';
+import { Directive, ElementRef, HostListener, Renderer2, inject } from '@angular/core';
 
 @Directive({
   selector: '[appScrollProgress]',
@@ -6,12 +6,13 @@ import { Directive, ElementRef, HostListener, inject } from '@angular/core';
 })
 export class ScrollProgressDirective {
   private readonly el = inject(ElementRef<HTMLElement>);
+  private readonly renderer = inject(Renderer2);
 
   @HostListener('window:scroll')
   onWindowScroll(): void {
     const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
     const progress = ScrollProgressDirective.computeProgress(scrollTop, scrollHeight, clientHeight);
-    this.el.nativeElement.style.width = `${progress}%`;
+    this.renderer.setStyle(this.el.nativeElement, 'width', `${progress}%`);
   }
 
   static computeProgress(scrollTop: number, scrollHeight: number, clientHeight: number): number {
