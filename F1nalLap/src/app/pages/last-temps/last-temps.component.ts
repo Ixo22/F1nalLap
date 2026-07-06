@@ -1,8 +1,4 @@
 import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
-import { CloseOtherMenusDirective } from '../../Cerrado/cerrado.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
@@ -46,10 +42,6 @@ interface ResultadosRow {
   standalone: true,
   imports: [
     MatSlideToggleModule,
-    RouterModule,
-    MatMenuModule,
-    CloseOtherMenusDirective,
-    MatButtonModule,
     CommonModule,
     MatInputModule,
     FormsModule,

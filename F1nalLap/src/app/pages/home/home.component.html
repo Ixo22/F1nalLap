@@ -1,150 +1,89 @@
-<div class="container">
-  <div class="content">
-    <header>
-      <h1><a href="home" class="titulo">F1nal Lap</a></h1>
-      <img
-        src="https://www.formula1.com/etc/designs/fom-website/images/f1_logo.svg"
-        alt="Fórmula 1 Logo"
-      />
-    </header>
+<div class="contenedor-section">
+  <section id="inicio">
+    <h2>Bienvenido a F1nalLap</h2>
+    <p>
+      Tu vuelta rápida al universo F1, el espacio donde la emoción, la historia y la estrategia de
+      la Fórmula 1 se encuentran. Esta plataforma nace como un trabajo de fin de grado, pero acelera
+      hacia algo más grande: ser tu centro de referencia para revivir, explorar y simular la magia
+      del Gran Circo.
+    </p>
+  </section>
 
-    <div id="progress-container">
-      <nav appCloseOtherMenus>
-        <a mat-button href="home">Inicio</a>
-        
-        <button mat-button [matMenuTriggerFor]="Informacion" #triggerTemp="matMenuTrigger">
-          Formula 1
-        </button>
-        <mat-menu #Informacion="matMenu">
-          <a mat-menu-item href="actual">Temporada Actual</a>
-          <a mat-menu-item href="last">Temporadas Anteriores</a>
-          <a mat-menu-item href="memorable">Temporadas Memorables</a>
-        </mat-menu>
+  <section id="que-encontraras">
+    <h2>¿Qué encontrarás aquí?</h2>
+    <ul>
+      <li>
+        <strong><a href="actual">Temporada Actual:</a></strong>
+        Innovaciones y actualizaciones de la temporada en curso.
+      </li>
+      <li>
+        <strong><a href="last">Temporadas anteriores:</a></strong> Lo mejor de los últimos años.
+        Recorre grandes batallas y campeonatos inolvidables.
+      </li>
+      <li>
+        <strong><a href="memorable">Temporadas Memorables:</a></strong>
+        Las eras doradas de la F1, desde Senna a Verstappen.
+      </li>
+      <li>
+        <strong><a href="ranking">Clasificación actual:</a></strong>
+        Clasificación actual de pilotos, equipos y resultados por carrera. También se puede
+        consultar el calendario de la temporada.
+      </li>
+      <li>
+        <strong><a href="comparar">Análisis:</a></strong>
+        Comparación de pilotos y equipos a través de estadísticas y gráficos por temporada.
+      </li>
+      <li>
+        <strong><a href="/circuits">Simulador:</a></strong> Explora los trazados más míticos y
+        técnicos del mundo y simula tus stints como un estratega de paddock.
+      </li>
+    </ul>
+  </section>
 
-        <button mat-button [matMenuTriggerFor]="Clasificacion" #triggerClas="matMenuTrigger">
-          Clasificación
-        </button>
-        <mat-menu #Clasificacion="matMenu">
-          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'drivers' }">
-            Pilotos
-          </button>
-          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'teams' }">
-            Equipos
-          </button>
-          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'races' }">
-            Carreras
-          </button>
-        </mat-menu>
-        
-        <a mat-button href="comparar">Análisis</a>
-        <a mat-button href="circuits">Simulador</a>
-      </nav>
+  <section id="proposito">
+    <h2>Más que datos: pasión y precisión</h2>
+    <p>
+      F1nalLap no es solo una base de datos. Es un homenaje a la emoción de cada adelantamiento, a
+      la tensión de cada parada en boxes, y al análisis que esconde cada vuelta. Nuestro propósito
+      es claro: hacer que el conocimiento y la emoción de la F1 estén al alcance de todos.
+    </p>
+  </section>
 
-      <div id="progress-bar"></div>
-    </div>
+  <section id="explora-disfruta">
+    <h2>Explora y Disfruta</h2>
+    <p>
+      ¿Listo para arrancar? Recorre cada rincón de la web, experimenta, recuerda, predice y siente
+      la velocidad desde tu pantalla.
+    </p>
+    <p>
+      →
+      <a href="circuits" class="btn-primary"><strong>Ir al Simulador</strong></a>
+      ←
+    </p>
+  </section>
 
-    <div class="contenedor-section">
-      <section id="inicio">
-        <h2>Bienvenido a F1nalLap</h2>
-        <p>
-          Tu vuelta rápida al universo F1, el espacio donde la emoción,
-          la historia y la estrategia de la Fórmula 1 se encuentran. Esta
-          plataforma nace como un trabajo de fin de grado, pero acelera hacia
-          algo más grande: ser tu centro de referencia para revivir, explorar y
-          simular la magia del Gran Circo.
-        </p>
-      </section>
-
-      <section id="que-encontraras">
-        <h2>¿Qué encontrarás aquí?</h2>
-        <ul>
-          <li>
-            <strong><a href="actual">Temporada Actual:</a></strong>
-            Innovaciones y actualizaciones de la temporada en
-            curso.
-          </li>
-          <li>
-            <strong><a href="last">Temporadas anteriores:</a></strong> Lo mejor de
-            los últimos años. Recorre grandes batallas y campeonatos
-            inolvidables.
-          </li>
-          <li>
-            <strong><a href="memorable">Temporadas Memorables:</a></strong>
-            Las eras doradas de la F1, desde Senna a Verstappen.
-          </li>
-          <li>
-            <strong><a href="ranking">Clasificación actual:</a></strong>
-            Clasificación actual de pilotos, equipos y resultados por carrera. También 
-            se puede consultar el calendario de la temporada.
-          </li>
-          <li>
-            <strong><a href="comparar">Análisis:</a></strong>
-            Comparación de pilotos y equipos a través de estadísticas y gráficos por temporada.
-          </li>
-          <li>
-            <strong><a href="/circuits">Simulador:</a></strong> Explora los
-            trazados más míticos y técnicos del mundo y simula tus stints como
-            un estratega de paddock.
-          </li>
-        </ul>
-      </section>
-
-      <section id="proposito">
-        <h2>Más que datos: pasión y precisión</h2>
-        <p>
-          F1nalLap no es solo una base de datos. Es un homenaje a la emoción de
-          cada adelantamiento, a la tensión de cada parada en boxes, y al
-          análisis que esconde cada vuelta. Nuestro propósito es claro: hacer
-          que el conocimiento y la emoción de la F1 estén al alcance de todos.
-        </p>
-      </section>
-
-      <section id="explora-disfruta">
-        <h2>Explora y Disfruta</h2>
-        <p>
-          ¿Listo para arrancar? Recorre cada rincón de la web, experimenta,
-          recuerda, predice y siente la velocidad desde tu pantalla.
-        </p>
-        <p>
-          →
-          <a href="circuits" class="btn-primary"
-            ><strong>Ir al Simulador</strong></a
-          >
-          ←
-        </p>
-      </section>
-
-      <section id="contacto">
-        <h2>Contáctanos</h2>
-        <p>
-          ¿Tienes feedback, ideas o simplemente quieres hablar de tu GP
-          favorito? Escríbeme o búscame en redes. ¡Me encanta la F1 tanto como
-          a ti!
-        </p>
-        <ul>
-          <li>
-            <a href="mailto:aga1036@alu.ubu.es">
-              <strong>Correo electrónico </strong>
-            </a>
-          </li>
-          <li>
-            <a href="https://www.linkedin.com/in/aalbeerto/" target="_blank">
-              <strong>LinkedIn</strong>
-            </a>
-          </li>
-          <li>
-            <a href="https://github.com/Ixo22/F1nalLap" target="_blank">
-              <strong>GitHub del proyecto</strong>
-            </a>
-          </li>
-        </ul>
-      </section>
-    </div>
-  </div>
-
-  <footer>
-    <a href="https://www.linkedin.com/in/aalbeerto/" target="_blank"
-      >© AGA. Todos los derechos reservados.</a
-    >
-  </footer>
+  <section id="contacto">
+    <h2>Contáctanos</h2>
+    <p>
+      ¿Tienes feedback, ideas o simplemente quieres hablar de tu GP favorito? Escríbeme o búscame en
+      redes. ¡Me encanta la F1 tanto como a ti!
+    </p>
+    <ul>
+      <li>
+        <a href="mailto:aga1036@alu.ubu.es">
+          <strong>Correo electrónico </strong>
+        </a>
+      </li>
+      <li>
+        <a href="https://www.linkedin.com/in/aalbeerto/" target="_blank">
+          <strong>LinkedIn</strong>
+        </a>
+      </li>
+      <li>
+        <a href="https://github.com/Ixo22/F1nalLap" target="_blank">
+          <strong>GitHub del proyecto</strong>
+        </a>
+      </li>
+    </ul>
+  </section>
 </div>
