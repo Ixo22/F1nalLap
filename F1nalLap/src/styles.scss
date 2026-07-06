@@ -101,9 +101,6 @@ footer {
   text-align: center;
   padding: 10px 0;
   margin-top: auto;
-  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Checkered_Flag.svg/1200px-Checkered_Flag.svg.png');
-  background-repeat: repeat;
-  background-size: 50px 50px;
   box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -128,6 +125,7 @@ section {
 }
 
 section h2 {
+  font-family: $font-heading;
   font-size: 30px;
   color: $color-red;
   border-bottom: 2px solid $color-red;
@@ -135,6 +133,7 @@ section h2 {
 }
 
 section h3 {
+  font-family: $font-heading;
   color: $color-text;
   border-bottom: 2px solid $color-surface-border;
   padding-bottom: 5px;
