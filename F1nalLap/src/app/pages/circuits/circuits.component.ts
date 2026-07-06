@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
@@ -58,6 +59,7 @@ interface DegradacionChartSerie {
 export class CircuitsComponent implements OnInit {
   private strategiesService = inject<EstrategiasService>(EstrategiasService);
   private snackBar = inject(MatSnackBar);
+  private destroyRef = inject(DestroyRef);
 
   circuits: CircuitInfo[] = [];
   filteredCircuits: CircuitInfo[] = [];
@@ -83,12 +85,14 @@ export class CircuitsComponent implements OnInit {
     this.circuits = circuitosJson;
     this.filteredCircuits = circuitosJson;
 
-    this.circuitControl.valueChanges.subscribe((value) => {
-      this.filteredCircuits = this._filterCircuits(typeof value === 'string' ? value : '');
-      if (!value) {
-        this.selectedCircuit = null;
-      }
-    });
+    this.circuitControl.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        this.filteredCircuits = this._filterCircuits(typeof value === 'string' ? value : '');
+        if (!value) {
+          this.selectedCircuit = null;
+        }
+      });
   }
 
   private _filterCircuits(value: string): CircuitInfo[] {
