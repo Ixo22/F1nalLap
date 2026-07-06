@@ -1,7 +1,11 @@
+@use '../../../styles/tokens' as *;
+
 table {
   max-width: 40% !important;
   border-collapse: collapse;
   margin: 20px 0;
+  background-color: #fff;
+  color: #1a1a1a;
 }
 
 table th,
@@ -29,7 +33,7 @@ table tr:nth-child(even) {
 /* Placeholder antes de cargar datos */
 .placeholder {
   text-align: center;
-  color: #666;
+  color: $color-text-secondary;
 }
 
 .rankings {
@@ -96,9 +100,7 @@ table tr:nth-child(even) {
   color: #da0000 !important;
 }
 
-::ng-deep
-  .mdc-text-field--filled:not(.mdc-text-field--disabled)
-  .mdc-line-ripple::after {
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::after {
   border-bottom-color: #da0000 !important;
 }
 
@@ -117,8 +119,6 @@ button.limpiar:focus,
   color: inherit !important;
 }
 
-
-
 .selectors {
   display: grid;
   grid-template-columns: repeat(2, 25%);
@@ -126,22 +126,21 @@ button.limpiar:focus,
   //gap: 2rem;
   row-gap: 1rem;
   column-gap: 1.5rem;
-  padding: 0 .5rem;
+  padding: 0 0.5rem;
   margin-top: 1rem;
 }
 
 .graficos-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;  
-  align-items: center;      
-  gap: 5rem; 
-  padding: 0 1rem;        
-  margin: 0 auto;   
-  margin-bottom: 5rem;        
-  width: 100%;              
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
+  padding: 0 1rem;
+  margin: 0 auto;
+  margin-bottom: 5rem;
+  width: 100%;
 }
-
 
 .grafico-pie {
   display: block;
@@ -193,10 +192,10 @@ button.limpiar:focus,
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg);}
-  100% { transform: rotate(360deg);}
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
-
-
-
-
