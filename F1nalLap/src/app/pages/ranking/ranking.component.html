@@ -1,147 +1,94 @@
-<div class="container">
-  <div class="content">
-    <header>
-      <h1><a href="home" class="titulo">F1nal Lap</a></h1>
-      <img
-        src="https://www.formula1.com/etc/designs/fom-website/images/f1_logo.svg"
-        alt="Fórmula 1 Logo"
-      />
-    </header>
+<div class="contenedor-section">
+  <section>
+    <h2 style="text-align: center">Ranking de F1 – Temporada 2025</h2>
 
-    <div id="progress-container" [style.z-index]="dialogOpen() ? 950 : null">
-      <nav appCloseOtherMenus>
-        <a mat-button href="home">Inicio</a>
-
-        <button mat-button [matMenuTriggerFor]="Informacion" #triggerTemp="matMenuTrigger">
-          Formula 1
-        </button>
-        <mat-menu #Informacion="matMenu">
-          <a mat-menu-item href="actual">Temporada Actual</a>
-          <a mat-menu-item href="last">Temporadas Anteriores</a>
-          <a mat-menu-item href="memorable">Temporadas Memorables</a>
-        </mat-menu>
-
-        <button mat-button [matMenuTriggerFor]="Clasificacion" #triggerClas="matMenuTrigger">
-          Clasificación
-        </button>
-        <mat-menu #Clasificacion="matMenu">
-          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'drivers' }">
-            Pilotos
-          </button>
-          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'teams' }">
-            Equipos
-          </button>
-          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'races' }">
-            Carreras
-          </button>
-        </mat-menu>
-
-        <a mat-button href="comparar">Análisis</a>
-        <a mat-button href="circuits">Simulador</a>
-      </nav>
-
-      <div id="progress-bar"></div>
+    <div class="buttons">
+      <button [routerLink]="['/ranking']" [queryParams]="{ view: 'drivers' }">
+        Ranking de Pilotos
+      </button>
+      <button [routerLink]="['/ranking']" [queryParams]="{ view: 'teams' }">
+        Ranking de Equipos
+      </button>
+      <button [routerLink]="['/ranking']" [queryParams]="{ view: 'races' }">Carreras</button>
     </div>
 
-    <div class="contenedor-section">
-      <section>
-        <h2 style="text-align: center">Ranking de F1 – Temporada 2025</h2>
-
-        <div class="buttons">
-          <button [routerLink]="['/ranking']" [queryParams]="{ view: 'drivers' }">
-            Ranking de Pilotos
-          </button>
-          <button [routerLink]="['/ranking']" [queryParams]="{ view: 'teams' }">
-            Ranking de Equipos
-          </button>
-          <button [routerLink]="['/ranking']" [queryParams]="{ view: 'races' }">Carreras</button>
+    <!-- Vista Pilotos y Equipos -->
+    @if (carreras().length === 0) {
+      @if (items().length > 0) {
+        <div class="rankings">
+          @for (it of items(); track it) {
+            <div [ngClass]="isDrivers() ? 'driver' : 'team'">
+              <!-- Imagen piloto -->
+              @if (isDrivers()) {
+                <img class="driver-img" [src]="it.imageUrl" [alt]="it.driverName" />
+              }
+              <!-- Logo equipo -->
+              @if (!isDrivers() && it.logoUrl) {
+                <img class="team-logo" [src]="it.logoUrl" [alt]="it.teamName" />
+              }
+              <!-- Contenido para pilotos -->
+              @if (isDrivers()) {
+                <div class="driver-info">
+                  <span class="position">#{{ it.position }}</span>
+                  – <strong>{{ it.driverName }}</strong> ({{ it.teamName }})
+                  <br />
+                  <strong>·</strong> Puntos: {{ it.points }}
+                  <br />
+                  <strong>·</strong> Victorias: {{ it.wins ?? 0 }}
+                </div>
+              } @else {
+                <div class="team-info">
+                  <span class="position">#{{ it.position }}</span>
+                  – {{ it.teamName }}
+                  <br />
+                  Puntos: {{ it.points }}
+                </div>
+              }
+              <!-- Contenido para equipos -->
+            </div>
+          }
         </div>
-
-        <!-- Vista Pilotos y Equipos -->
-        @if (carreras().length === 0) {
-          @if (items().length > 0) {
-            <div class="rankings">
-              @for (it of items(); track it) {
-                <div [ngClass]="isDrivers() ? 'driver' : 'team'">
-                  <!-- Imagen piloto -->
-                  @if (isDrivers()) {
-                    <img class="driver-img" [src]="it.imageUrl" [alt]="it.driverName" />
-                  }
-                  <!-- Logo equipo -->
-                  @if (!isDrivers() && it.logoUrl) {
-                    <img class="team-logo" [src]="it.logoUrl" [alt]="it.teamName" />
-                  }
-                  <!-- Contenido para pilotos -->
-                  @if (isDrivers()) {
-                    <div class="driver-info">
-                      <span class="position">#{{ it.position }}</span>
-                      – <strong>{{ it.driverName }}</strong> ({{ it.teamName }})
-                      <br />
-                      <strong>·</strong> Puntos: {{ it.points }}
-                      <br />
-                      <strong>·</strong> Victorias: {{ it.wins ?? 0 }}
-                    </div>
-                  } @else {
-                    <div class="team-info">
-                      <span class="position">#{{ it.position }}</span>
-                      – {{ it.teamName }}
-                      <br />
-                      Puntos: {{ it.points }}
-                    </div>
-                  }
-                  <!-- Contenido para equipos -->
-                </div>
+      } @else {
+        <p class="placeholder">Cargando datos...</p>
+      }
+    } @else {
+      @if (carreras().length > 0) {
+        <div class="rankings">
+          @for (r of carreras(); track r) {
+            <div class="team race-card">
+              @if (r.circuitImage) {
+                <img class="circuit-img" [src]="r.circuitImage" [alt]="r.race + ' circuito'" />
               }
-            </div>
-          } @else {
-            <p class="placeholder">Cargando datos...</p>
-          }
-        } @else {
-          @if (carreras().length > 0) {
-            <div class="rankings">
-              @for (r of carreras(); track r) {
-                <div class="team race-card">
-                  @if (r.circuitImage) {
-                    <img class="circuit-img" [src]="r.circuitImage" [alt]="r.race + ' circuito'" />
-                  }
-                  <hr class="divider" />
-                  <div class="team-info">
-                    <span class="position">#{{ r.round }}</span>
-                    – <strong>{{ r.race }}</strong>
-                    <br />
-                    – Fecha: {{ r.date | date: 'dd/MM/yyyy' }}
-                    <br />
-                    @if (r.podium.length > 0) {
-                      <div class="podium">
-                        – Podio:
-                        <ul class="no-bullet-list">
-                          @for (p of r.podium; track p) {
-                            <li>{{ p.position }}º – {{ p.driver }}</li>
-                          }
-                        </ul>
-                      </div>
-                      <button (click)="openDialog(r.round, r.race)">Mostrar Resultado</button>
-                    }
-                    @if (r.podium.length === 0) {
-                      <div class="podium">– Sin resultados</div>
-                    }
+              <hr class="divider" />
+              <div class="team-info">
+                <span class="position">#{{ r.round }}</span>
+                – <strong>{{ r.race }}</strong>
+                <br />
+                – Fecha: {{ r.date | date: 'dd/MM/yyyy' }}
+                <br />
+                @if (r.podium.length > 0) {
+                  <div class="podium">
+                    – Podio:
+                    <ul class="no-bullet-list">
+                      @for (p of r.podium; track p) {
+                        <li>{{ p.position }}º – {{ p.driver }}</li>
+                      }
+                    </ul>
                   </div>
-                </div>
-              }
+                  <button (click)="openDialog(r.round, r.race)">Mostrar Resultado</button>
+                }
+                @if (r.podium.length === 0) {
+                  <div class="podium">– Sin resultados</div>
+                }
+              </div>
             </div>
-          } @else {
-            <p class="placeholder">Cargando datos...</p>
           }
-        }
+        </div>
+      } @else {
+        <p class="placeholder">Cargando datos...</p>
+      }
+    }
 
-        <!-- Vista Carreras -->
-      </section>
-    </div>
-  </div>
-
-  <footer>
-    <a href="https://www.linkedin.com/in/aalbeerto/" target="_blank">
-      © AGA. Todos los derechos reservados.
-    </a>
-  </footer>
+    <!-- Vista Carreras -->
+  </section>
 </div>

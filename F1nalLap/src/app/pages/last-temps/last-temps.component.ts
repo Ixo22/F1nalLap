@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogSeasonResultsComponent } from '../../components/dialog-season-results/dialog-season-results.component';
 import { F1ApiService } from '../../services/f1-api.service';
+import { OverlayStateService } from '../../layout/overlay-state.service';
 
 interface DriverRow {
   position: string;
@@ -55,6 +56,7 @@ interface ResultadosRow {
 })
 export class LastTempsComponent {
   private f1Api = inject(F1ApiService);
+  private overlayState = inject(OverlayStateService);
 
   currentView = signal<'drivers' | 'teams' | 'races' | null>(null);
   temporadaControl = new FormControl<number | null>(null, [
@@ -71,10 +73,6 @@ export class LastTempsComponent {
   displayedColumnsDrivers = ['position', 'piloto', 'constructor', 'points'];
   displayedColumnsTeams = ['position', 'constructor', 'points'];
   displayedColumnsRaces = ['round', 'race', 'date', 'winner'];
-
-  /** Baja el z-index de #progress-container mientras el diálogo de resultados está abierto,
-   *  para que su overlay no quede tapado por la barra de progreso (z-index: 1050). */
-  dialogOpen = signal(false);
 
   mostrarPilotos() {
     if (this.temporadaControl.invalid) return;
@@ -128,7 +126,7 @@ export class LastTempsComponent {
   readonly dialog = inject(MatDialog);
 
   openDialog(round: string | null, race: string | null) {
-    this.dialogOpen.set(true);
+    this.overlayState.setOpen(true);
 
     const season = this.temporadaControl.value!;
     this.f1Api.getRaceResults(season, round!).subscribe((results) => {
@@ -156,7 +154,7 @@ export class LastTempsComponent {
       });
 
       dialogRef.afterClosed().subscribe(() => {
-        this.dialogOpen.set(false);
+        this.overlayState.setOpen(false);
       });
     });
   }

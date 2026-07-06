@@ -1,10 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 
 import { RankingComponent } from './ranking.component';
 import { F1ApiService } from '../../services/f1-api.service';
+import { OverlayStateService } from '../../layout/overlay-state.service';
 import {
   DriverStanding,
   ConstructorStanding,
@@ -122,5 +123,24 @@ describe('RankingComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.componentInstance.items()[0].imageUrl).toContain('colapinto.jpg');
+  });
+
+  it('opens the overlay state while the race result dialog is open, and closes it after', () => {
+    const overlayState = TestBed.inject(OverlayStateService);
+    const afterClosed$ = new Subject<void>();
+    const dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['afterClosed']);
+    dialogRefSpy.afterClosed.and.returnValue(afterClosed$.asObservable());
+    const dialogSpy = TestBed.inject(MatDialog) as jasmine.SpyObj<MatDialog>;
+    dialogSpy.open.and.returnValue(dialogRefSpy);
+    f1ApiSpy.getRaceResults.and.returnValue(of([raceResult]));
+
+    const fixture = TestBed.createComponent(RankingComponent);
+    fixture.detectChanges();
+
+    fixture.componentInstance.openDialog('1', 'Australia Grand Prix');
+    expect(overlayState.isOpen()).toBeTrue();
+
+    afterClosed$.next();
+    expect(overlayState.isOpen()).toBeFalse();
   });
 });

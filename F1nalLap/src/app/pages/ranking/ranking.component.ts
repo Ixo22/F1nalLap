@@ -13,14 +13,12 @@ import { map, catchError, of, switchMap, forkJoin } from 'rxjs';
 
 import { CommonModule } from '@angular/common';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 
-import { CloseOtherMenusDirective } from '../../Cerrado/cerrado.component';
 import { Dialog2025RaceResultsComponent } from '../../components/dialog-2025-race-results/dialog-2025-race-results.component';
 import { F1ApiService } from '../../services/f1-api.service';
+import { OverlayStateService } from '../../layout/overlay-state.service';
 import { ConstructorStanding, DriverStanding } from '../../models/f1-api.models';
 import { CircuitInfo } from '../../models/circuit.models';
 import teamsJson from '../../../assets/json/teams.json';
@@ -65,16 +63,7 @@ interface TeamResponse {
 @Component({
   selector: 'app-ranking',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    MatSlideToggleModule,
-    MatMenuModule,
-    MatButtonModule,
-    MatTableModule,
-    MatDialogModule,
-    CloseOtherMenusDirective,
-  ],
+  imports: [CommonModule, RouterModule, MatSlideToggleModule, MatTableModule],
   templateUrl: './ranking.component.html',
   styleUrls: ['./ranking.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -84,6 +73,7 @@ export class RankingComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
+  private overlayState = inject(OverlayStateService);
 
   private teamsData = teamsJson.response as TeamResponse[];
   private circuitsData = circuitosJson as CircuitInfo[];
@@ -91,9 +81,6 @@ export class RankingComponent implements OnInit {
   public items: WritableSignal<DisplayItem[]> = signal([]);
   public carreras: WritableSignal<DisplayRace[]> = signal([]);
   public isDrivers: WritableSignal<boolean> = signal(true);
-  /** Baja el z-index de #progress-container mientras el diálogo de resultados está abierto,
-   *  para que su overlay no quede tapado por la barra de progreso (z-index: 1050). */
-  public dialogOpen: WritableSignal<boolean> = signal(false);
 
   ngOnInit() {
     this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
@@ -171,7 +158,7 @@ export class RankingComponent implements OnInit {
   }
 
   openDialog(round: string, race: string) {
-    this.dialogOpen.set(true);
+    this.overlayState.setOpen(true);
 
     this.f1Api.getRaceResults(SEASON, round).subscribe((results) => {
       const raceData = [
@@ -193,7 +180,7 @@ export class RankingComponent implements OnInit {
       });
 
       dialogRef.afterClosed().subscribe(() => {
-        this.dialogOpen.set(false);
+        this.overlayState.setOpen(false);
       });
     });
   }
