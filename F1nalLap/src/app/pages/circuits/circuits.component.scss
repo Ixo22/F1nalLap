@@ -1,6 +1,8 @@
+@use '../../../styles/tokens' as *;
+
 .tarjetas-contenedor {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); 
+  grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
   padding: 2rem;
   border-radius: 1rem;
@@ -35,10 +37,11 @@
 }
 
 ::ng-deep .tarjeta {
-  border: 2px solid black;
+  border: 2px solid #1a1a1a;
   border-radius: 2rem;
   padding: 1rem;
   background-color: #ffffff;
+  color: #1a1a1a;
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
   cursor: pointer;
@@ -92,7 +95,7 @@
 
 @media (max-width: 768px) {
   .tarjetas-contenedor {
-    grid-template-columns: 1fr; 
+    grid-template-columns: 1fr;
     padding: 1rem;
     gap: 1rem;
   }
@@ -120,11 +123,11 @@
 
 @media (min-width: 769px) and (max-width: 1024px) {
   .tarjetas-contenedor {
-    grid-template-columns: repeat(2, 1fr); 
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
   }
   .estrategias {
-    grid-template-columns: repeat(2, 1fr); 
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
 }
@@ -138,7 +141,7 @@
 /* Placeholder antes de cargar datos */
 .placeholder {
   text-align: center;
-  color: #666;
+  color: $color-text-secondary;
 }
 
 ::ng-deep
@@ -147,9 +150,7 @@
   color: #da0000 !important;
 }
 
-::ng-deep
-  .mdc-text-field--filled:not(.mdc-text-field--disabled)
-  .mdc-line-ripple::after {
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::after {
   border-bottom-color: #da0000 !important;
 }
 
@@ -213,16 +214,16 @@ h3 {
 }
 
 .tiempo-mejor {
-  color: #0a7d32; 
-  background-color: #e6f4ea; 
+  color: #0a7d32;
+  background-color: #e6f4ea;
   font-weight: bold;
   padding: 0.15em 0.5em;
   border-radius: 0.4em;
 }
 
 .tiempo-peor {
-  color: #b71c1c; 
-  background-color: #fdeaea; 
+  color: #b71c1c;
+  background-color: #fdeaea;
   font-weight: bold;
   padding: 0.15em 0.5em;
   border-radius: 0.4em;
@@ -236,20 +237,17 @@ h3 {
   border-radius: 0.4em;
 }
 
-
-
 .graficos-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;  
-  align-items: center;      
-  gap: 5rem; 
-  padding: 0 1rem;        
-  margin: 0 auto;   
-  margin-bottom: 10rem;        
-  width: 100%;              
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
+  padding: 0 1rem;
+  margin: 0 auto;
+  margin-bottom: 10rem;
+  width: 100%;
 }
-
 
 .grafico-pie {
   display: block;

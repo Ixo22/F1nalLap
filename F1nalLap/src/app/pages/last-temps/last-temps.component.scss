@@ -1,7 +1,11 @@
+@use '../../../styles/tokens' as *;
+
 table {
   max-width: 40% !important;
   border-collapse: collapse;
   margin: 20px 0;
+  background-color: #fff;
+  color: #1a1a1a;
 }
 
 table th,
@@ -29,7 +33,7 @@ table tr:nth-child(even) {
 /* Placeholder antes de cargar datos */
 .placeholder {
   text-align: center;
-  color: #666;
+  color: $color-text-secondary;
 }
 
 .rankings {
