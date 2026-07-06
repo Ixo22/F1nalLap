@@ -1,362 +1,302 @@
-<div class="container">
-  <div class="content">
-    <header>
-      <h1><a href="home" class="titulo">F1nal Lap</a></h1>
-      <img
-        src="https://www.formula1.com/etc/designs/fom-website/images/f1_logo.svg"
-        alt="Fórmula 1 Logo"
-      />
-    </header>
-
-    <div id="progress-container">
-      <nav appCloseOtherMenus>
-        <a mat-button href="home">Inicio</a>
-
-        <button mat-button [matMenuTriggerFor]="Informacion" #triggerTemp="matMenuTrigger">
-          Formula 1
-        </button>
-        <mat-menu #Informacion="matMenu">
-          <a mat-menu-item href="actual">Temporada Actual</a>
-          <a mat-menu-item href="last">Temporadas Anteriores</a>
-          <a mat-menu-item href="memorable">Temporadas Memorables</a>
-        </mat-menu>
-
-        <button mat-button [matMenuTriggerFor]="Clasificacion" #triggerClas="matMenuTrigger">
-          Clasificación
-        </button>
-        <mat-menu #Clasificacion="matMenu">
-          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'drivers' }">
-            Pilotos
-          </button>
-          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'teams' }">
-            Equipos
-          </button>
-          <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'races' }">
-            Carreras
-          </button>
-        </mat-menu>
-
-        <a mat-button href="comparar">Análisis</a>
-        <a mat-button href="circuits">Simulador</a>
-      </nav>
-
-      <div id="progress-bar"></div>
-    </div>
-
-    <div class="contenedor-section">
-      <section>
-        <h2>Circuitos</h2>
-        @if (selectedCircuit) {
-          <button class="boton" id="volver" (click)="clearSelection()">
-            <img src="./../../../assets/images/flecha.png" alt="Volver" class="flecha-volver" />
+<div class="contenedor-section">
+  <section>
+    <h2>Circuitos</h2>
+    @if (selectedCircuit) {
+      <button class="boton" id="volver" (click)="clearSelection()">
+        <img src="./../../../assets/images/flecha.png" alt="Volver" class="flecha-volver" />
+      </button>
+    }
+    <div class="buttons">
+      <mat-form-field appearance="fill">
+        <mat-label>Filtrar circuito</mat-label>
+        <input
+          type="text"
+          placeholder="Ej: Japan"
+          matInput
+          [formControl]="circuitControl"
+          [matAutocomplete]="auto"
+        />
+        @if (circuitControl.value) {
+          <button
+            mat-icon-button
+            matSuffix
+            class="limpiar"
+            aria-label="limpiar"
+            (click)="clearSelection()"
+          >
+            <mat-icon>close</mat-icon>
           </button>
         }
-        <div class="buttons">
-          <mat-form-field appearance="fill">
-            <mat-label>Filtrar circuito</mat-label>
-            <input
-              type="text"
-              placeholder="Ej: Japan"
-              matInput
-              [formControl]="circuitControl"
-              [matAutocomplete]="auto"
-            />
-            @if (circuitControl.value) {
-              <button
-                mat-icon-button
-                matSuffix
-                class="limpiar"
-                aria-label="limpiar"
-                (click)="clearSelection()"
-              >
-                <mat-icon>close</mat-icon>
-              </button>
-            }
-            <mat-autocomplete
-              #auto="matAutocomplete"
-              (optionSelected)="onCircuitSelected($event.option.value)"
-              [displayWith]="displayCircuitName"
-            >
-              @for (circuito of filteredCircuits; track circuito) {
-                <mat-option [value]="circuito">
-                  {{ circuito.name_GP }}
-                </mat-option>
-              }
-            </mat-autocomplete>
-          </mat-form-field>
-        </div>
+        <mat-autocomplete
+          #auto="matAutocomplete"
+          (optionSelected)="onCircuitSelected($event.option.value)"
+          [displayWith]="displayCircuitName"
+        >
+          @for (circuito of filteredCircuits; track circuito) {
+            <mat-option [value]="circuito">
+              {{ circuito.name_GP }}
+            </mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
 
-        @if (selectedCircuit) {
-          <div class="tarjetas-contenedor seleccionado">
-            <div class="tarjeta">
-              <div class="tarjeta-imagen">
-                <img [src]="selectedCircuit.image" [alt]="selectedCircuit.name" />
-              </div>
-              <div class="tarjeta-contenido">
-                <h3>{{ selectedCircuit.name_GP }}</h3>
-                <div class="tarjeta-detalles">
-                  <p>
-                    Vueltas: {{ selectedCircuit.laps }} | Longitud:
-                    {{ selectedCircuit.length }}
-                  </p>
-                  <p>Vuelta rápida: {{ selectedCircuit.lap_record }} min</p>
-                </div>
-                <button type="button" class="boton" (click)="showBestStrategies(selectedCircuit)">
-                  Estrategias
-                </button>
-                <button type="button" class="boton" (click)="onSimulador(selectedCircuit)">
-                  Simulador
-                </button>
-                <!-- Estrategias -->
-                @if (bestStrategiesVisible && bestStrategies.length > 0) {
-                  <div class="estrategias">
-                    <h4 style="grid-column: 1 / -1">Mejores estrategias:</h4>
-                    @for (estrategia of bestStrategies; track estrategia) {
-                      <div>
-                        <strong>
-                          Estrategia {{ estrategia.estrategia }} ({{ estrategia.paradas }}
-                          paradas):
-                        </strong>
-                        <br />
-                        <br />
-                        <span>
-                          Salir con:
-                          {{ estrategia.stints[0].compuesto | titlecase }}
-                        </span>
-                        <br />
-                        @for (stop of getPitStops(estrategia.stints); track stop; let i = $index) {
-                          <span>
-                            Parada {{ i + 1 }}: {{ stop.compuesto | titlecase }} en la vuelta
-                            {{ stop.vuelta }}
-                          </span>
-                          <br />
-                        }
-                        <br />
-                        <span>
-                          Tiempo total: {{ estrategia.tiempo_formateado }} h <br /><br />
-                        </span>
-                      </div>
-                    }
-                  </div>
-                }
-                <!-- Simulador dentro de la tarjeta -->
-                @if (simuladorActivo) {
-                  <div class="simulador-form">
+    @if (selectedCircuit) {
+      <div class="tarjetas-contenedor seleccionado">
+        <div class="tarjeta">
+          <div class="tarjeta-imagen">
+            <img [src]="selectedCircuit.image" [alt]="selectedCircuit.name" />
+          </div>
+          <div class="tarjeta-contenido">
+            <h3>{{ selectedCircuit.name_GP }}</h3>
+            <div class="tarjeta-detalles">
+              <p>
+                Vueltas: {{ selectedCircuit.laps }} | Longitud:
+                {{ selectedCircuit.length }}
+              </p>
+              <p>Vuelta rápida: {{ selectedCircuit.lap_record }} min</p>
+            </div>
+            <button type="button" class="boton" (click)="showBestStrategies(selectedCircuit)">
+              Estrategias
+            </button>
+            <button type="button" class="boton" (click)="onSimulador(selectedCircuit)">
+              Simulador
+            </button>
+            <!-- Estrategias -->
+            @if (bestStrategiesVisible && bestStrategies.length > 0) {
+              <div class="estrategias">
+                <h4 style="grid-column: 1 / -1">Mejores estrategias:</h4>
+                @for (estrategia of bestStrategies; track estrategia) {
+                  <div>
+                    <strong>
+                      Estrategia {{ estrategia.estrategia }} ({{ estrategia.paradas }}
+                      paradas):
+                    </strong>
                     <br />
                     <br />
-                    <!-- Instrucciones para el simulador -->
-                    <div class="simulador-instrucciones" style="margin-bottom: 10px; color: #555">
-                      <strong>¿Cómo funciona?</strong><br />
-                      Añade los stints de tu estrategia, elige el compuesto y asigna las vueltas
-                      para cada uno.
+                    <span>
+                      Salir con:
+                      {{ estrategia.stints[0].compuesto | titlecase }}
+                    </span>
+                    <br />
+                    @for (stop of getPitStops(estrategia.stints); track stop; let i = $index) {
+                      <span>
+                        Parada {{ i + 1 }}: {{ stop.compuesto | titlecase }} en la vuelta
+                        {{ stop.vuelta }}
+                      </span>
                       <br />
-                      Cuando termines, pulsa "Simular" para comparar tu tiempo con la mejor
-                      estrategia calculada.
-                    </div>
-                    <h4>Simulador de Estrategia Personalizada</h4>
-                    <div>
-                      <button (click)="agregarStint()">Añadir Stint</button>
-                    </div>
+                    }
                     <br />
-                    @if (simuladorStints.length > 0) {
-                      <div style="margin-bottom: 10px">
-                        <strong>{{ vueltasLibres }} vueltas libres por asignar</strong>
-                      </div>
-                    }
-                    @for (stint of simuladorStints; track stint; let i = $index) {
-                      <div>
-                        <label>
-                          <mat-form-field appearance="fill">
-                            <input
-                              type="text"
-                              placeholder="Compuesto"
-                              matInput
-                              [matAutocomplete]="autoCompuesto"
-                              [(ngModel)]="stint.compuesto"
-                              [ngModelOptions]="{ standalone: true }"
-                            />
-                            @if (stint.compuesto) {
-                              <button
-                                mat-icon-button
-                                matSuffix
-                                class="limpiar"
-                                aria-label="limpiar"
-                                (click)="stint.compuesto = ''"
-                              >
-                                <mat-icon>close</mat-icon>
-                              </button>
-                            }
-                            <mat-autocomplete #autoCompuesto="matAutocomplete">
-                              @for (c of compuestos; track c) {
-                                <mat-option [value]="c">
-                                  {{ c | titlecase }}
-                                </mat-option>
-                              }
-                            </mat-autocomplete>
-                          </mat-form-field>
-                        </label>
-                        <label>
-                          <mat-form-field class="vueltas" appearance="fill">
-                            <input
-                              type="number"
-                              matInput
-                              placeholder="Vueltas"
-                              [(ngModel)]="stint.vueltas"
-                              min="1"
-                              [ngModelOptions]="{ standalone: true }"
-                            />
-                          </mat-form-field>
-                        </label>
-                        <button (click)="eliminarStint(i)">Eliminar</button>
-                      </div>
-                    }
-                    @if (simuladorStints.length > 0) {
-                      <button (click)="simularEstrategiaLibre()">Simular</button>
-                    }
-                    @if (simuladorResultado) {
-                      <div>
-                        <h4>Estrategia Personalizada:</h4>
-                        <span>
-                          Salir con:
-                          {{ simuladorResultado.stints[0].compuesto | titlecase }}
-                        </span>
-                        <br />
-                        @for (
-                          stop of getPitStops(simuladorResultado.stints);
-                          track stop;
-                          let i = $index
-                        ) {
-                          <span>
-                            Parada {{ i + 1 }}: {{ stop.compuesto | titlecase }} en la vuelta
-                            {{ stop.vuelta }}
-                          </span>
-                          <br />
-                        }
-                        <br />
-                        <span [ngClass]="simuladoVsMejorClases">
-                          Tiempo simulado: {{ simuladorResultado.tiempo_formateado }} h
-                        </span>
-                        <br />
-                        <br />
-                        @if (bestStrategies.length > 0) {
-                          <span [ngClass]="mejorVsSimuladoClases">
-                            Tiempo mejor estrategia: {{ bestStrategies[0].tiempo_formateado }} h
-                          </span>
-                        }
-                        <div class="graficos-container">
-                          <!-- Gráfico de la estrategia simulada -->
-                          <div
-                            style="
-                              margin-top: 2rem;
-                              display: flex;
-                              flex-direction: column;
-                              align-items: center;
-                            "
-                            class="grafico-pie-container"
-                          >
-                            <h4 class="titulo-grafico">Degradación por stint y fase (simulada)</h4>
-                            <ngx-charts-line-chart
-                              class="grafico-pie"
-                              [view]="degradacionChartView"
-                              [results]="degradacionSimuladaChartData"
-                              [xAxis]="true"
-                              [yAxis]="true"
-                              [legend]="true"
-                              [legendTitle]="''"
-                              [legendPosition]="LegendPosition.Below"
-                              [showXAxisLabel]="true"
-                              [showYAxisLabel]="true"
-                              [xAxisLabel]="'Vuelta'"
-                              [yAxisLabel]="'Degradación (s)'"
-                              [autoScale]="true"
-                            >
-                            </ngx-charts-line-chart>
-                          </div>
-                          <!-- Gráfico de la estrategia calculada -->
-                          <div
-                            style="
-                              margin-top: 2rem;
-                              display: flex;
-                              flex-direction: column;
-                              align-items: center;
-                            "
-                            class="grafico-pie-container"
-                          >
-                            <h4 class="titulo-grafico">Degradación por stint y fase (calculada)</h4>
-                            <ngx-charts-line-chart
-                              class="grafico-pie"
-                              [view]="degradacionChartView"
-                              [results]="degradacionCalculadaChartData"
-                              [xAxis]="true"
-                              [yAxis]="true"
-                              [legend]="true"
-                              [legendTitle]="''"
-                              [legendPosition]="LegendPosition.Below"
-                              [showXAxisLabel]="true"
-                              [showYAxisLabel]="true"
-                              [xAxisLabel]="'Vuelta'"
-                              [yAxisLabel]="'Degradación (s)'"
-                              [autoScale]="true"
-                            >
-                            </ngx-charts-line-chart>
-                          </div>
-                        </div>
-                      </div>
-                    }
+                    <span> Tiempo total: {{ estrategia.tiempo_formateado }} h <br /><br /> </span>
                   </div>
                 }
-                <!-- Fin simulador -->
               </div>
+            }
+            <!-- Simulador dentro de la tarjeta -->
+            @if (simuladorActivo) {
+              <div class="simulador-form">
+                <br />
+                <br />
+                <!-- Instrucciones para el simulador -->
+                <div class="simulador-instrucciones" style="margin-bottom: 10px; color: #555">
+                  <strong>¿Cómo funciona?</strong><br />
+                  Añade los stints de tu estrategia, elige el compuesto y asigna las vueltas para
+                  cada uno.
+                  <br />
+                  Cuando termines, pulsa "Simular" para comparar tu tiempo con la mejor estrategia
+                  calculada.
+                </div>
+                <h4>Simulador de Estrategia Personalizada</h4>
+                <div>
+                  <button (click)="agregarStint()">Añadir Stint</button>
+                </div>
+                <br />
+                @if (simuladorStints.length > 0) {
+                  <div style="margin-bottom: 10px">
+                    <strong>{{ vueltasLibres }} vueltas libres por asignar</strong>
+                  </div>
+                }
+                @for (stint of simuladorStints; track stint; let i = $index) {
+                  <div>
+                    <label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          placeholder="Compuesto"
+                          matInput
+                          [matAutocomplete]="autoCompuesto"
+                          [(ngModel)]="stint.compuesto"
+                          [ngModelOptions]="{ standalone: true }"
+                        />
+                        @if (stint.compuesto) {
+                          <button
+                            mat-icon-button
+                            matSuffix
+                            class="limpiar"
+                            aria-label="limpiar"
+                            (click)="stint.compuesto = ''"
+                          >
+                            <mat-icon>close</mat-icon>
+                          </button>
+                        }
+                        <mat-autocomplete #autoCompuesto="matAutocomplete">
+                          @for (c of compuestos; track c) {
+                            <mat-option [value]="c">
+                              {{ c | titlecase }}
+                            </mat-option>
+                          }
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </label>
+                    <label>
+                      <mat-form-field class="vueltas" appearance="fill">
+                        <input
+                          type="number"
+                          matInput
+                          placeholder="Vueltas"
+                          [(ngModel)]="stint.vueltas"
+                          min="1"
+                          [ngModelOptions]="{ standalone: true }"
+                        />
+                      </mat-form-field>
+                    </label>
+                    <button (click)="eliminarStint(i)">Eliminar</button>
+                  </div>
+                }
+                @if (simuladorStints.length > 0) {
+                  <button (click)="simularEstrategiaLibre()">Simular</button>
+                }
+                @if (simuladorResultado) {
+                  <div>
+                    <h4>Estrategia Personalizada:</h4>
+                    <span>
+                      Salir con:
+                      {{ simuladorResultado.stints[0].compuesto | titlecase }}
+                    </span>
+                    <br />
+                    @for (
+                      stop of getPitStops(simuladorResultado.stints);
+                      track stop;
+                      let i = $index
+                    ) {
+                      <span>
+                        Parada {{ i + 1 }}: {{ stop.compuesto | titlecase }} en la vuelta
+                        {{ stop.vuelta }}
+                      </span>
+                      <br />
+                    }
+                    <br />
+                    <span [ngClass]="simuladoVsMejorClases">
+                      Tiempo simulado: {{ simuladorResultado.tiempo_formateado }} h
+                    </span>
+                    <br />
+                    <br />
+                    @if (bestStrategies.length > 0) {
+                      <span [ngClass]="mejorVsSimuladoClases">
+                        Tiempo mejor estrategia: {{ bestStrategies[0].tiempo_formateado }} h
+                      </span>
+                    }
+                    <div class="graficos-container">
+                      <!-- Gráfico de la estrategia simulada -->
+                      <div
+                        style="
+                          margin-top: 2rem;
+                          display: flex;
+                          flex-direction: column;
+                          align-items: center;
+                        "
+                        class="grafico-pie-container"
+                      >
+                        <h4 class="titulo-grafico">Degradación por stint y fase (simulada)</h4>
+                        <ngx-charts-line-chart
+                          class="grafico-pie"
+                          [view]="degradacionChartView"
+                          [results]="degradacionSimuladaChartData"
+                          [xAxis]="true"
+                          [yAxis]="true"
+                          [legend]="true"
+                          [legendTitle]="''"
+                          [legendPosition]="LegendPosition.Below"
+                          [showXAxisLabel]="true"
+                          [showYAxisLabel]="true"
+                          [xAxisLabel]="'Vuelta'"
+                          [yAxisLabel]="'Degradación (s)'"
+                          [autoScale]="true"
+                        >
+                        </ngx-charts-line-chart>
+                      </div>
+                      <!-- Gráfico de la estrategia calculada -->
+                      <div
+                        style="
+                          margin-top: 2rem;
+                          display: flex;
+                          flex-direction: column;
+                          align-items: center;
+                        "
+                        class="grafico-pie-container"
+                      >
+                        <h4 class="titulo-grafico">Degradación por stint y fase (calculada)</h4>
+                        <ngx-charts-line-chart
+                          class="grafico-pie"
+                          [view]="degradacionChartView"
+                          [results]="degradacionCalculadaChartData"
+                          [xAxis]="true"
+                          [yAxis]="true"
+                          [legend]="true"
+                          [legendTitle]="''"
+                          [legendPosition]="LegendPosition.Below"
+                          [showXAxisLabel]="true"
+                          [showYAxisLabel]="true"
+                          [xAxisLabel]="'Vuelta'"
+                          [yAxisLabel]="'Degradación (s)'"
+                          [autoScale]="true"
+                        >
+                        </ngx-charts-line-chart>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+            <!-- Fin simulador -->
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div class="tarjetas-contenedor" [ngClass]="{ seleccionado: filteredCircuits.length === 1 }">
+        @for (circuito of filteredCircuits; track circuito) {
+          <div
+            class="tarjeta"
+            role="button"
+            tabindex="0"
+            (click)="onCircuitSelected(circuito)"
+            (keydown.enter)="onCircuitSelected(circuito)"
+            (keydown.space)="onCircuitSelected(circuito)"
+          >
+            <div class="tarjeta-imagen">
+              <img [src]="circuito.image" [alt]="circuito.name" />
+            </div>
+            <div class="tarjeta-contenido">
+              <h3>{{ circuito.name_GP }}</h3>
+              <div class="tarjeta-detalles">
+                <p>
+                  Vueltas: {{ circuito.laps }} | Longitud:
+                  {{ circuito.length }}
+                </p>
+                <p>Vuelta rápida: {{ circuito.lap_record }} min</p>
+              </div>
+              <button
+                type="button"
+                class="boton"
+                (click)="onCircuitSelected(circuito); showBestStrategies(circuito)"
+              >
+                Estrategias
+              </button>
+              <button type="button" class="boton" (click)="onSimulador(circuito)">Simulador</button>
             </div>
           </div>
-        } @else {
-          <div
-            class="tarjetas-contenedor"
-            [ngClass]="{ seleccionado: filteredCircuits.length === 1 }"
-          >
-            @for (circuito of filteredCircuits; track circuito) {
-              <div
-                class="tarjeta"
-                role="button"
-                tabindex="0"
-                (click)="onCircuitSelected(circuito)"
-                (keydown.enter)="onCircuitSelected(circuito)"
-                (keydown.space)="onCircuitSelected(circuito)"
-              >
-                <div class="tarjeta-imagen">
-                  <img [src]="circuito.image" [alt]="circuito.name" />
-                </div>
-                <div class="tarjeta-contenido">
-                  <h3>{{ circuito.name_GP }}</h3>
-                  <div class="tarjeta-detalles">
-                    <p>
-                      Vueltas: {{ circuito.laps }} | Longitud:
-                      {{ circuito.length }}
-                    </p>
-                    <p>Vuelta rápida: {{ circuito.lap_record }} min</p>
-                  </div>
-                  <button
-                    type="button"
-                    class="boton"
-                    (click)="onCircuitSelected(circuito); showBestStrategies(circuito)"
-                  >
-                    Estrategias
-                  </button>
-                  <button type="button" class="boton" (click)="onSimulador(circuito)">
-                    Simulador
-                  </button>
-                </div>
-              </div>
-            }
-          </div>
         }
-      </section>
-    </div>
-  </div>
-
-  <footer>
-    <a href="https://www.linkedin.com/in/aalbeerto/" target="_blank"
-      >© AGA. Todos los derechos reservados.</a
-    >
-  </footer>
+      </div>
+    }
+  </section>
 </div>

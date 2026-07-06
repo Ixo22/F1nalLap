@@ -1,10 +1,6 @@
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
-import { CloseOtherMenusDirective } from '../../Cerrado/cerrado.component';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -39,11 +35,6 @@ interface DegradacionChartSerie {
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule,
-    MatMenuModule,
-    MatMenuTrigger,
-    MatButtonModule,
-    CloseOtherMenusDirective,
     FormsModule,
     ReactiveFormsModule,
     MatAutocompleteModule,

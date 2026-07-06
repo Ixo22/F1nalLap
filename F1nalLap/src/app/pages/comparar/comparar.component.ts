@@ -10,10 +10,6 @@ import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, forkJoin } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { RouterModule } from '@angular/router';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
-import { CloseOtherMenusDirective } from '../../Cerrado/cerrado.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
@@ -60,10 +56,6 @@ const colorSchemeT: Color = {
   standalone: true,
   imports: [
     MatSlideToggleModule,
-    RouterModule,
-    MatMenuModule,
-    CloseOtherMenusDirective,
-    MatButtonModule,
     CommonModule,
     MatInputModule,
     MatIconModule,
