@@ -21,10 +21,12 @@
 .btn-primary {
   display: inline-block;
   padding: 0.875rem 2rem;
-  background-color: transparent;
+  // Fondo con tinte rojo sutil en reposo (en vez de transparente) para que
+  // se lea como CTA primario y no como un botón secundario de contorno.
+  background-color: rgba($color-red, 0.16);
   border: 2px solid $color-red;
   clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 100%, 15px 100%);
-  color: $color-red;
+  color: $color-text;
   font-family: $font-heading;
   font-size: 1rem;
   font-weight: 600;
