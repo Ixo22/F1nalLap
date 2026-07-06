@@ -155,10 +155,10 @@ describe('ScrollProgressDirective', () => {
 
 Run: `npm test -- --include='**/scroll-progress.directive.spec.ts'` → FAIL (module not found).
 
-- [ ] **Step 2: Implementar** `src/app/layout/scroll-progress.directive.ts`:
+- [ ] **Step 2: Implementar** `src/app/layout/scroll-progress.directive.ts` — usar `Renderer2` en vez de escribir `nativeElement.style` directamente (el proyecto retiró la manipulación directa del DOM en la Fase 6 previa; esta directiva no debe reintroducirla):
 
 ```ts
-import { Directive, ElementRef, HostListener, inject } from '@angular/core';
+import { Directive, ElementRef, HostListener, Renderer2, inject } from '@angular/core';
 
 @Directive({
   selector: '[appScrollProgress]',
@@ -166,12 +166,13 @@ import { Directive, ElementRef, HostListener, inject } from '@angular/core';
 })
 export class ScrollProgressDirective {
   private readonly el = inject(ElementRef<HTMLElement>);
+  private readonly renderer = inject(Renderer2);
 
   @HostListener('window:scroll')
   onWindowScroll(): void {
     const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
     const progress = ScrollProgressDirective.computeProgress(scrollTop, scrollHeight, clientHeight);
-    this.el.nativeElement.style.width = `${progress}%`;
+    this.renderer.setStyle(this.el.nativeElement, 'width', `${progress}%`);
   }
 
   static computeProgress(scrollTop: number, scrollHeight: number, clientHeight: number): number {
@@ -182,6 +183,12 @@ export class ScrollProgressDirective {
     return Math.min(100, Math.max(0, (scrollTop / maxScroll) * 100));
   }
 }
+```
+
+En el test "sets the host element width on window scroll", compara el valor numérico en vez de la cadena exacta — `style.width` se re-serializa en el navegador y pierde precisión de punto flotante:
+
+```ts
+expect(parseFloat(bar.style.width)).toBeCloseTo((400 / 1200) * 100, 2);
 ```
 
 Run: `npm test -- --include='**/scroll-progress.directive.spec.ts'` → PASS (5 specs).
