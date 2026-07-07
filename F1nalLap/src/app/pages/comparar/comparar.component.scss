@@ -179,6 +179,21 @@ button.limpiar:focus,
   min-width: 80px;
 }
 
+// ngx-charts dibuja sus textos (ejes, ticks, etiquetas de las porciones del
+// donut) en SVG, que usa `fill` en vez de `color` para pintar el texto. La
+// librería los deja en negro por defecto (piensa en fondo claro), así que
+// quedaban invisibles sobre el fondo oscuro del rediseño.
+::ng-deep .grafico-pie text {
+  fill: $color-text !important;
+}
+
+// Líneas de cuadrícula y ejes del gráfico de líneas, mismo problema pero con
+// `stroke` en vez de `fill`.
+::ng-deep .grafico-pie .gridline-path,
+::ng-deep .grafico-pie .refline-path {
+  stroke: $color-surface-border !important;
+}
+
 .spinner {
   display: inline-block;
   width: 24px;

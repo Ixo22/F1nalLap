@@ -324,3 +324,15 @@ h3 {
   text-align: center !important;
   min-width: 80px;
 }
+
+// ngx-charts dibuja sus textos (ejes, ticks) en SVG, que usa `fill` en vez de
+// `color`. La librería los deja en negro por defecto (piensa en fondo
+// claro), invisibles sobre el fondo oscuro del rediseño.
+::ng-deep .grafico-pie text {
+  fill: $color-text !important;
+}
+
+::ng-deep .grafico-pie .gridline-path,
+::ng-deep .grafico-pie .refline-path {
+  stroke: $color-surface-border !important;
+}
