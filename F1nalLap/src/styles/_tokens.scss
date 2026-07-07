@@ -59,8 +59,12 @@ $font-body: 'Inter', sans-serif;
 
 @mixin btn-secondary {
   @include btn-base;
-  background-color: transparent;
-  border: 1px solid $color-surface-border;
+  // Un fondo puramente transparente se pierde contra la superficie oscura
+  // circundante ("botón oscuro sobre fondo oscuro"). Un tinte "glass" sutil
+  // le da entidad propia como superficie clicable sin competir con la
+  // primaria.
+  background-color: $color-glass-bg;
+  border: 1px solid rgba(255, 255, 255, 0.18);
   color: $color-text;
 
   &:hover:not(:disabled) {

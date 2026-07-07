@@ -88,15 +88,8 @@ table tr:nth-child(even) {
   }
 }
 
-::ng-deep
-  .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
-  .mdc-floating-label {
-  color: #da0000 !important;
-}
-
-::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::after {
-  border-bottom-color: #da0000 !important;
-}
+// El foco/relleno de mat-form-field ya se estiliza globalmente en
+// src/styles.scss (.mat-mdc-form-field), con acento dorado en vez de rojo.
 
 .link-button {
   background: none;
