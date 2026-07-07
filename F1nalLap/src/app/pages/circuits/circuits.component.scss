@@ -36,18 +36,24 @@
   align-items: center;
 }
 
+// La tarjeta de circuito vivía como una tarjeta blanca clásica, la única
+// superficie clara que quedaba en la app tras el rediseño. Se convierte a la
+// misma superficie "glass" oscura que el resto (ranking, home), y los
+// botones/textos internos pasan de sus variantes "sobre claro" a las
+// variantes estándar del sistema de diseño.
 ::ng-deep .tarjeta {
-  border: 2px solid #1a1a1a;
+  @include surface-glass;
   border-radius: 2rem;
   padding: 1rem;
-  background-color: #ffffff;
-  color: #1a1a1a;
-  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
+  color: $color-text;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
   cursor: pointer;
 
   &:hover {
     transform: scale(1.02);
+    border-color: $color-gold;
   }
 
   .tarjeta-imagen img {
@@ -58,62 +64,37 @@
   }
 
   .tarjeta-contenido {
-    border-top: 1px solid black;
+    border-top: 1px solid $color-surface-border;
     margin-top: 1rem;
     text-align: center;
 
-    // El título hereda `color` de esta tarjeta blanca, pero la regla global
-    // `section h3 { color: $color-text }` (pensada para el tema oscuro) tiene
-    // más especificidad que un color heredado y lo pisaba, dejando el título
-    // casi invisible sobre el fondo blanco. Se fija explícitamente aquí.
     h3 {
       margin: 0.5rem 0;
-      color: #1a1a1a;
+      color: $color-text;
     }
 
-    // Sistema de botones unificado (ver _tokens.scss), variante "sobre claro"
-    // para vivir dentro de esta tarjeta blanca. `.boton` es la acción
+    // Sistema de botones unificado (ver _tokens.scss).`.boton` es la acción
     // secundaria (Estrategias, Eliminar); `.boton-primario` es la acción
-    // principal (Simulador, Añadir Stint, Simular) en rojo de marca sólido.
+    // principal (Simulador, Añadir Stint, Simular).
     .boton {
-      @include btn-secondary-on-light;
+      @include btn-secondary;
       margin-top: 0.5rem;
       margin-left: 0.5rem;
     }
 
     .boton-primario {
-      @include btn-secondary-on-light;
+      @include btn-primary;
       margin-top: 0.5rem;
       margin-left: 0.5rem;
-      background-color: $color-red;
-      border-color: $color-red;
-      color: #fff;
-
-      &:hover {
-        background-color: #a01818;
-        border-color: #a01818;
-        color: #fff;
-      }
     }
 
-    // Mismo problema que el título: la regla global `button { ... }` del tema
-    // oscuro (fondo transparente + texto claro) hacía invisibles los botones
-    // sueltos del simulador ("Añadir Stint", "Eliminar", "Simular") sobre la
-    // tarjeta blanca.
     .simulador-form button {
-      @include btn-secondary-on-light;
+      @include btn-secondary;
       margin: 0.5rem;
 
       &.boton-primario {
-        background-color: $color-red;
-        border-color: $color-red;
-        color: #fff;
-
-        &:hover {
-          background-color: #a01818;
-          border-color: #a01818;
-          color: #fff;
-        }
+        @include btn-primary;
+        margin: 0.5rem;
       }
     }
   }
@@ -122,13 +103,11 @@
 .tarjeta-detalles {
   margin: 0.5rem 0 1rem 0;
   font-size: 1rem;
-  color: #444;
+  color: $color-text-secondary;
 
-  // Mismo problema de especificidad que el título: la regla global `p` del
-  // tema oscuro pisaba este color heredado. Se repite aquí para que gane.
   p {
     margin: 0.2rem 0;
-    color: #444;
+    color: $color-text-secondary;
   }
 }
 
