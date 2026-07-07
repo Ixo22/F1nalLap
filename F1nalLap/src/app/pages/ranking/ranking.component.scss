@@ -139,8 +139,15 @@
 .race-card {
   // Antes flotaba sin fondo propio directamente sobre la sección oscura.
   // Superficie "glass" (blur + borde dorado sutil) para que se lea como una
-  // tarjeta destacada, no como texto suelto.
+  // tarjeta destacada, no como texto suelto. Esta tarjeta también lleva la
+  // clase `.team` (comparte grid con las de equipo), cuya regla fija
+  // `color: #1a1a1a` para su propio fondo blanco — hay que sobreescribirlo
+  // explícitamente aquí o el texto queda oscuro sobre este fondo oscuro.
   @include surface-glass;
+  // Un poco más clara que el glass estándar para que la imagen del circuito
+  // se aprecie bien y la tarjeta no se sienta tan oscura como el fondo.
+  background-color: rgba(255, 255, 255, 0.07);
+  color: $color-text;
   display: flex;
   flex-direction: column;
   align-items: center;

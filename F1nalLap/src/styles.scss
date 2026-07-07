@@ -314,21 +314,57 @@ button {
     color: $color-text-secondary !important;
   }
 
-  input.mat-mdc-input-element,
-  .mat-mdc-autocomplete-panel,
-  .mdc-list-item__primary-text {
+  input.mat-mdc-input-element {
     color: $color-text !important;
   }
 }
 
+// El panel de autocompletado se renderiza vía CDK Overlay al final del
+// <body>, fuera del DOM de .mat-mdc-form-field — por eso este bloque no
+// puede anidarse ahí arriba; si no, nunca aplica y el texto de las opciones
+// se queda con el color oscuro por defecto de Material sobre nuestro panel
+// ya oscurecido (oscuro sobre oscuro, ilegible).
 .mat-mdc-autocomplete-panel {
   background-color: $color-surface !important;
   border: 1px solid $color-glass-border !important;
 }
 
+.mat-mdc-autocomplete-panel .mat-mdc-option,
+.mat-mdc-autocomplete-panel .mdc-list-item__primary-text {
+  color: $color-text !important;
+}
+
 .mat-mdc-option:hover:not(.mdc-list-item--disabled),
 .mat-mdc-option.mat-mdc-option-active {
   background-color: rgba($color-red, 0.16) !important;
+}
+
+// Los diálogos de resultados (Dialog2025RaceResults / DialogSeasonResults)
+// usaban la superficie blanca por defecto del tema Material azure-blue,
+// completamente distinta al resto de la app ya rediseñada.
+.mat-mdc-dialog-surface {
+  background-color: $color-surface !important;
+  color: $color-text !important;
+  border: 1px solid $color-glass-border !important;
+}
+
+.mat-mdc-dialog-surface .mdc-dialog__title,
+.mat-mdc-dialog-surface .mat-mdc-dialog-title {
+  color: $color-text !important;
+}
+
+// El título hereda el mismo tratamiento que los <h2> de sección (fuente,
+// rojo, borde inferior) para que se lea como parte de la misma familia visual.
+.mat-mdc-dialog-surface h2[mat-dialog-title] {
+  font-family: $font-heading;
+  color: $color-red;
+  border-bottom: 2px solid $color-red;
+  padding-bottom: 0.5rem;
+  margin: 0 0 0.75rem;
+}
+
+.mat-mdc-dialog-surface .mat-mdc-dialog-content {
+  color: $color-text;
 }
 
 @media (max-width: 1020px) {

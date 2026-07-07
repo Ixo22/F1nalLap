@@ -1,22 +1,31 @@
+@use '../../../styles/tokens' as *;
+
+// El diálogo ahora usa la superficie oscura del sistema de diseño (ver
+// styles.scss, .mat-mdc-dialog-surface). Las filas pares tenían su propio
+// fondo claro pero el texto seguía el color heredado del diálogo — antes
+// oscuro (por defecto de Material), ahora claro, así que las filas pares se
+// habrían quedado con texto claro sobre fondo claro. Se sustituye por una
+// franja oscura sutil para mantener el zebra-striping sin ese problema.
 table {
   max-width: 40% !important;
   border-collapse: collapse;
+  color: $color-text;
 }
 
 table th,
 table td {
-  border: 1px solid #ddd;
+  border: 1px solid $color-surface-border;
   padding: 8px;
   text-align: left;
 }
 
 table th {
-  background-color: #da0000;
-  color: white;
+  background-color: $color-red;
+  color: $color-text;
 }
 
 table tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: rgba(255, 255, 255, 0.04);
 }
 
 .sticky-header {
@@ -42,7 +51,7 @@ table tr:nth-child(even) {
 }
 
 @media (max-width: 490px) {
-    th,
+  th,
   td {
     font-size: 9px;
   }
@@ -55,12 +64,12 @@ table tr:nth-child(even) {
   }
 }
 
-@media (max-width: 400px){
-  table{
+@media (max-width: 400px) {
+  table {
     font-size: 7px;
     width: 100%;
   }
   .mat-column-fastestLapTime {
-      display: none;
-    }
+    display: none;
+  }
 }
