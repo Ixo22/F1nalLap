@@ -37,18 +37,21 @@ interface PuntosPorCarreraSerie {
   series: { name: string; value: number }[];
 }
 
+// Paleta alineada con el sistema de diseño (rojo de marca + dorado), en vez
+// de los verdes/naranjas/azules genéricos de antes, que desentonaban con el
+// resto de la app.
 const colorSchemeP: Color = {
   name: 'pilotos',
   selectable: true,
   group: ScaleType.Ordinal,
-  domain: ['#2a6425', '#f09c1e'],
+  domain: ['#d6342e', '#c9a35c'],
 };
 
 const colorSchemeT: Color = {
   name: 'equipos',
   selectable: true,
   group: ScaleType.Ordinal,
-  domain: ['#a01d1d', '#0672ca'],
+  domain: ['#d6342e', '#c9a35c'],
 };
 
 @Component({

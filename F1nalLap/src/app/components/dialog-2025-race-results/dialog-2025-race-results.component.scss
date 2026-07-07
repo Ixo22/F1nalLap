@@ -52,6 +52,15 @@
 .driver-details {
   flex-grow: 1;
   text-align: left;
+  // Explícito: Material fija su propio `color` en el contenido del diálogo
+  // (vía sus custom properties de tema), que gana sobre el color heredado
+  // del ancestro aunque este use !important, dejando el texto oscuro sobre
+  // esta tarjeta ya oscura.
+  color: $color-text;
+
+  .stats span {
+    color: $color-text-secondary;
+  }
 }
 
 .position {
