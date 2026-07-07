@@ -502,10 +502,13 @@ button {
   border: 1px solid $color-surface-border !important;
 }
 
-// Icono "limpiar" (X) de los mat-form-field con autocompletado: por defecto
-// Material reserva el área de toque completa de un icon-button (40px), que
-// se ve desproporcionadamente grande junto a un campo de texto compacto.
-.limpiar.mat-mdc-icon-button {
+// Icono "limpiar" (X) de los mat-form-field con autocompletado. El botón real
+// solo lleva la clase `.limpiar` (sin `.mat-mdc-icon-button`, la suposición
+// anterior era incorrecta), así que la regla global `button { min-width:
+// 110px; ... }` (el mixin btn-secondary) le ganaba y lo dejaba con el mismo
+// tamaño que cualquier botón normal de la app.
+.limpiar {
+  min-width: 0 !important;
   width: 28px !important;
   height: 28px !important;
   padding: 4px !important;
@@ -521,4 +524,35 @@ button {
     width: 28px !important;
     height: 28px !important;
   }
+}
+
+// Tablas Angular Material (`<table mat-table>`, usadas en Últimas Temporadas
+// y Análisis): aunque el elemento subyacente es un <table>/<td> normal,
+// Material aplica sus propias clases (.mat-mdc-cell, .mat-mdc-header-cell)
+// con su tema por defecto (texto casi negro, pensado para fondo claro), que
+// gana por especificidad de clase sobre un selector `table td` de elemento.
+.mat-mdc-table {
+  background-color: transparent;
+}
+
+.mat-mdc-header-row {
+  background-color: $color-red;
+}
+
+.mat-mdc-header-cell {
+  color: $color-text !important;
+  border-bottom-color: $color-surface-border !important;
+}
+
+.mat-mdc-cell {
+  color: $color-text !important;
+  border-bottom-color: $color-surface-border !important;
+}
+
+.mat-mdc-row:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.mat-mdc-row:hover {
+  background-color: rgba($color-gold, 0.08);
 }
