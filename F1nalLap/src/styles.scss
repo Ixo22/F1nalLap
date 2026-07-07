@@ -501,3 +501,24 @@ button {
   background-color: $color-red !important;
   border: 1px solid $color-surface-border !important;
 }
+
+// Icono "limpiar" (X) de los mat-form-field con autocompletado: por defecto
+// Material reserva el área de toque completa de un icon-button (40px), que
+// se ve desproporcionadamente grande junto a un campo de texto compacto.
+.limpiar.mat-mdc-icon-button {
+  width: 28px !important;
+  height: 28px !important;
+  padding: 4px !important;
+
+  .mat-icon {
+    font-size: 16px !important;
+    width: 16px !important;
+    height: 16px !important;
+    line-height: 16px !important;
+  }
+
+  .mat-mdc-button-touch-target {
+    width: 28px !important;
+    height: 28px !important;
+  }
+}

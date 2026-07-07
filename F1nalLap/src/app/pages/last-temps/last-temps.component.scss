@@ -1,27 +1,36 @@
 @use '../../../styles/tokens' as *;
 
+// Tabla oscura/"glass", consistente con el resto de superficies de la app
+// (antes era una tabla blanca clásica, la única superficie clara que
+// quedaba en esta página).
 table {
   max-width: 40% !important;
   border-collapse: collapse;
   margin: 20px 0;
-  background-color: #fff;
-  color: #1a1a1a;
+  background-color: rgba(255, 255, 255, 0.03);
+  color: $color-text;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 table th,
 table td {
-  border: 1px solid #ddd;
+  border: 1px solid $color-surface-border;
   padding: 8px;
   text-align: left;
 }
 
 table th {
-  background-color: #da0000;
-  color: white;
+  background-color: $color-red;
+  color: $color-text;
 }
 
 table tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+table tr:hover {
+  background-color: rgba($color-gold, 0.08);
 }
 
 /* Botones */
