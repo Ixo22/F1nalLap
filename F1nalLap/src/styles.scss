@@ -286,6 +286,51 @@ button {
   color: $color-gold !important;
 }
 
+// Campos de formulario Material (appearance="fill"): por defecto usan el
+// relleno claro del tema azure-blue de Material, que se ve como una caja
+// genérica de Material sobre el fondo oscuro del rediseño. Se centraliza
+// aquí (antes duplicado con colores sueltos en circuits/comparar/last-temps)
+// y se eleva a un acabado "glass" oscuro con acento dorado en foco.
+.mat-mdc-form-field {
+  .mdc-text-field--filled {
+    background-color: $color-glass-bg !important;
+    border-radius: 4px 4px 0 0;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::before {
+    border-bottom-color: $color-surface-border;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
+    .mdc-floating-label {
+    color: $color-gold !important;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::after {
+    border-bottom-color: $color-gold !important;
+  }
+
+  .mdc-floating-label {
+    color: $color-text-secondary !important;
+  }
+
+  input.mat-mdc-input-element,
+  .mat-mdc-autocomplete-panel,
+  .mdc-list-item__primary-text {
+    color: $color-text !important;
+  }
+}
+
+.mat-mdc-autocomplete-panel {
+  background-color: $color-surface !important;
+  border: 1px solid $color-glass-border !important;
+}
+
+.mat-mdc-option:hover:not(.mdc-list-item--disabled),
+.mat-mdc-option.mat-mdc-option-active {
+  background-color: rgba($color-red, 0.16) !important;
+}
+
 @media (max-width: 1020px) {
   nav a {
     font-size: 16px;
