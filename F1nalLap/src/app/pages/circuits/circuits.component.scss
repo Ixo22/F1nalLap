@@ -62,23 +62,47 @@
     margin-top: 1rem;
     text-align: center;
 
+    // El título hereda `color` de esta tarjeta blanca, pero la regla global
+    // `section h3 { color: $color-text }` (pensada para el tema oscuro) tiene
+    // más especificidad que un color heredado y lo pisaba, dejando el título
+    // casi invisible sobre el fondo blanco. Se fija explícitamente aquí.
     h3 {
       margin: 0.5rem 0;
+      color: #1a1a1a;
     }
 
     .boton {
       display: inline-block;
-      width: 80px;
+      min-width: 110px;
+      white-space: nowrap;
       margin-top: 0.5rem;
       margin-left: 0.5rem;
-      padding: 0.5rem 1rem;
-      background-color: black;
-      color: white;
+      padding: 0.6rem 1.25rem;
+      background-color: #1a1a1a;
+      color: #fff;
       border-radius: 0.5rem;
+      text-align: center;
       text-decoration: none;
+      transition: background-color 0.3s ease;
 
       &:hover {
-        background-color: #333;
+        background-color: $color-red;
+      }
+    }
+
+    // Mismo problema que el título: la regla global `button { ... }` del tema
+    // oscuro (fondo transparente + texto claro) hacía invisibles los botones
+    // sueltos del simulador ("Añadir Stint", "Eliminar", "Simular") sobre la
+    // tarjeta blanca.
+    .simulador-form button {
+      color: #1a1a1a;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+
+      &:hover {
+        background-color: #e2e2e2;
+        border-color: $color-red;
+        box-shadow: none;
       }
     }
   }
@@ -88,8 +112,12 @@
   margin: 0.5rem 0 1rem 0;
   font-size: 1rem;
   color: #444;
+
+  // Mismo problema de especificidad que el título: la regla global `p` del
+  // tema oscuro pisaba este color heredado. Se repite aquí para que gane.
   p {
     margin: 0.2rem 0;
+    color: #444;
   }
 }
 
