@@ -59,7 +59,11 @@
             <button type="button" class="boton" (click)="showBestStrategies(selectedCircuit)">
               Estrategias
             </button>
-            <button type="button" class="boton" (click)="onSimulador(selectedCircuit)">
+            <button
+              type="button"
+              class="boton boton-primario"
+              (click)="onSimulador(selectedCircuit)"
+            >
               Simulador
             </button>
             <!-- Estrategias -->
@@ -108,7 +112,7 @@
                 </div>
                 <h4>Simulador de Estrategia Personalizada</h4>
                 <div>
-                  <button (click)="agregarStint()">Añadir Stint</button>
+                  <button class="boton-primario" (click)="agregarStint()">Añadir Stint</button>
                 </div>
                 <br />
                 @if (simuladorStints.length > 0) {
@@ -164,7 +168,7 @@
                   </div>
                 }
                 @if (simuladorStints.length > 0) {
-                  <button (click)="simularEstrategiaLibre()">Simular</button>
+                  <button class="boton-primario" (click)="simularEstrategiaLibre()">Simular</button>
                 }
                 @if (simuladorResultado) {
                   <div>
@@ -292,7 +296,9 @@
               >
                 Estrategias
               </button>
-              <button type="button" class="boton" (click)="onSimulador(circuito)">Simulador</button>
+              <button type="button" class="boton boton-primario" (click)="onSimulador(circuito)">
+                Simulador
+              </button>
             </div>
           </div>
         }
