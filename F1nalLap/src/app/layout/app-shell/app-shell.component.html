@@ -9,7 +9,7 @@
     </header>
 
     <div id="progress-container" [style.z-index]="overlayState.isOpen() ? 950 : null">
-      <nav appCloseOtherMenus>
+      <nav appCloseOtherMenus appScrollShadow>
         <a
           mat-button
           routerLink="/home"
@@ -19,7 +19,7 @@
         >
 
         <button mat-button [matMenuTriggerFor]="Informacion" #triggerTemp="matMenuTrigger">
-          Formula 1
+          Formula 1 <span class="nav-chevron">▾</span>
         </button>
         <mat-menu #Informacion="matMenu">
           <a mat-menu-item routerLink="/actual" routerLinkActive="active-link">Temporada Actual</a>
@@ -32,7 +32,7 @@
         </mat-menu>
 
         <button mat-button [matMenuTriggerFor]="Clasificacion" #triggerClas="matMenuTrigger">
-          Clasificación
+          Clasificación <span class="nav-chevron">▾</span>
         </button>
         <mat-menu #Clasificacion="matMenu">
           <button mat-menu-item [routerLink]="['/ranking']" [queryParams]="{ view: 'drivers' }">

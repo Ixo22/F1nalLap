@@ -71,22 +71,28 @@
       color: #1a1a1a;
     }
 
+    // Sistema de botones unificado (ver _tokens.scss), variante "sobre claro"
+    // para vivir dentro de esta tarjeta blanca. `.boton` es la acción
+    // secundaria (Estrategias, Eliminar); `.boton-primario` es la acción
+    // principal (Simulador, Añadir Stint, Simular) en rojo de marca sólido.
     .boton {
-      display: inline-block;
-      min-width: 110px;
-      white-space: nowrap;
+      @include btn-secondary-on-light;
       margin-top: 0.5rem;
       margin-left: 0.5rem;
-      padding: 0.6rem 1.25rem;
-      background-color: #1a1a1a;
+    }
+
+    .boton-primario {
+      @include btn-secondary-on-light;
+      margin-top: 0.5rem;
+      margin-left: 0.5rem;
+      background-color: $color-red;
+      border-color: $color-red;
       color: #fff;
-      border-radius: 0.5rem;
-      text-align: center;
-      text-decoration: none;
-      transition: background-color 0.3s ease;
 
       &:hover {
-        background-color: $color-red;
+        background-color: #a01818;
+        border-color: #a01818;
+        color: #fff;
       }
     }
 
@@ -95,14 +101,19 @@
     // sueltos del simulador ("Añadir Stint", "Eliminar", "Simular") sobre la
     // tarjeta blanca.
     .simulador-form button {
-      color: #1a1a1a;
-      background-color: #f0f0f0;
-      border: 1px solid #ccc;
+      @include btn-secondary-on-light;
+      margin: 0.5rem;
 
-      &:hover {
-        background-color: #e2e2e2;
+      &.boton-primario {
+        background-color: $color-red;
         border-color: $color-red;
-        box-shadow: none;
+        color: #fff;
+
+        &:hover {
+          background-color: #a01818;
+          border-color: #a01818;
+          color: #fff;
+        }
       }
     }
   }

@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CloseOtherMenusDirective } from '../../Cerrado/cerrado.component';
 import { OverlayStateService } from '../overlay-state.service';
 import { ScrollProgressDirective } from '../scroll-progress.directive';
+import { ScrollShadowDirective } from '../scroll-shadow.directive';
 
 @Component({
   selector: 'app-shell',
@@ -15,6 +16,7 @@ import { ScrollProgressDirective } from '../scroll-progress.directive';
     MatButtonModule,
     CloseOtherMenusDirective,
     ScrollProgressDirective,
+    ScrollShadowDirective,
   ],
   templateUrl: './app-shell.component.html',
   styleUrl: './app-shell.component.scss',
