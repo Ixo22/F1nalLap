@@ -21,7 +21,12 @@ body {
   font-family: $font-body;
   background: $color-bg-gradient;
   position: relative;
-  overflow-x: hidden;
+  // overflow-x:hidden aquí (además de en html) convierte a body en un
+  // segundo contenedor de scroll independiente del viewport real (html es
+  // document.scrollingElement). position:sticky se recalcula contra el
+  // scroll de su ancestro con overflow más cercano — que sería body — pero
+  // body nunca hace scroll de verdad, así que el nav/progress-bar dejaban
+  // de pegarse al hacer scroll. Basta con el overflow-x:hidden de html.
 }
 
 .titulo {
