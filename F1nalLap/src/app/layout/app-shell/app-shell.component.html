@@ -9,7 +9,19 @@
     </header>
 
     <div id="progress-container" [style.z-index]="overlayState.isOpen() ? 950 : null">
-      <nav appCloseOtherMenus appScrollShadow>
+      <nav appCloseOtherMenus appScrollShadow [class.nav-open]="mobileNavOpen()">
+        <button
+          type="button"
+          class="nav-toggle"
+          [attr.aria-expanded]="mobileNavOpen()"
+          aria-label="Abrir menú de navegación"
+          (click)="toggleMobileNav()"
+        >
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+        </button>
+
         <a
           mat-button
           routerLink="/home"
