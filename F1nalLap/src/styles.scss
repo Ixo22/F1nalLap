@@ -1,5 +1,19 @@
 @use 'styles/tokens' as *;
 
+// Sin este reset, cualquier elemento con width:100% + padding (secciones,
+// tarjetas, formularios) suma el padding por fuera del 100%, desbordando el
+// viewport en pantallas estrechas — la causa más común de "layout cortado"
+// en móvil.
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+}
+
 body {
   height: 100%;
   margin: 0;
@@ -7,6 +21,7 @@ body {
   font-family: $font-body;
   background: $color-bg-gradient;
   position: relative;
+  overflow-x: hidden;
 }
 
 .titulo {
@@ -144,6 +159,31 @@ nav a.active-link:hover {
   color: $color-text;
 }
 
+// Botón hamburguesa: oculto por defecto, solo se muestra en el breakpoint
+// móvil (ver @media max-width:620px) donde reemplaza la fila de enlaces por
+// un desplegable vertical.
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin: 6px 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-toggle-bar {
+  display: block;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background-color: $color-text;
+}
+
 footer {
   background-color: $color-surface;
   color: $color-text;
@@ -221,20 +261,43 @@ button {
 }
 
 #progress-container {
+  // Antes tenía height:6px fijo (pensado para una sola fila del nav) con
+  // margin-bottom:55px para separar del contenido. Cuando el nav envolvía a
+  // una segunda fila (pantallas medianas, 5 enlaces no caben en una fila),
+  // su altura real superaba esos 6px + 55px reservados, y el contenido
+  // siguiente (misma stacking, orden de DOM posterior) se solapaba con esa
+  // segunda fila. Con height:auto el contenedor mide lo que el nav
+  // realmente ocupa, sea una fila o dos, y ya no hay solape.
   position: sticky; /* Mantiene la barra en una posición fija */
   top: 0; /* Ajusta esto según la altura de tu barra de navegación */
   left: 0;
   width: 100%;
-  height: 6px;
+  height: auto;
   background-color: transparent;
   z-index: 1050; /* Asegura que esté por encima de otros elementos */
-  /*border-top: 2px solid white;*/
-  margin-bottom: 55px;
+  margin-bottom: 12px;
+}
+
+// El overlay de Angular Material (mat-menu, mat-dialog, autocomplete) se
+// añade a <body> con z-index:1000 por defecto, por debajo del nav
+// (z-index:1050). Con el nav horizontal apenas se notaba porque el
+// desplegable abría fuera de su franja; en el menú hamburguesa vertical el
+// desplegable de un submenú (Fórmula 1, Clasificación) queda literalmente
+// debajo de los enlaces siguientes del propio nav. Se sube por encima de
+// cualquier elemento sticky de la app.
+.cdk-overlay-container {
+  z-index: 2000;
 }
 
 #progress-bar {
+  // Posicionada de forma absoluta pegada al borde inferior del contenedor,
+  // así no participa del flujo del documento (el contenedor ya no necesita
+  // reservarle una altura fija aparte de la del nav).
+  position: absolute;
+  left: 0;
+  bottom: 0;
   z-index: 10;
-  height: 100%;
+  height: 4px;
   width: 0;
   background-color: $color-gold;
 }
@@ -371,6 +434,16 @@ button {
   nav a {
     font-size: 16px;
   }
+
+  // Los enlaces del nav son <a mat-button>/<button mat-button>: la regla
+  // `.mat-mdc-button` de arriba (padding 10px 25px, font 15px, !important)
+  // gana siempre sobre `nav a`, así que sin overrides propios por breakpoint
+  // el nav se quedaba con el mismo tamaño "de escritorio" hasta los 500px,
+  // desbordando/envolviendo de forma brusca en vez de encoger gradualmente.
+  .mat-mdc-button:not(:disabled) {
+    padding: 9px 18px !important;
+    font-size: 15px !important;
+  }
 }
 
 /* Pantalla Mediana */
@@ -382,6 +455,11 @@ button {
 
   nav a {
     font-size: 14px;
+  }
+
+  .mat-mdc-button:not(:disabled) {
+    padding: 9px 14px !important;
+    font-size: 14px !important;
   }
 
   section {
@@ -403,10 +481,56 @@ button {
   }
 }
 
+// Por debajo de este ancho, 5 enlaces ya no caben cómodamente en una fila
+// aunque se encojan (ver breakpoints de arriba): en vez de seguir
+// reduciendo la letra hasta ser ilegible, el nav pasa a un menú
+// hamburguesa — los enlaces se ocultan y aparecen en una columna a pantalla
+// completa con un tamaño de letra normal al abrir.
 @media (max-width: 620px) {
-  nav a {
-    font-size: 11px;
+  nav {
+    justify-content: flex-start;
+    padding: 0 1rem;
   }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  // Line separator entre items (::before en nav > a/button) no tiene
+  // sentido en una columna a ancho completo — se apaga en modo hamburguesa.
+  nav > a::before,
+  nav > button::before {
+    display: none;
+  }
+
+  // Los enlaces (<a mat-button>) traen su propio display:inline-flex de
+  // Angular Material vía una clase (.mat-mdc-button-base), que por jerarquía
+  // de especificidad CSS gana a un selector de solo tipos como `nav > a`
+  // aunque este sea posterior en la hoja de estilos. De ahí el !important.
+  nav > a,
+  nav > button:not(.nav-toggle) {
+    display: none !important;
+    width: 100%;
+  }
+
+  nav.nav-open {
+    flex-direction: column;
+    align-items: stretch;
+    padding-bottom: 0.5rem;
+  }
+
+  nav.nav-open > a,
+  nav.nav-open > button:not(.nav-toggle) {
+    display: block !important;
+  }
+
+  nav.nav-open .mat-mdc-button:not(:disabled) {
+    width: 100%;
+    padding: 12px 16px !important;
+    font-size: 15px !important;
+    text-align: left;
+  }
+
   .mdc-dialog--open .mat-mdc-dialog-surface,
   .mdc-dialog--closing .mat-mdc-dialog-surface {
     width: 80%;
@@ -425,7 +549,7 @@ button {
 
   body p,
   body ul {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   footer {
@@ -435,15 +559,6 @@ button {
 
   footer a {
     font-size: 10px;
-  }
-
-  nav {
-    padding: 0;
-  }
-
-  .mat-mdc-button:not(:disabled) {
-    padding: 8px 14px !important;
-    font-size: 12px !important;
   }
 
   .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
@@ -459,17 +574,13 @@ button {
     height: 22%;
   }
 
-  nav a {
-    font-size: 9px;
-  }
-
   body h2 {
     font-size: 16px;
   }
 
   body p,
   body ul {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   footer {
