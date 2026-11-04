@@ -1,0 +1,27 @@
+-- 2025 circuit catalogue (previously circuitos2025.json in the Angular app).
+-- Lengths normalised to km and lap records to milliseconds.
+INSERT INTO circuit (id, circuit_ref, name, grand_prix_name, country, laps, length_km, lap_record_ms, image_url) VALUES
+    (1, 'albert_park', 'Albert Park Circuit', 'Australia Grand Prix', 'Australia', 58, 5.278, 79813, 'https://media.api-sports.io/formula-1/circuits/1.png'),
+    (2, 'shanghai', 'Shanghai International Circuit', 'China Grand Prix', 'China', 56, 5.451, 90641, 'https://media.api-sports.io/formula-1/circuits/4.png'),
+    (3, 'suzuka', 'Suzuka International Racing Course', 'Japan Grand Prix', 'Japan', 53, 5.807, 90983, 'https://media.api-sports.io/formula-1/circuits/19.png'),
+    (4, 'bahrain', 'Bahrain International Circuit', 'Bahrain Grand Prix', 'Bahrain', 57, 5.412, 91447, 'https://media.api-sports.io/formula-1/circuits/2.png'),
+    (5, 'jeddah', 'Jeddah Corniche Circuit', 'Saudi Arabia Grand Prix', 'Saudi Arabia', 50, 6.174, 90734, 'https://media.api-sports.io/formula-1/circuits/29.png'),
+    (6, 'miami', 'Miami International Autodrome', 'Miami Grand Prix', 'USA', 57, 5.412, 89708, 'https://media.api-sports.io/formula-1/circuits/31.png'),
+    (7, 'imola', 'Autodromo Enzo e Dino Ferrari', 'Emilia Romagna Grand Prix', 'Italy', 63, 4.909, 75484, 'https://media.api-sports.io/formula-1/circuits/27.png'),
+    (8, 'monaco', 'Circuit de Monaco', 'Monaco Grand Prix', 'Monaco', 78, 3.337, 72909, 'https://media.api-sports.io/formula-1/circuits/7.png'),
+    (9, 'catalunya', 'Circuit de Barcelona-Catalunya', 'Spain Grand Prix', 'Spain', 66, 4.657, 76330, 'https://media.api-sports.io/formula-1/circuits/6.png'),
+    (10, 'villeneuve', 'Circuit Gilles-Villeneuve', 'Canada Grand Prix', 'Canada', 70, 4.361, 73078, 'https://media.api-sports.io/formula-1/circuits/9.png'),
+    (11, 'red_bull_ring', 'Red Bull Ring', 'Austria Grand Prix', 'Austria', 71, 4.318, 65619, 'https://media.api-sports.io/formula-1/circuits/11.png'),
+    (12, 'silverstone', 'Silverstone Circuit', 'Great Britain Grand Prix', 'United Kingdom', 52, 5.891, 87097, 'https://media.api-sports.io/formula-1/circuits/12.png'),
+    (13, 'spa', 'Circuit de Spa-Francorchamps', 'Belgium Grand Prix', 'Belgium', 44, 7.004, 104701, 'https://media.api-sports.io/formula-1/circuits/15.png'),
+    (14, 'hungaroring', 'Hungaroring', 'Hungary Grand Prix', 'Hungary', 70, 4.381, 76627, 'https://media.api-sports.io/formula-1/circuits/14.png'),
+    (15, 'zandvoort', 'Circuit Zandvoort', 'Netherlands Grand Prix', 'Netherlands', 72, 4.259, 71097, 'https://media.api-sports.io/formula-1/circuits/5.png'),
+    (16, 'monza', 'Autodromo Nazionale Monza', 'Italy Grand Prix', 'Italy', 53, 5.793, 81046, 'https://media.api-sports.io/formula-1/circuits/16.png'),
+    (17, 'baku', 'Baku City Circuit', 'Azerbaijan Grand Prix', 'Azerbaijan', 51, 6.003, 103009, 'https://media.api-sports.io/formula-1/circuits/8.png'),
+    (18, 'marina_bay', 'Marina Bay Street Circuit', 'Singapore Grand Prix', 'Singapore', 62, 4.940, 94486, 'https://media.api-sports.io/formula-1/circuits/17.png'),
+    (19, 'americas', 'Circuit of The Americas', 'USA Grand Prix', 'USA', 56, 5.513, 96169, 'https://media.api-sports.io/formula-1/circuits/20.png'),
+    (20, 'rodriguez', 'Autódromo Hermanos Rodríguez', 'Mexico Grand Prix', 'Mexico', 71, 4.304, 77774, 'https://media.api-sports.io/formula-1/circuits/21.png'),
+    (21, 'interlagos', 'Autódromo José Carlos Pace', 'Brazil Grand Prix', 'Brazil', 71, 4.309, 70540, 'https://media.api-sports.io/formula-1/circuits/22.png'),
+    (22, 'vegas', 'Las Vegas Strip Circuit', 'Las Vegas Grand Prix', 'USA', 50, 6.201, 94876, 'https://media.api-sports.io/formula-1/circuits/32.png'),
+    (23, 'losail', 'Losail International Circuit', 'Qatar Grand Prix', 'Qatar', 57, 5.419, 82384, 'https://media.api-sports.io/formula-1/circuits/30.png'),
+    (24, 'yas_marina', 'Yas Marina Circuit', 'Abu Dhabi Grand Prix', 'United Arab Emirates', 58, 5.281, 85637, 'https://media.api-sports.io/formula-1/circuits/23.png');

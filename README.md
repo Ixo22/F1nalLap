@@ -14,6 +14,18 @@ Este proyecto es el resultado de un apasionado por este deporte para su trabajo 
 En esta página entcontrarás una amplia gama de información sobre este mundo, asi como la clasificación de pilotos y constructores de la temporada actual, calendario de carreras y sus resultados, detalles de la temporada actual y hasta resúmenes de temporadas pasadas.
 
 
+## Backend (Spring Boot)
+API REST propia en [`backend/`](./backend): Java 21, Spring Boot 4.1, PostgreSQL y Flyway.
+
+Requisitos: JDK 21 y Docker Desktop.
+
+```bash
+cd backend
+docker compose up --build        # API + Postgres -> http://localhost:8080/actuator/health
+./mvnw spring-boot:run           # desde el IDE/terminal: arranca solo Postgres con Docker Compose
+./mvnw verify                    # tests (Testcontainers levanta un Postgres real)
+```
+
 ## Contacto
 Puede ponerse en contacto conmigo para cualquier consulta sobre la aplicación F1nalLap por correo electrónico: ```aga1036@alu.ubu.es```
 
