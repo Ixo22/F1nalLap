@@ -1,0 +1,129 @@
+# Credentials come from environment variables (SPRING_DATASOURCE_URL,
+# SPRING_DATASOURCE_USERNAME, SPRING_DATASOURCE_PASSWORD). Never commit them.
+spring:
+  application:
+    name: f1nallap-api
+  profiles:
+    default: local
+  threads:
+    virtual:
+      enabled: true
+  jpa:
+    open-in-view: false
+    hibernate:
+      # Flyway owns the schema; Hibernate only checks that entities match it.
+      ddl-auto: validate
+  docker:
+    compose:
+      enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  info:
+    env:
+      enabled: true
+
+app:
+  cors:
+    # Comma-separated list. Override with APP_CORS_ALLOWED_ORIGINS in production.
+    allowed-origins: http://localhost:4200
+
+ingest:
+  base-url: https://api.jolpi.ca/ergast/f1
+  page-size: 100
+  min-interval: 300ms
+  connect-timeout: 5s
+  read-timeout: 30s
+  preload-seasons: [2025]
+  current-season-ttl: 6h
+  # Set INGEST_ADMIN_API_KEY to enable POST /admin/ingest/{season}.
+  admin-api-key: ''
+  refresh-cron: 0 0 6 * * MON
+  retry:
+    max-retries: 3
+    delay: 1s
+
+strategy:
+  pit-stop-seconds: 11.5
+  same-compound-penalty-seconds: 50
+  one-stop-bonus-seconds: 10
+  similarity-threshold-laps: 15
+  initial-phase-last-lap: 5
+  seed: 2025
+  tyres:
+    SOFT:
+      life: 22
+      min-laps: 9
+      max-laps: 15
+      base-offset-seconds: 0
+      initial: { min: 0.20, max: 0.25 }
+      middle: { min: 0.15, max: 0.20 }
+      end: { min: 0.25, max: 0.30 }
+    MEDIUM:
+      life: 33
+      min-laps: 15
+      max-laps: 30
+      base-offset-seconds: 0.9
+      initial: { min: 0.15, max: 0.20 }
+      middle: { min: 0.13, max: 0.17 }
+      end: { min: 0.18, max: 0.26 }
+    HARD:
+      life: 50
+      min-laps: 25
+      max-laps: 40
+      base-offset-seconds: 1.7
+      initial: { min: 0.12, max: 0.16 }
+      middle: { min: 0.09, max: 0.14 }
+      # Much more aggressive than its middle phase; kept as in the original.
+      end: { min: 0.15, max: 0.80 }
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+info:
+  app:
+    name: F1nalLap API
+    version: '@project.version@'
+
+---
+# Local development: running the app from the IDE starts only the Postgres
+# service of compose.yaml and wires the datasource automatically.
+spring:
+  config:
+    activate:
+      on-profile: local
+  docker:
+    compose:
+      enabled: true
+      file: compose.yaml
+      lifecycle-management: start-only
+      start:
+        arguments: postgres
+
+---
+# Production (Render + Neon): small connection pool for the free database tier.
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    hikari:
+      maximum-pool-size: 5
+ingest:
+  preload-seasons: [2025, 2024]
+
+---
+# Tests: Testcontainers provides the database through @ServiceConnection.
+spring:
+  config:
+    activate:
+      on-profile: test
+ingest:
+  preload-seasons: []
+  min-interval: 0ms
+  retry:
+    delay: 10ms

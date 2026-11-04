@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: 'postgres:17-alpine'
+    environment:
+      POSTGRES_DB: f1nallap
+      POSTGRES_USER: f1nallap
+      POSTGRES_PASSWORD: f1nallap
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U f1nallap -d f1nallap']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/f1nallap
+      SPRING_DATASOURCE_USERNAME: f1nallap
+      SPRING_DATASOURCE_PASSWORD: f1nallap
+    ports:
+      - '8080:8080'
+    labels:
+      # Spring Boot's Docker Compose support must not treat the API as a dependency.
+      org.springframework.boot.ignore: 'true'
+
+volumes:
+  pgdata:

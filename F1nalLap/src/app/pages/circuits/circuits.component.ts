@@ -7,9 +7,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { EstrategiasService } from '../../services/strategies.service';
+import { forkJoin, of } from 'rxjs';
+import { DegradacionPunto, EstrategiasService } from '../../services/strategies.service';
+import { F1ApiService } from '../../services/f1-api.service';
 import { LegendPosition, NgxChartsModule } from '@swimlane/ngx-charts';
-import circuitosJson from '../../../assets/json/circuitos2025.json';
 import { CircuitInfo } from '../../models/circuit.models';
 import {
   Compuesto,
@@ -18,12 +19,6 @@ import {
   StintResultado,
   esEstrategiaValida,
 } from '../../models/estrategia.models';
-
-interface DegradacionPunto {
-  vuelta: number;
-  value: number;
-  fase: string;
-}
 
 interface DegradacionChartSerie {
   name: string;
@@ -49,6 +44,7 @@ interface DegradacionChartSerie {
 })
 export class CircuitsComponent implements OnInit {
   private strategiesService = inject<EstrategiasService>(EstrategiasService);
+  private f1Api = inject(F1ApiService);
   private snackBar = inject(MatSnackBar);
   private destroyRef = inject(DestroyRef);
 
@@ -73,8 +69,15 @@ export class CircuitsComponent implements OnInit {
   LegendPosition = LegendPosition;
 
   ngOnInit(): void {
-    this.circuits = circuitosJson;
-    this.filteredCircuits = circuitosJson;
+    this.f1Api
+      .getCircuits()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((circuits) => {
+        this.circuits = circuits;
+        this.filteredCircuits = this._filterCircuits(
+          typeof this.circuitControl.value === 'string' ? this.circuitControl.value : ''
+        );
+      });
 
     this.circuitControl.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -176,12 +179,16 @@ export class CircuitsComponent implements OnInit {
       .filter((s): s is { compuesto: string; vueltas: number } => Boolean(s.compuesto && s.vueltas))
       .map((s) => [s.compuesto.toLowerCase() as Compuesto, Number(s.vueltas)]);
 
-    this.strategiesService
-      .simularEstrategiaLibre(this.selectedCircuit, estrategia)
-      .subscribe((res) => {
+    this.strategiesService.simularEstrategiaLibre(this.selectedCircuit, estrategia).subscribe({
+      next: (res) => {
         this.simuladorResultado = res;
         this.actualizarGraficaDegradacion();
-      });
+      },
+      error: () =>
+        this.snackBar.open('No se pudo simular la estrategia. Inténtalo de nuevo.', 'Cerrar', {
+          duration: 5000,
+        }),
+    });
   }
 
   calcularMejoresEstrategias(circuit: CircuitInfo): void {
@@ -208,101 +215,66 @@ export class CircuitsComponent implements OnInit {
   diferenciaTiemposChartData: DegradacionChartSerie[] = [];
 
   actualizarGraficaDegradacion() {
+    const circuito = this.selectedCircuit;
     const stintsSim = this.simuladorResultado?.stints ?? [];
     const stintsCalc = this.bestStrategies[0]?.stints ?? [];
+    if (!circuito) return;
 
-    this.degradacionSimuladaChartData = [];
-    this.degradacionCalculadaChartData = [];
     this.tiemposPorVueltaSimulada = [];
     this.tiemposPorVueltaCalculada = [];
 
-    let vueltaGlobal = 1;
+    forkJoin([
+      this.degradacionDeStints(circuito, stintsSim),
+      this.degradacionDeStints(circuito, stintsCalc),
+    ]).subscribe(([simulada, calculada]) => {
+      this.degradacionSimuladaChartData = this.toChartSeries(stintsSim, simulada);
+      this.degradacionCalculadaChartData = this.toChartSeries(stintsCalc, calculada);
 
-    stintsSim.forEach((stint, idx) => {
-      const degradaciones = this.calcularDegradacionStintPorFase(
-        stint.compuesto,
-        stint.vueltas,
-        this.strategiesService
-      );
-      this.degradacionSimuladaChartData.push({
-        name: `${stint.compuesto} (${idx + 1})`,
-        series: degradaciones.map((d) => ({
-          name: (vueltaGlobal++).toString(),
-          value: d.value,
-          extra: { fase: d.fase },
-        })),
+      const diferenciaTiempos = this.tiemposPorVueltaSimulada.map((simuladaVuelta, index) => {
+        const calculadaVuelta = this.tiemposPorVueltaCalculada[index];
+        return {
+          vuelta: index + 1,
+          diferencia: calculadaVuelta ? simuladaVuelta.tiempo - calculadaVuelta.tiempo : 0,
+        };
       });
-    });
 
-    vueltaGlobal = 1;
-    stintsCalc.forEach((stint, idx) => {
-      const degradaciones = this.calcularDegradacionStintPorFase(
-        stint.compuesto,
-        stint.vueltas,
-        this.strategiesService
-      );
-      this.degradacionCalculadaChartData.push({
-        name: `${stint.compuesto} (${idx + 1})`,
-        series: degradaciones.map((d) => ({
-          name: (vueltaGlobal++).toString(),
-          value: d.value,
-          extra: { fase: d.fase },
-        })),
-      });
+      this.diferenciaTiemposChartData = [
+        {
+          name: 'Diferencia de Tiempos (simulada vs calculada)',
+          series: diferenciaTiempos.map((d) => ({
+            name: d.vuelta.toString(),
+            value: d.diferencia,
+            extra: { fase: '' },
+          })),
+        },
+      ];
     });
-
-    const diferenciaTiempos = this.tiemposPorVueltaSimulada.map((simulada, index) => {
-      const calculada = this.tiemposPorVueltaCalculada[index];
-      return {
-        vuelta: index + 1,
-        diferencia: calculada ? simulada.tiempo - calculada.tiempo : 0,
-      };
-    });
-
-    this.diferenciaTiemposChartData = [
-      {
-        name: 'Diferencia de Tiempos (simulada vs calculada)',
-        series: diferenciaTiempos.map((d) => ({
-          name: d.vuelta.toString(),
-          value: d.diferencia,
-          extra: { fase: '' },
-        })),
-      },
-    ];
   }
 
-  private calcularDegradacionStintPorFase(
-    compuesto: Compuesto,
-    vueltas: number,
-    service: EstrategiasService
-  ): DegradacionPunto[] {
-    const vidaUtil = service.getVidaUtil(compuesto);
-    const vidaUtilPromedio = Math.floor(vidaUtil / 2);
-    const degradaciones: DegradacionPunto[] = [];
+  /** Pide al backend la degradación de cada stint (una petición por stint, en paralelo). */
+  private degradacionDeStints(circuito: CircuitInfo, stints: StintResultado[]) {
+    if (stints.length === 0) return of([] as DegradacionPunto[][]);
+    return forkJoin(
+      stints.map((s) =>
+        this.strategiesService.getDegradacionStint(circuito, s.compuesto, s.vueltas)
+      )
+    );
+  }
 
-    for (let vuelta = 0; vuelta < vueltas; vuelta++) {
-      let fase: 'inicial' | 'media' | 'final';
-
-      if (vuelta <= 5) fase = 'inicial';
-      else if (vuelta <= vidaUtilPromedio && vuelta > 5) fase = 'media';
-      else fase = 'final';
-
-      let degradacion: number;
-      if (vuelta >= vidaUtil) {
-        const vueltasFueraVidaUtil = vuelta - vidaUtil;
-        degradacion = 0.5 + Math.pow(vueltasFueraVidaUtil, 1.5) * 1.5;
-      } else {
-        degradacion = service.calcularDegradacionPorVuelta(compuesto, vuelta, vueltas);
-      }
-
-      degradaciones.push({
-        vuelta: vuelta + 1,
-        value: degradacion,
-        fase: fase,
-      });
-    }
-
-    return degradaciones;
+  /** Numera las vueltas de forma global a lo largo de la carrera. */
+  private toChartSeries(
+    stints: StintResultado[],
+    degradaciones: DegradacionPunto[][]
+  ): DegradacionChartSerie[] {
+    let vueltaGlobal = 1;
+    return stints.map((stint, idx) => ({
+      name: `${stint.compuesto} (${idx + 1})`,
+      series: (degradaciones[idx] ?? []).map((d) => ({
+        name: (vueltaGlobal++).toString(),
+        value: d.value,
+        extra: { fase: d.fase },
+      })),
+    }));
   }
 
   get simuladoVsMejorClases(): Record<string, boolean> {

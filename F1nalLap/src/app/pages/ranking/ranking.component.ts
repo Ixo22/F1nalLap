@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { map, catchError, of, switchMap, forkJoin } from 'rxjs';
+import { map, catchError, of, forkJoin } from 'rxjs';
 
 import { CommonModule } from '@angular/common';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -20,9 +20,7 @@ import { Dialog2025RaceResultsComponent } from '../../components/dialog-2025-rac
 import { F1ApiService } from '../../services/f1-api.service';
 import { OverlayStateService } from '../../layout/overlay-state.service';
 import { ConstructorStanding, DriverStanding } from '../../models/f1-api.models';
-import { CircuitInfo } from '../../models/circuit.models';
 import teamsJson from '../../../assets/json/teams.json';
-import circuitosJson from '../../../assets/json/circuitos2025.json';
 
 const SEASON = 2025;
 
@@ -76,7 +74,6 @@ export class RankingComponent implements OnInit {
   private overlayState = inject(OverlayStateService);
 
   private teamsData = teamsJson.response as TeamResponse[];
-  private circuitsData = circuitosJson as CircuitInfo[];
 
   public items: WritableSignal<DisplayItem[]> = signal([]);
   public carreras: WritableSignal<DisplayRace[]> = signal([]);
@@ -122,36 +119,23 @@ export class RankingComponent implements OnInit {
     this.isDrivers.set(false);
     this.items.set([]);
 
-    this.f1Api
-      .getSeasonSchedule(SEASON)
+    forkJoin([this.f1Api.getSeasonResults(SEASON), this.f1Api.getCircuits()])
       .pipe(
-        switchMap((races) => {
-          const calls = races.map((race) =>
-            this.f1Api.getRaceResults(SEASON, race.round).pipe(
-              map((results) =>
-                results.slice(0, 3).map((rs) => ({
-                  position: rs.position,
-                  driver: `${rs.Driver.givenName} ${rs.Driver.familyName}`,
-                }))
-              ),
-              catchError(() => of([] as PodiumEntry[]))
-            )
-          );
-          return forkJoin(calls).pipe(
-            map((podiums) =>
-              races.map((race, idx) => {
-                const info = this.circuitsData.find((c) => c.circuitId === race.Circuit.circuitId);
-                return {
-                  round: race.round,
-                  race: race.raceName ?? '—',
-                  date: race.date ?? '—',
-                  podium: podiums[idx],
-                  circuitImage: info?.image,
-                } as DisplayRace;
-              })
-            )
-          );
-        }),
+        map(([races, circuits]) =>
+          races.map((race) => {
+            const info = circuits.find((c) => c.circuitId === race.Circuit.circuitId);
+            return {
+              round: race.round,
+              race: race.raceName ?? '—',
+              date: race.date ?? '—',
+              podium: (race.Results ?? []).slice(0, 3).map((rs) => ({
+                position: rs.position,
+                driver: `${rs.Driver.givenName} ${rs.Driver.familyName}`,
+              })),
+              circuitImage: info?.image,
+            } as DisplayRace;
+          })
+        ),
         catchError(() => of([]))
       )
       .subscribe((data) => this.carreras.set(data));

@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CommonModule } from '@angular/common';
@@ -303,39 +303,35 @@ export class CompararComponent implements OnInit {
     this.carrerasLabels = [];
 
     const season = this.temporadaControl.value;
-    this.f1Api.getSeasonSchedule(season).subscribe((carreras) => {
+    this.f1Api.getSeasonResults(season).subscribe((carreras) => {
       this.carrerasLabels = carreras.map((c) =>
         (c.raceName ?? '—').replace(/ Grand Prix/i, '').trim()
       );
+      const resultadosPorCarrera = carreras.map((c) => c.Results ?? []);
+      const puntos1 = resultadosPorCarrera.map((results) => {
+        const resultado = results.find(
+          (r) => `${r.Driver.givenName} ${r.Driver.familyName}` === piloto1.piloto
+        );
+        return resultado ? +resultado.points! : 0;
+      });
+      const puntos2 = resultadosPorCarrera.map((results) => {
+        const resultado = results.find(
+          (r) => `${r.Driver.givenName} ${r.Driver.familyName}` === piloto2.piloto
+        );
+        return resultado ? +resultado.points! : 0;
+      });
 
-      forkJoin(carreras.map((c) => this.f1Api.getRaceResults(season, c.round))).subscribe(
-        (resultadosPorCarrera) => {
-          const puntos1 = resultadosPorCarrera.map((results) => {
-            const resultado = results.find(
-              (r) => `${r.Driver.givenName} ${r.Driver.familyName}` === piloto1.piloto
-            );
-            return resultado ? +resultado.points! : 0;
-          });
-          const puntos2 = resultadosPorCarrera.map((results) => {
-            const resultado = results.find(
-              (r) => `${r.Driver.givenName} ${r.Driver.familyName}` === piloto2.piloto
-            );
-            return resultado ? +resultado.points! : 0;
-          });
-
-          this.puntosPorCarrera = [
-            {
-              name: piloto1.piloto,
-              series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos1[i] })),
-            },
-            {
-              name: piloto2.piloto,
-              series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos2[i] })),
-            },
-          ];
-          this.cargandoPuntos = false;
-        }
-      );
+      this.puntosPorCarrera = [
+        {
+          name: piloto1.piloto,
+          series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos1[i] })),
+        },
+        {
+          name: piloto2.piloto,
+          series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos2[i] })),
+        },
+      ];
+      this.cargandoPuntos = false;
     });
   }
 
@@ -349,37 +345,33 @@ export class CompararComponent implements OnInit {
     this.carrerasLabels = [];
 
     const season = this.temporadaControl.value;
-    this.f1Api.getSeasonSchedule(season).subscribe((carreras) => {
+    this.f1Api.getSeasonResults(season).subscribe((carreras) => {
       this.carrerasLabels = carreras.map((c) =>
         (c.raceName ?? '—').replace(/ Grand Prix/i, '').trim()
       );
-
-      forkJoin(carreras.map((c) => this.f1Api.getRaceResults(season, c.round))).subscribe(
-        (resultadosPorCarrera) => {
-          const puntos1 = resultadosPorCarrera.map((results) =>
-            results
-              .filter((r) => r.Constructor.name === equipo1.constructor)
-              .reduce((acc, curr) => acc + +(curr.points ?? 0), 0)
-          );
-          const puntos2 = resultadosPorCarrera.map((results) =>
-            results
-              .filter((r) => r.Constructor.name === equipo2.constructor)
-              .reduce((acc, curr) => acc + +(curr.points ?? 0), 0)
-          );
-
-          this.puntosPorCarrera = [
-            {
-              name: equipo1.constructor,
-              series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos1[i] })),
-            },
-            {
-              name: equipo2.constructor,
-              series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos2[i] })),
-            },
-          ];
-          this.cargandoPuntos = false;
-        }
+      const resultadosPorCarrera = carreras.map((c) => c.Results ?? []);
+      const puntos1 = resultadosPorCarrera.map((results) =>
+        results
+          .filter((r) => r.Constructor.name === equipo1.constructor)
+          .reduce((acc, curr) => acc + +(curr.points ?? 0), 0)
       );
+      const puntos2 = resultadosPorCarrera.map((results) =>
+        results
+          .filter((r) => r.Constructor.name === equipo2.constructor)
+          .reduce((acc, curr) => acc + +(curr.points ?? 0), 0)
+      );
+
+      this.puntosPorCarrera = [
+        {
+          name: equipo1.constructor,
+          series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos1[i] })),
+        },
+        {
+          name: equipo2.constructor,
+          series: this.carrerasLabels.map((label, i) => ({ name: label, value: puntos2[i] })),
+        },
+      ];
+      this.cargandoPuntos = false;
     });
   }
 
