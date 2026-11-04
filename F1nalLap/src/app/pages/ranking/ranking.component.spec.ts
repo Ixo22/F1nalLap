@@ -50,12 +50,14 @@ describe('RankingComponent', () => {
     f1ApiSpy = jasmine.createSpyObj('F1ApiService', [
       'getDriverStandings',
       'getConstructorStandings',
-      'getSeasonSchedule',
+      'getSeasonResults',
       'getRaceResults',
+      'getCircuits',
     ]);
     f1ApiSpy.getDriverStandings.and.returnValue(of([driverStanding]));
     f1ApiSpy.getConstructorStandings.and.returnValue(of([constructorStanding]));
-    f1ApiSpy.getSeasonSchedule.and.returnValue(of([raceEntry]));
+    f1ApiSpy.getSeasonResults.and.returnValue(of([{ ...raceEntry, Results: [raceResult] }]));
+    f1ApiSpy.getCircuits.and.returnValue(of([]));
     f1ApiSpy.getRaceResults.and.returnValue(of([raceResult]));
 
     TestBed.configureTestingModule({
@@ -98,8 +100,7 @@ describe('RankingComponent', () => {
 
     queryParams$.next({ view: 'races' });
 
-    expect(f1ApiSpy.getSeasonSchedule).toHaveBeenCalledWith(2025);
-    expect(f1ApiSpy.getRaceResults).toHaveBeenCalledWith(2025, '1');
+    expect(f1ApiSpy.getSeasonResults).toHaveBeenCalledWith(2025);
     expect(fixture.componentInstance.carreras()).toEqual([
       jasmine.objectContaining({
         round: '1',

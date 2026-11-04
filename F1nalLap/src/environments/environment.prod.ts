@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  f1ApiBaseUrl: 'https://api.jolpi.ca/ergast/f1',
+  apiBaseUrl: 'https://f1nallap-api.onrender.com/api/v1',
 };

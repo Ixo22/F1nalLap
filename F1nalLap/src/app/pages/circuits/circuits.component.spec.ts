@@ -5,15 +5,39 @@ import { of } from 'rxjs';
 
 import { CircuitsComponent } from './circuits.component';
 import { EstrategiasService } from '../../services/strategies.service';
+import { F1ApiService } from '../../services/f1-api.service';
 import { CircuitInfo } from '../../models/circuit.models';
 import { EstrategiaResultado, MejorEstrategiaResultado } from '../../models/estrategia.models';
-import circuitosJson from '../../../assets/json/circuitos2025.json';
 
 describe('CircuitsComponent', () => {
   let strategiesSpy: jasmine.SpyObj<EstrategiasService>;
   let snackBarSpy: jasmine.SpyObj<MatSnackBar>;
 
-  const circuito: CircuitInfo = (circuitosJson as CircuitInfo[])[0];
+  const circuitos: CircuitInfo[] = [
+    {
+      id: 1,
+      name: 'Albert Park Circuit',
+      image: 'https://media.api-sports.io/formula-1/circuits/1.png',
+      name_GP: 'Australia Grand Prix',
+      country: 'Australia',
+      laps: 58,
+      length: '5.278 km',
+      lap_record: '1:19.813',
+      circuitId: 'albert_park',
+    },
+    {
+      id: 2,
+      name: 'Shanghai International Circuit',
+      image: 'https://media.api-sports.io/formula-1/circuits/4.png',
+      name_GP: 'China Grand Prix',
+      country: 'China',
+      laps: 56,
+      length: '5.451 km',
+      lap_record: '1:30.641',
+      circuitId: 'shanghai',
+    },
+  ];
+  const circuito: CircuitInfo = circuitos[0];
 
   const estrategiaValida: EstrategiaResultado = {
     estrategia: 1,
@@ -30,17 +54,21 @@ describe('CircuitsComponent', () => {
     strategiesSpy = jasmine.createSpyObj('EstrategiasService', [
       'getBestStrategies',
       'simularEstrategiaLibre',
-      'getVidaUtil',
-      'calcularDegradacionPorVuelta',
+      'getDegradacionStint',
     ]);
-    strategiesSpy.getVidaUtil.and.returnValue(30);
-    strategiesSpy.calcularDegradacionPorVuelta.and.returnValue(0.2);
+    strategiesSpy.getDegradacionStint.and.returnValue(
+      of([{ vuelta: 1, value: 0.2, fase: 'inicial' }])
+    );
     strategiesSpy.getBestStrategies.and.returnValue(of([]));
     snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
 
     TestBed.configureTestingModule({
       imports: [CircuitsComponent],
-      providers: [provideRouter([]), { provide: EstrategiasService, useValue: strategiesSpy }],
+      providers: [
+        provideRouter([]),
+        { provide: EstrategiasService, useValue: strategiesSpy },
+        { provide: F1ApiService, useValue: { getCircuits: () => of(circuitos) } },
+      ],
     });
     // CircuitsComponent importa MatSnackBarModule directamente en su @Component,
     // lo que crea un injector propio para el componente: un `providers: [...]`
@@ -49,11 +77,11 @@ describe('CircuitsComponent', () => {
     TestBed.overrideProvider(MatSnackBar, { useValue: snackBarSpy });
   });
 
-  it('loads every circuit from the local JSON on init', () => {
+  it('loads every circuit from the API on init', () => {
     const fixture = TestBed.createComponent(CircuitsComponent);
     fixture.detectChanges();
 
-    expect(fixture.componentInstance.circuits.length).toBe((circuitosJson as CircuitInfo[]).length);
+    expect(fixture.componentInstance.circuits.length).toBe(circuitos.length);
     expect(fixture.componentInstance.filteredCircuits).toEqual(fixture.componentInstance.circuits);
   });
 

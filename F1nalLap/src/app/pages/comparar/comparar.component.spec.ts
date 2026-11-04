@@ -60,13 +60,13 @@ describe('CompararComponent', () => {
     f1ApiSpy = jasmine.createSpyObj('F1ApiService', [
       'getDriverStandings',
       'getConstructorStandings',
-      'getSeasonSchedule',
-      'getRaceResults',
+      'getSeasonResults',
     ]);
     f1ApiSpy.getDriverStandings.and.returnValue(of([driverStanding, otroDriverStanding]));
     f1ApiSpy.getConstructorStandings.and.returnValue(of([constructorStanding]));
-    f1ApiSpy.getSeasonSchedule.and.returnValue(of([raceEntry]));
-    f1ApiSpy.getRaceResults.and.returnValue(of([resultadoVerstappen, resultadoNorris]));
+    f1ApiSpy.getSeasonResults.and.returnValue(
+      of([{ ...raceEntry, Results: [resultadoVerstappen, resultadoNorris] }])
+    );
 
     TestBed.configureTestingModule({
       imports: [CompararComponent],
@@ -118,8 +118,7 @@ describe('CompararComponent', () => {
     component.piloto1Control.setValue('Max Verstappen');
     component.piloto2Control.setValue('Lando Norris');
 
-    expect(f1ApiSpy.getSeasonSchedule).toHaveBeenCalledWith(2025);
-    expect(f1ApiSpy.getRaceResults).toHaveBeenCalledWith(2025, '1');
+    expect(f1ApiSpy.getSeasonResults).toHaveBeenCalledWith(2025);
     expect(component.puntosPorCarrera).toEqual([
       { name: 'Max Verstappen', series: [{ name: 'Australia', value: 25 }] },
       { name: 'Lando Norris', series: [{ name: 'Australia', value: 18 }] },

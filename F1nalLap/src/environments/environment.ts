@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  f1ApiBaseUrl: 'https://api.jolpi.ca/ergast/f1',
+  apiBaseUrl: 'http://localhost:8080/api/v1',
 };

@@ -1,154 +1,128 @@
 import { TestBed } from '@angular/core/testing';
-import { firstValueFrom } from 'rxjs';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { environment } from '../../environments/environment';
 import { EstrategiasService } from './strategies.service';
 import { CircuitInfo } from '../models/circuit.models';
-import { esEstrategiaValida } from '../models/estrategia.models';
+import { MejorEstrategiaResultado } from '../models/estrategia.models';
 
 describe('EstrategiasService', () => {
   let service: EstrategiasService;
+  let httpMock: HttpTestingController;
+  const url = `${environment.apiBaseUrl}/circuits/albert_park`;
 
   const circuito: CircuitInfo = {
     id: 1,
-    name: 'Suzuka Circuit',
+    name: 'Albert Park Circuit',
     image: '',
-    name_GP: 'Japan Grand Prix',
-    country: 'Japan',
-    laps: 53,
-    length: '5.807 km',
-    lap_record: '1:30.983',
-    circuitId: 'suzuka',
+    name_GP: 'Australia Grand Prix',
+    country: 'Australia',
+    laps: 58,
+    length: '5.278 km',
+    lap_record: '1:19.813',
+    circuitId: 'albert_park',
   };
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+    });
     service = TestBed.inject(EstrategiasService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  afterEach(() => httpMock.verify());
+
+  it('maps the best strategies to the Spanish model', () => {
+    let result: MejorEstrategiaResultado[] = [];
+    service.getBestStrategies(circuito).subscribe((r) => (result = r));
+
+    httpMock.expectOne(`${url}/strategies/best`).flush([
+      {
+        rank: 1,
+        stops: 1,
+        stints: [
+          { compound: 'MEDIUM', laps: 25 },
+          { compound: 'HARD', laps: 33 },
+        ],
+        totalTimeSeconds: 4734.5,
+        formattedTime: '1:18:54.500',
+      },
+    ]);
+
+    expect(result).toEqual([
+      {
+        estrategia: 1,
+        paradas: 1,
+        stints: [
+          { compuesto: 'medios', vueltas: 25 },
+          { compuesto: 'duros', vueltas: 33 },
+        ],
+        tiempo_total_segundos: 4734.5,
+        tiempo_formateado: '1:18:54.500',
+      },
+    ]);
   });
 
-  describe('getVidaUtil', () => {
-    it('returns the expected tyre life for each compound', () => {
-      expect(service.getVidaUtil('blandos')).toBe(22);
-      expect(service.getVidaUtil('medios')).toBe(33);
-      expect(service.getVidaUtil('duros')).toBe(50);
-    });
+  it('returns an error entry when there are no strategies or the API fails', () => {
+    let empty: MejorEstrategiaResultado[] = [];
+    let failed: MejorEstrategiaResultado[] = [];
+    service.getBestStrategies(circuito).subscribe((r) => (empty = r));
+    httpMock.expectOne(`${url}/strategies/best`).flush([]);
+    service.getBestStrategies(circuito).subscribe((r) => (failed = r));
+    httpMock.expectOne(`${url}/strategies/best`).flush(null, { status: 500, statusText: 'Error' });
+
+    expect('error' in empty[0]).toBeTrue();
+    expect('error' in failed[0]).toBeTrue();
   });
 
-  describe('calcularDegradacionPorVuelta', () => {
-    it('stays within the "inicial" phase range for the first laps', () => {
-      spyOn(Math, 'random').and.returnValue(0.5);
-      const valor = service.calcularDegradacionPorVuelta('blandos', 0, 20);
-      expect(valor).toBeGreaterThanOrEqual(0.2);
-      expect(valor).toBeLessThanOrEqual(0.25);
+  it('sends a free strategy with English compound names', () => {
+    let paradas: number | undefined;
+    service
+      .simularEstrategiaLibre(circuito, [
+        ['blandos', 20],
+        ['duros', 38],
+      ])
+      .subscribe((r) => (paradas = r.paradas));
+
+    const req = httpMock.expectOne(`${url}/strategies/simulate`);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual({
+      stints: [
+        { compound: 'SOFT', laps: 20 },
+        { compound: 'HARD', laps: 38 },
+      ],
+    });
+    req.flush({
+      rank: null,
+      stops: 1,
+      stints: req.request.body.stints,
+      totalTimeSeconds: 4800,
+      formattedTime: '1:20:00.000',
     });
 
-    it('stays within the "media" phase range once past lap 5 and before the tyre midlife', () => {
-      spyOn(Math, 'random').and.returnValue(0.5);
-      // vidaUtil.medios = 33 -> mitad = 16, así que la vuelta 10 cae en fase "media"
-      const valor = service.calcularDegradacionPorVuelta('medios', 10, 20);
-      expect(valor).toBeGreaterThanOrEqual(0.13);
-      expect(valor).toBeLessThanOrEqual(0.17);
-    });
-
-    it('stays within the "final" phase range once past the tyre midlife', () => {
-      spyOn(Math, 'random').and.returnValue(0.5);
-      // vidaUtil.duros = 50 -> mitad = 25, así que la vuelta 30 cae en fase "final"
-      const valor = service.calcularDegradacionPorVuelta('duros', 30, 35);
-      expect(valor).toBeGreaterThanOrEqual(0.15);
-      expect(valor).toBeLessThanOrEqual(0.8);
-    });
+    expect(paradas).toBe(1);
   });
 
-  describe('calcularMejoresEstrategias', () => {
-    it('returns strategies whose stints add up to the total race laps', () => {
-      const resultados = service.calcularMejoresEstrategias(circuito);
-      expect(resultados.length).toBeGreaterThan(0);
+  it('maps lap-by-lap degradation and its phases', () => {
+    let puntos: { vuelta: number; fase: string; value: number }[] = [];
+    service.getDegradacionStint(circuito, 'medios', 2).subscribe((p) => (puntos = p));
 
-      const validas = resultados.filter(esEstrategiaValida);
-      expect(validas.length).toBeGreaterThan(0);
-
-      for (const estrategia of validas) {
-        const totalVueltas = estrategia.stints.reduce((acc, s) => acc + s.vueltas, 0);
-        expect(totalVueltas).toBe(circuito.laps);
-        expect(estrategia.paradas).toBe(estrategia.stints.length - 1);
-      }
+    const req = httpMock.expectOne((r) => r.url === `${url}/degradation`);
+    expect(req.request.params.get('compound')).toBe('MEDIUM');
+    expect(req.request.params.get('laps')).toBe('2');
+    req.flush({
+      compound: 'MEDIUM',
+      tyreLife: 33,
+      laps: [
+        { lap: 1, phase: 'INITIAL', degradationSeconds: 0.17 },
+        { lap: 2, phase: 'END', degradationSeconds: 0.2 },
+      ],
     });
 
-    it('every returned strategy uses at least two different compounds', () => {
-      const resultados = service.calcularMejoresEstrategias(circuito).filter(esEstrategiaValida);
-      for (const estrategia of resultados) {
-        const compuestosUsados = new Set(estrategia.stints.map((s) => s.compuesto));
-        expect(compuestosUsados.size).toBeGreaterThanOrEqual(2);
-      }
-    });
-
-    it('sorts strategies from best (lowest) to worst total time', () => {
-      const resultados = service.calcularMejoresEstrategias(circuito).filter(esEstrategiaValida);
-      for (let i = 1; i < resultados.length; i++) {
-        expect(resultados[i].tiempo_total_segundos).toBeGreaterThanOrEqual(
-          resultados[i - 1].tiempo_total_segundos
-        );
-      }
-    });
-
-    it('formats tiempo_formateado as m:ss.mmm', () => {
-      const [primera] = service.calcularMejoresEstrategias(circuito).filter(esEstrategiaValida);
-      expect(primera.tiempo_formateado).toMatch(/^\d+:\d{2}(:\d{2})?\.\d{3}$/);
-    });
-  });
-
-  describe('simularEstrategiaLibre', () => {
-    it('computes a two-stint strategy with one pit stop', async () => {
-      const resultado = await firstValueFrom(
-        service.simularEstrategiaLibre(circuito, [
-          ['medios', 20],
-          ['duros', 33],
-        ])
-      );
-
-      expect(resultado.paradas).toBe(1);
-      expect(resultado.stints).toEqual([
-        { compuesto: 'medios', vueltas: 20 },
-        { compuesto: 'duros', vueltas: 33 },
-      ]);
-      expect(resultado.tiempo_total_segundos).toBeGreaterThan(0);
-      expect(resultado.tiempo_formateado).toMatch(/^\d+:\d{2}(:\d{2})?\.\d{3}$/);
-    });
-
-    it('applies a heavier degradation penalty once a stint outlives the tyre', async () => {
-      spyOn(Math, 'random').and.returnValue(0);
-
-      const dentroDeVida = await firstValueFrom(
-        service.simularEstrategiaLibre(circuito, [
-          ['blandos', 20],
-          ['duros', 33],
-        ])
-      );
-      const masAllaDeVida = await firstValueFrom(
-        service.simularEstrategiaLibre(circuito, [
-          ['blandos', 25],
-          ['duros', 28],
-        ])
-      );
-
-      // 25 vueltas > vidaUtil.blandos (22) debería penalizar el tiempo total
-      // más que simplemente sumar 5 vueltas extra a ritmo normal.
-      const tiempoExtraPorVuelta =
-        (masAllaDeVida.tiempo_total_segundos - dentroDeVida.tiempo_total_segundos) / 5;
-      // Con Math.random() fijado a 0, la degradación normal máxima es 0.8s/vuelta
-      // (duros, fase final); un extra muy por encima de eso solo se explica por la
-      // penalización de "0.5 + vueltasFueraDeVida^1.5 * 1.5" al superar vidaUtil.
-      expect(tiempoExtraPorVuelta).toBeGreaterThan(1);
-    });
-  });
-
-  describe('getBestStrategies', () => {
-    it('wraps calcularMejoresEstrategias in an observable', async () => {
-      const resultado = await firstValueFrom(service.getBestStrategies(circuito));
-      expect(Array.isArray(resultado)).toBeTrue();
-      expect(resultado.length).toBeGreaterThan(0);
-    });
+    expect(puntos).toEqual([
+      { vuelta: 1, fase: 'inicial', value: 0.17 },
+      { vuelta: 2, fase: 'final', value: 0.2 },
+    ]);
   });
 });
