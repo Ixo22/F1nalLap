@@ -31,6 +31,10 @@ public class RaceResult {
 	@JoinColumn(name = "constructor_id")
 	private Constructor constructor;
 
+	/** Order of the row in the classification; unique per race, unlike position. */
+	@Column(name = "result_order", nullable = false)
+	private Integer resultOrder;
+
 	@Column(nullable = false)
 	private Integer position;
 
@@ -52,12 +56,13 @@ public class RaceResult {
 	protected RaceResult() {
 	}
 
-	public RaceResult(Race race, Driver driver, Constructor constructor, int position,
+	public RaceResult(Race race, Driver driver, Constructor constructor, int resultOrder, int position,
 			String positionText, Integer grid, BigDecimal points, String status, Integer laps,
 			String fastestLapTime) {
 		this.race = race;
 		this.driver = driver;
 		this.constructor = constructor;
+		this.resultOrder = resultOrder;
 		this.position = position;
 		this.positionText = positionText;
 		this.grid = grid;
@@ -81,6 +86,10 @@ public class RaceResult {
 
 	public Constructor getConstructor() {
 		return constructor;
+	}
+
+	public Integer getResultOrder() {
+		return resultOrder;
 	}
 
 	public Integer getPosition() {

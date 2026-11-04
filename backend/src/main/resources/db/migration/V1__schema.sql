@@ -35,12 +35,14 @@ CREATE TABLE race (
 );
 CREATE INDEX idx_race_season ON race (season_year);
 
--- position is the classified order (unique per race); in the 1950s a driver could have two entries.
+-- result_order is the row order published by Jolpica (unique per race). position is not unique:
+-- with shared drives in the 1950s two drivers could be classified in the same position.
 CREATE TABLE race_result (
     id               BIGSERIAL PRIMARY KEY,
     race_id          BIGINT       NOT NULL REFERENCES race (id) ON DELETE CASCADE,
     driver_id        BIGINT       NOT NULL REFERENCES driver (id),
     constructor_id   BIGINT       NOT NULL REFERENCES constructor (id),
+    result_order     INTEGER      NOT NULL,
     position         INTEGER      NOT NULL,
     position_text    VARCHAR(8)   NOT NULL,
     grid             INTEGER,
@@ -48,7 +50,7 @@ CREATE TABLE race_result (
     status           VARCHAR(64),
     laps             INTEGER,
     fastest_lap_time VARCHAR(16),
-    CONSTRAINT uk_result_race_position UNIQUE (race_id, position)
+    CONSTRAINT uk_result_race_order UNIQUE (race_id, result_order)
 );
 CREATE INDEX idx_result_race ON race_result (race_id);
 CREATE INDEX idx_result_driver ON race_result (driver_id);

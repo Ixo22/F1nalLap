@@ -94,9 +94,10 @@ public class SeasonWriter {
 
 		for (JolpicaModels.Race jr : data.resultsByRace()) {
 			Race race = raceByRound.get(jr.round());
+			int order = 0;
 			for (JolpicaModels.Result r : nullSafe(jr.results())) {
 				results.save(new RaceResult(race, driverByRef.get(r.driver().driverId()),
-						constructorByRef.get(r.constructor().constructorId()),
+						constructorByRef.get(r.constructor().constructorId()), ++order,
 						Integer.parseInt(r.position()), r.positionText(), parseInt(r.grid()),
 						parsePoints(r.points()), r.status(), parseInt(r.laps()), fastestLap(r)));
 				rows++;

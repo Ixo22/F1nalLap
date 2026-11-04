@@ -17,7 +17,7 @@ public interface RaceResultRepository extends JpaRepository<RaceResult, Long> {
 			join fetch rr.driver
 			join fetch rr.constructor
 			where r.seasonYear = :seasonYear and r.round = :round
-			order by rr.position
+			order by rr.resultOrder
 			""")
 	List<RaceResult> findByRace(int seasonYear, int round);
 
@@ -27,7 +27,7 @@ public interface RaceResultRepository extends JpaRepository<RaceResult, Long> {
 			join fetch rr.driver
 			join fetch rr.constructor
 			where r.seasonYear = :seasonYear
-			order by r.round, rr.position
+			order by r.round, rr.resultOrder
 			""")
 	List<RaceResult> findBySeason(int seasonYear);
 
